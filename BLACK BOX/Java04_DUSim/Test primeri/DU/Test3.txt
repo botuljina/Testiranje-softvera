@@ -1,0 +1,11 @@
+int bintr(int K, int M[], int N){
+int ID = 0;
+int IG = N - 1;
+while (ID <= IG) {
+	IS = (ID + IG) / 2;
+	if (K == M[IS]) return IS;
+	else if (K < M[IS]) IG = IS;
+	else ID = IS;
+}
+return -1;
+}

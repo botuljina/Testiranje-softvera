@@ -1,0 +1,14 @@
+int main (void) {
+    int count = 0, totals[MAXCOLUMNS], val = 0;
+    memset (totals, 0, MAXCOLUMNS * sizeof(int));
+    count = 0;
+    while ( count < ITERATIONS ) {
+        val = abs(rand()) % MAXCOLUMNS;
+        totals[val] += 1;
+        if ( totals[val] > MAXCOUNT ) {
+            totals[val] = MAXCOUNT;
+        }
+        count++;
+    }
+    return (0);
+}

@@ -1,0 +1,16 @@
+Scanner sc = new Scanner (System.in);
+int brojac, x, y, c;
+System.out.println ("br?");
+brojac = sc.nextInt();
+System.out.println ("br?");
+x = sc.nextInt();
+y = sc.nextInt();
+while (brojac > 0) {
+	if (x < y)
+	x = razlika(x, y);
+	else
+	y = zbir(x, y);
+	brojac = brojac - 1;
+}
+c = stepen(x, y);
+System.out.println ("Rezultat: " + c);

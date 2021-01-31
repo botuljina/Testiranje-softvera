@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/gui/FileInfo.java=UTF-8
+encoding//src/gui/MainWindow.java=UTF-8
+encoding//src/gui/TreeFiller.java=UTF-8
+encoding//src/helpers/Jump.java=UTF-8
+encoding//src/simulator/Lcsaj.java=UTF-8
+encoding//src/simulator/Lexer.java=UTF-8
+encoding//src/simulator/VarsToInclude.java=UTF-8
+encoding//src/symtable/Scope.java=UTF-8
+encoding//src/symtable/SymbolTable.java=UTF-8

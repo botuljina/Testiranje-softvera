@@ -1,0 +1,249 @@
+/*html, body {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}*/
+
+.centar{
+    text-align: center;
+    margin: 0 auto;
+}
+
+.container{
+    min-height: 100%;
+    width:100%;
+    background-color:#E8E8E8;
+    margin: 0 auto;
+}
+.header{
+    padding-top: 30px !important;
+    padding-bottom: 20px !important;
+    width:100%;
+
+}
+
+
+.formaK {
+
+    width:50%;
+    margin:0 auto;
+    min-height:100%;
+}
+
+
+.fNav a{
+    color:black !important;
+}
+.hide {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+body {
+    -webkit-background-size:cover;
+    background-size:cover;
+    background-position: center center;
+    height: 100vh;
+}
+.menu-area li a {
+    text-decoration: none;
+}
+
+.menu-area li {
+    list-style-type: none;
+}
+
+.custom-padding{
+    padding-top: 25px;
+}
+
+nav {
+    position: relative;
+    width: calc(100% - 60px);
+    margin: 0 auto;
+    padding: 10px 0;
+    background: #333;
+    z-index: 1;
+    text-align: right;
+    padding-right: 2%;
+}
+
+.logo {
+    width: 15%;
+    float: left;
+    text-align: left;
+    padding-left: 2%;
+
+
+}
+
+.menu-area li {
+    display: inline-block;
+}
+
+.menu-area a {
+    color: #fff;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    padding: 0 25px;
+    font-size: 14px;
+    line-height: 30px;
+    position: relative;
+    z-index: 1;
+}
+.menu-area a:hover {
+    background: orange;
+    color: #fff;
+}
+
+.menu-area a:hover:after {
+    transform: translateY(-50%) rotate(-35deg);
+}
+
+nav:before {
+    position: absolute;
+    content: '';
+    border-top: 10px solid #333;
+    border-right: 10px solid #333;
+    border-left: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    top: 100%;
+    left: 0;
+}
+
+nav:after {
+    position: absolute;
+    content: '';
+    border-top: 10px solid #333;
+    border-left: 10px solid #333;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    top: 100%;
+    right: 0;
+}
+
+
+
+
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.custom-file-input::before {
+    content: 'Select some files';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+.custom-file-input:hover::before {
+    border-color: black;
+}
+.custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.greskaP{
+    margin: 0 auto;
+    width:40%;
+    background-color: #E87272;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.greskaS{
+    color:#8F0000;
+}
+
+.hidden{
+    display: none;
+}
+
+.loginlink{
+    /*color: black; !important;*/
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 0.98em;
+    font-weight: bold;
+    text-transform: none;
+}
+.loginlink:hover {
+    color: dodgerblue !important;
+    /*color: rgba(0, 0, 0, 0.87);*/
+    font-size: 0.98em;
+    font-weight: bold;
+    text-transform: none;
+    text-decoration: underline;
+}
+.linkdugme{
+    background: none!important;
+    border: none !important;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif !important;
+    /*input has OS specific font-family*/
+    color: #069 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+.izmenidugme{
+    background: none!important;
+    border: none !important;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif !important;
+    /*input has OS specific font-family*/
+    color: #069 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+.izmpitdugme{
+    background: none!important;
+    border: none !important;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif !important;
+    /*input has OS specific font-family*/
+    color: #069 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+}
+.labelsel{
+    /*margin-left:5% !important;*/
+}
+
+/*.ui .table .tablewidth {*/
+/*    width:75%; !important;*/
+/*}*/
+
+.mainWrap{
+    padding-bottom: 50px;
+    width: 90%;
+    margin: auto;
+}
+.naslov{
+    padding-bottom: 5% !important;
+    margin-bottom: -6% !important;
+    /*padding-top: 10% !important;*/
+}
+
+.check
+{
+    vertical-align:middle !important;
+}

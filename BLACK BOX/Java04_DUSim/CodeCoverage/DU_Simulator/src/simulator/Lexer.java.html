@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Lexer.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">simulator</a> &gt; <span class="el_source">Lexer.java</span></div><h1>Lexer.java</h1><pre class="source lang-java linenums">package simulator;
+
+import java.util.ArrayList;
+
+// Klasa koja izdvaja tokene iz unetog koda na osnovu specifikacije Jave
+public class Lexer {
+	
+	// Kljucne reci
+<span class="fc" id="L9">	private final String[] keywords = {</span>
+<span class="fc" id="L10">			&quot;const&quot;, &quot;assert&quot;, &quot;break&quot;, &quot;case&quot;, &quot;catch&quot;,</span>
+<span class="fc" id="L11">			&quot;class&quot;, &quot;continue&quot;, &quot;default&quot;, &quot;do&quot;, &quot;else&quot;, </span>
+<span class="fc" id="L12">			&quot;enum&quot;, &quot;extends&quot;, &quot;finally&quot;, &quot;for&quot;, &quot;goto&quot;, </span>
+<span class="fc" id="L13">			&quot;if&quot;, &quot;implements&quot;, &quot;import&quot;, &quot;instanceof&quot;, &quot;interface&quot;, </span>
+<span class="fc" id="L14">			&quot;native&quot;, &quot;new&quot;, &quot;package&quot;, &quot;return&quot;, &quot;strictfp&quot;, </span>
+<span class="fc" id="L15">			&quot;super&quot;, &quot;switch&quot;, &quot;synchronized&quot;, &quot;this&quot;, &quot;throw&quot;, </span>
+<span class="fc" id="L16">			&quot;throws&quot;, &quot;try&quot;, &quot;void&quot;, &quot;while&quot;</span>
+	};	
+	
+	// Ugradjene vrednosti
+<span class="fc" id="L20">	private final String[] values = {</span>
+<span class="fc" id="L21">			&quot;true&quot;, &quot;false&quot;, &quot;null&quot;</span>
+	};
+	
+	// Ugradjeni tipovi
+<span class="fc" id="L25">	private final String[] types = {</span>
+<span class="fc" id="L26">			&quot;boolean&quot;, &quot;byte&quot;, &quot;char&quot;, &quot;double&quot;, &quot;float&quot;, &quot;int&quot;, &quot;long&quot;, &quot;short&quot;</span>
+	};
+	
+	// Modifikatori pristupa
+<span class="fc" id="L30">	private final String[] accessModifiers = {</span>
+<span class="fc" id="L31">			&quot;private&quot;, &quot;protected&quot;, &quot;public&quot;</span>
+	};
+	
+	// Ključne reči koje mogu da uđu u sastav definicije/deklaracije
+<span class="fc" id="L35">	private final String[] literals = {</span>
+<span class="fc" id="L36">			&quot;static&quot;, &quot;volatile&quot;, &quot;final&quot;, &quot;transient&quot;, &quot;abstract&quot;</span>
+	};
+	
+	// Operatori koji se sastoje iz jednog znaka
+<span class="fc" id="L40">	private final char[] operators1 = {</span>
+<span class="fc" id="L41">			'(', ')', '[', ']', '.', '~', '?', ':', ','</span>
+	};
+	
+	// Operatori koji mogu medjusobno da se kombinuju i daju nove operatore
+<span class="fc" id="L45">	private final char[] operators2 = {</span>
+<span class="fc" id="L46">			'+', '-', '!', '*', '/', '%', '&lt;', '&gt;', </span>
+<span class="fc" id="L47">			'=', '&amp;', '^', '|'</span>
+	};
+	
+	// Zagrade koje okruzuju blok
+<span class="fc" id="L51">	private final char[] blockBrackets = {</span>
+<span class="fc" id="L52">			'{', '}'</span>
+	};
+	
+	// Znak za kraj naredbe
+<span class="fc" id="L56">	private final char semiColon = ';';</span>
+	
+	// Lista u kojoj se pamte tokeni i iterator za obilazak liste
+	private ArrayList&lt;Token&gt; tokenList;
+	private int currentIndex;
+	
+	// Liste korisnickih i ugradjenih tipova
+	private ArrayList&lt;String&gt; userTypes;
+	private ArrayList&lt;String&gt; systemTypes;
+	private ArrayList&lt;String&gt; userConsts;
+	
+<span class="fc" id="L67">	public Lexer() {</span>
+<span class="fc" id="L68">		tokenList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L69">		userTypes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L70">		systemTypes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L71">		userConsts = new ArrayList&lt;&gt;();</span>
+		
+		// (Neki) ugradjeni tipovi 
+<span class="fc" id="L74">		systemTypes.add(&quot;Runnable&quot;);</span>
+<span class="fc" id="L75">		systemTypes.add(&quot;Boolean&quot;);</span>
+<span class="fc" id="L76">		systemTypes.add(&quot;Byte&quot;);</span>
+<span class="fc" id="L77">		systemTypes.add(&quot;Character&quot;);</span>
+<span class="fc" id="L78">		systemTypes.add(&quot;Double&quot;);</span>
+<span class="fc" id="L79">		systemTypes.add(&quot;Float&quot;);</span>
+<span class="fc" id="L80">		systemTypes.add(&quot;Integer&quot;);</span>
+<span class="fc" id="L81">		systemTypes.add(&quot;Long&quot;);</span>
+<span class="fc" id="L82">		systemTypes.add(&quot;Object&quot;);</span>
+<span class="fc" id="L83">		systemTypes.add(&quot;Short&quot;);</span>
+<span class="fc" id="L84">		systemTypes.add(&quot;String&quot;);</span>
+<span class="fc" id="L85">		systemTypes.add(&quot;System&quot;);</span>
+<span class="fc" id="L86">		systemTypes.add(&quot;Scanner&quot;);</span>
+<span class="fc" id="L87">		systemTypes.add(&quot;Thread&quot;);</span>
+<span class="fc" id="L88">		systemTypes.add(&quot;Exception&quot;);</span>
+<span class="fc" id="L89">	}</span>
+	
+	// Skenira unet kod i izdvaja tokene
+	public void scanCode(String code) {
+		// Rec koja se trenutno cita
+<span class="fc" id="L94">		String word = &quot;&quot;;</span>
+		// Brojac koji koristimo za prolaz kroz kod
+<span class="fc" id="L96">		int i = 0;</span>
+		// Brojac redova
+<span class="fc" id="L98">		int rowNo = 1;</span>
+		
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		while (i &lt; code.length()) {</span>
+			
+			// Ako se radi o tokenu koji se sastoji samo iz jednog znaka
+<span class="fc bfc" id="L103" title="All 6 branches covered.">			if (isOperator1(code.charAt(i)) || isBlockBracket(code.charAt(i)) || isSemiColon(code.charAt(i))) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">				if (!word.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L105">					Token token = new Token(word, rowNo);</span>
+<span class="fc" id="L106">					tokenList.add(token);</span>
+<span class="fc" id="L107">					word = &quot;&quot;;</span>
+				}
+<span class="fc" id="L109">				word += code.charAt(i);</span>
+<span class="fc" id="L110">				Token token = new Token(word, rowNo);</span>
+<span class="fc" id="L111">				tokenList.add(token);</span>
+<span class="fc" id="L112">				word = &quot;&quot;;</span>
+<span class="fc" id="L113">				i++;</span>
+<span class="fc" id="L114">			}</span>
+			
+			// Ako se radi o nekom operatoru koji moze da se kombinuje sa drugim
+<span class="fc bfc" id="L117" title="All 2 branches covered.">			else if (isOperator2(code.charAt(i))) {</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">				if (!word.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L119">					Token token = new Token(word, rowNo);</span>
+<span class="nc" id="L120">					tokenList.add(token);</span>
+<span class="nc" id="L121">					word = &quot;&quot;;</span>
+				}
+				// Citamo kod sve dok se pojavljuju znakovi koji mogu da se kombinuju
+<span class="pc bfc" id="L124" title="All 2 branches covered.">				while (isOperator2(code.charAt(i))) {</span>
+<span class="fc" id="L125">					word += code.charAt(i);</span>
+<span class="fc" id="L126">					i++;</span>
+				}
+<span class="fc" id="L128">				Token token = new Token(word, rowNo);</span>
+<span class="fc" id="L129">				tokenList.add(token);</span>
+<span class="fc" id="L130">				word = &quot;&quot;;</span>
+<span class="fc" id="L131">			}</span>
+			
+			// Ako se radi o String vrednosti
+<span class="fc bfc" id="L134" title="All 2 branches covered.">			else if (code.charAt(i) == '\&quot;') {</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">				if (!word.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L136">					Token token = new Token(word, rowNo);</span>
+<span class="nc" id="L137">					tokenList.add(token);</span>
+<span class="nc" id="L138">					word = &quot;&quot;;</span>
+				}
+<span class="fc" id="L140">				word += code.charAt(i);</span>
+<span class="fc" id="L141">				i++;</span>
+<span class="pc bpc" id="L142" title="1 of 4 branches missed.">				while (!(code.charAt(i) == '\&quot;' &amp;&amp; code.charAt(i-1) != '\\')) {</span>
+<span class="fc" id="L143">					word += code.charAt(i);</span>
+<span class="fc" id="L144">					i++;</span>
+				}
+<span class="fc" id="L146">				word += code.charAt(i);</span>
+<span class="fc" id="L147">				i++;</span>
+<span class="fc" id="L148">				Token token = new Token(word, rowNo);</span>
+<span class="fc" id="L149">				tokenList.add(token);</span>
+<span class="fc" id="L150">				word = &quot;&quot;;</span>
+<span class="fc" id="L151">			}</span>
+			
+			// Ako se radi o char vrednosti
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">			else if (code.charAt(i) == '\'') {</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">				if (!word.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L156">					Token token = new Token(word, rowNo);</span>
+<span class="nc" id="L157">					tokenList.add(token);</span>
+<span class="nc" id="L158">					word = &quot;&quot;;</span>
+				}
+<span class="nc" id="L160">				word += code.charAt(i);</span>
+<span class="nc" id="L161">				i++;</span>
+<span class="nc bnc" id="L162" title="All 4 branches missed.">				while (!(code.charAt(i) == '\'' &amp;&amp; code.charAt(i-1) != '\\')) {</span>
+<span class="nc" id="L163">					word += code.charAt(i);</span>
+<span class="nc" id="L164">					i++;</span>
+				}
+<span class="nc" id="L166">				word += code.charAt(i);</span>
+<span class="nc" id="L167">				i++;</span>
+<span class="nc" id="L168">				Token token = new Token(word, rowNo);</span>
+<span class="nc" id="L169">				tokenList.add(token);</span>
+<span class="nc" id="L170">				word = &quot;&quot;;</span>
+<span class="nc" id="L171">			}</span>
+			
+			// Ako smo procitali blanko znak, formiramo token od prethodno procitane reci
+<span class="fc bfc" id="L174" title="All 2 branches covered.">			else if (code.charAt(i) == ' ') {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">				if (!word.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L176">					Token token = new Token(word, rowNo);</span>
+<span class="fc" id="L177">					tokenList.add(token);</span>
+<span class="fc" id="L178">					word = &quot;&quot;;</span>
+				}
+<span class="fc" id="L180">				i++;</span>
+<span class="fc" id="L181">			}</span>
+			
+			// Ako smo procitali znak za novi red, formiramo token od prethodno procitane reci i inkrementiramo brojac redova
+<span class="fc bfc" id="L184" title="All 2 branches covered.">			else if (code.charAt(i) == '\n') {</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">				if (!word.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L186">					Token token = new Token(word, rowNo);</span>
+<span class="fc" id="L187">					tokenList.add(token);</span>
+<span class="fc" id="L188">					word = &quot;&quot;;</span>
+				}
+<span class="fc" id="L190">				rowNo++;</span>
+<span class="fc" id="L191">				i++;</span>
+<span class="fc" id="L192">			}</span>
+			
+			// Ako smo procitali znak za tabulaciju, samo prelazimo na sledeci znak
+<span class="fc bfc" id="L195" title="All 2 branches covered.">			else if (code.charAt(i) == '\t') {</span>
+<span class="fc" id="L196">				i++;</span>
+<span class="fc" id="L197">			}</span>
+			
+			// U suprotnom dodajemo procitani znak na tekucu rec
+			else {
+<span class="fc" id="L201">				word += code.charAt(i);</span>
+<span class="fc" id="L202">				i++;</span>
+			}
+		}
+		
+		// Resetujemo iterator liste tokena
+<span class="fc" id="L207">		currentIndex = 0;</span>
+<span class="fc" id="L208">	}</span>
+	
+	// Dohvata sledeci token i inkrementira iterator
+	public Token nextToken() {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">		if (currentIndex &gt;= tokenList.size()) {</span>
+<span class="fc" id="L213">			currentIndex = 0;</span>
+<span class="fc" id="L214">			return null;</span>
+		}
+<span class="fc" id="L216">		Token token = tokenList.get(currentIndex);</span>
+<span class="fc" id="L217">		currentIndex++;</span>
+<span class="fc" id="L218">		return token;</span>
+	}
+	
+	// Dohvata sledeci token bez inkrementiranja iteratora
+	public Token peakNextToken() {
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">		if (currentIndex &gt;= tokenList.size()) return null;</span>
+<span class="fc" id="L224">		return tokenList.get(currentIndex);</span>
+	}
+	
+	// Provera da li je zadata rec kljucna rec
+	public boolean isKeyword(String word) {
+<span class="fc" id="L229">		boolean contains = false;</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">		for (int i=0; i&lt;keywords.length; i++) {</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">			if (keywords[i].equalsIgnoreCase(word)) {</span>
+<span class="fc" id="L232">				contains = true;</span>
+<span class="fc" id="L233">				break;</span>
+			}
+		}
+<span class="fc" id="L236">		return contains;</span>
+	}
+	
+	// Provera da li je zadata rec tip
+	public boolean isType(String word) {
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">		if (userTypes.contains(word)) return true;</span>
+<span class="fc bfc" id="L242" title="All 2 branches covered.">		if (systemTypes.contains(word)) return true;</span>
+<span class="fc" id="L243">		boolean contains = false;</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">		for (int i=0; i&lt;types.length; i++) {</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">			if (types[i].equalsIgnoreCase(word)) {</span>
+<span class="fc" id="L246">				contains = true;</span>
+<span class="fc" id="L247">				break;</span>
+			}
+		}
+<span class="fc" id="L250">		return contains;</span>
+	}
+	
+	// Provera da li je zadata rec modifikator pristupa
+	public boolean isAccessModifier(String word) {
+<span class="fc" id="L255">		boolean contains = false;</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">		for (int i=0; i&lt;accessModifiers.length; i++) {</span>
+<span class="pc bpc" id="L257" title="1 of 2 branches missed.">			if (accessModifiers[i].equalsIgnoreCase(word)) {</span>
+<span class="nc" id="L258">				contains = true;</span>
+<span class="nc" id="L259">				break;</span>
+			}
+		}
+<span class="fc" id="L262">		return contains;</span>
+	}
+	
+	// Provera da li je zadata rec final, volatile, itd.
+	public boolean isLiteral(String word) {
+<span class="fc" id="L267">		boolean contains = false;</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">		for (int i=0; i&lt;literals.length; i++) {</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">			if (literals[i].equalsIgnoreCase(word)) {</span>
+<span class="nc" id="L270">				contains = true;</span>
+<span class="nc" id="L271">				break;</span>
+			}
+		}
+<span class="fc" id="L274">		return contains;</span>
+	}
+	
+	// Provera da li je zadati znak operator koji se ne kombinuje
+	public boolean isOperator1(char sign) {
+<span class="fc" id="L279">		boolean contains = false;</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">		for (int i=0; i&lt;operators1.length; i++) {</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">			if (operators1[i] == sign) {</span>
+<span class="fc" id="L282">				contains = true;</span>
+<span class="fc" id="L283">				break;</span>
+			}
+		}
+<span class="fc" id="L286">		return contains;</span>
+	}
+	
+	// Provera da li je zadati znak operator koji moze da se kombinuje
+	public boolean isOperator2(char sign) {
+<span class="fc" id="L291">		boolean contains = false;</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">		for (int i=0; i&lt;operators2.length; i++) {</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">			if (operators2[i] == sign) {</span>
+<span class="fc" id="L294">				contains = true;</span>
+<span class="fc" id="L295">				break;</span>
+			}
+		}
+<span class="fc" id="L298">		return contains;</span>
+	}
+	
+	// Provera da li je zadati znak zagrada koja okruzuje blok
+	public boolean isBlockBracket(char sign) {
+<span class="fc" id="L303">		boolean contains = false;</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">		for (int i=0; i&lt;blockBrackets.length; i++) {</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">			if (blockBrackets[i] == sign) {</span>
+<span class="fc" id="L306">				contains = true;</span>
+<span class="fc" id="L307">				break;</span>
+			}
+		}
+<span class="fc" id="L310">		return contains;</span>
+	}
+	
+	// Provera da li zadati znak oznacava kraj naredbe 
+	public boolean isSemiColon(char sign) {
+<span class="fc bfc" id="L315" title="All 2 branches covered.">		if (semiColon == sign) return true;</span>
+<span class="fc" id="L316">		return false;</span>
+	}
+	
+	// Provera da li je zadata rec vrednost
+	public boolean isValue(String word) {
+<span class="pc bpc" id="L321" title="2 of 4 branches missed.">		if (word.charAt(0) &gt;= '0' &amp;&amp; word.charAt(0) &lt; '9') return true;</span>
+<span class="pc bpc" id="L322" title="2 of 4 branches missed.">		if (word.charAt(0) == '\'' || word.charAt(0) == '\&quot;') return true;</span>
+<span class="fc bfc" id="L323" title="All 2 branches covered.">		for (int i=0; i&lt;values.length; i++) {</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">			if (values[i].equalsIgnoreCase(word)) {</span>
+<span class="nc" id="L325">				return true;</span>
+			}
+		}
+<span class="fc" id="L328">		return false;</span>
+	}
+	
+	// Provera da li je zadata reč konstanta
+	public boolean isConst(String word) {
+<span class="fc" id="L333">		return userConsts.contains(word);</span>
+	}
+	
+	// Provera da li je zadata rec promenljiva
+	public boolean isVariable(String word) {
+<span class="pc bpc" id="L338" title="1 of 10 branches missed.">		if ((word.charAt(0) &gt;= 'a' &amp;&amp; word.charAt(0) &lt;= 'z') || (word.charAt(0) &gt;= 'A' &amp;&amp; word.charAt(0) &lt;= 'Z') || (word.charAt(0) == '_')) {</span>
+<span class="pc bpc" id="L339" title="1 of 2 branches missed.">			if (word.equalsIgnoreCase(&quot;this&quot;)) return true;</span>
+<span class="pc bpc" id="L340" title="4 of 12 branches missed.">			if (!isKeyword(word) &amp;&amp; !isType(word) &amp;&amp; !isAccessModifier(word) &amp;&amp; !isLiteral(word) &amp;&amp; !isValue(word) &amp;&amp; !isConst(word)) return true;</span>
+		}
+<span class="fc" id="L342">		return false;</span>
+	}
+	
+	// Dodavanje novog korisnickog tipa
+	public void addUserType(String type) {
+<span class="nc" id="L347">		userTypes.add(type);</span>
+<span class="nc" id="L348">	}</span>
+	
+	// Dodavanje nove konstante
+	public void addConstant(String con) {
+<span class="nc" id="L352">		userConsts.add(con);</span>
+<span class="nc" id="L353">	}</span>
+	
+	// Provera da li promenljiva sadrži ključnu reč &quot;this&quot;
+	public boolean hasThis(String var) {
+<span class="nc bnc" id="L357" title="All 2 branches missed.">		if (var.contains(&quot;this&quot;)) return true;</span>
+<span class="nc" id="L358">		return false;</span>
+	}
+	
+	// Dohvata objekat čijim poljima se pristupa
+	public String getTopObject(String var) {
+<span class="nc" id="L363">		String s = &quot;&quot;;</span>
+<span class="nc" id="L364">		int i = 0;</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">		while (var.charAt(i) != '.') {</span>
+<span class="nc" id="L366">			s += var.charAt(i);</span>
+<span class="nc" id="L367">			i++;</span>
+		}
+<span class="nc" id="L369">		return s;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

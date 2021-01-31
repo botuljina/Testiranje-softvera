@@ -1,0 +1,1277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Simulator.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">simulator</a> &gt; <span class="el_source">Simulator.java</span></div><h1>Simulator.java</h1><pre class="source lang-java linenums">package simulator;
+
+import helpers.BreakStmt;
+import helpers.BreakStmt.BreakType;
+import helpers.IfElseStmt;
+import helpers.Jump;
+import java.util.ArrayList;
+import javax.swing.JTextArea;
+import symtable.Scope;
+import symtable.SymbolTable;
+import symtable.Scope.ScopeType;
+
+// Klasa koja radi obradu unetog koda
+public class Simulator {
+	
+	// Flag koji oznacava da li se nalazimo u step-by-step modu rada
+<span class="fc" id="L17">	boolean stepByStep = false;</span>
+	// Tekuci red u step-by-step modu rada
+<span class="fc" id="L19">	int currentRow = 1;</span>
+	
+	// Liste u kojima se pamte definicije, upotrebe, DU-lanci i LCSAJ sekvence
+	public ArrayList&lt;Definition&gt; definitions;
+	public ArrayList&lt;Use&gt; uses;
+	public ArrayList&lt;DUChain&gt; duChains;
+	public ArrayList&lt;Lcsaj&gt; lcsaj;
+	
+	// Objekat za izdvajanje tokena u izvornom kodu
+	private Lexer lexer;
+	
+	// Objekat u kom se pamte promenljive koje treba ukljuciti u simulaciju
+	public VarsToInclude varsToInclude;
+	
+	// Lista if-else struktura
+	private ArrayList&lt;IfElseStmt&gt; ifElseStmts;
+	
+	// Lista u kojoj se pamte break i continue naredbe
+	private ArrayList&lt;BreakStmt&gt; breakStmts;
+	
+	// Tabela simbola
+	private SymbolTable symTable;
+	
+<span class="fc" id="L42">	public Simulator() {</span>
+<span class="fc" id="L43">		lexer = new Lexer();</span>
+<span class="fc" id="L44">		varsToInclude = new VarsToInclude();</span>
+<span class="fc" id="L45">		definitions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L46">		uses = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L47">		duChains = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L48">		lcsaj = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L49">		symTable = new SymbolTable();</span>
+<span class="fc" id="L50">		ifElseStmts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L51">		breakStmts = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L52">		Scope.posId = 0;</span>
+<span class="fc" id="L53">	}</span>
+	
+	// Analiza koda koja se pokrece klikom na dugme &quot;Pokreni&quot;
+	// Pretpostavka je da je uneti kod sintaksno i semanticki ispravan
+	public void analyseCode(String code, String vars) {
+		
+		// Izdvajanje tokena i promenljivih koje treba ukljuciti
+<span class="fc" id="L60">		lexer.scanCode(code);</span>
+<span class="fc" id="L61">		varsToInclude.scanVars(vars);</span>
+		
+		// Pokrece trazenje definicija i upotreba
+<span class="fc" id="L64">		findDefsUses();</span>
+		
+		// Pokrece trazenje DU-lanaca
+<span class="fc" id="L67">		findDuChains();</span>
+		
+		// Pokrece trazenje LCSAJ sekvenci
+<span class="fc" id="L70">		findLcsaj();</span>
+
+<span class="fc" id="L72">	}</span>
+	
+	public void findDefsUses() {
+		// Tekuci i prethodni token u analizi
+<span class="fc" id="L76">		Token token = null;</span>
+<span class="fc" id="L77">		Token previousToken = null;</span>
+
+		// Flag koji oznacava da li se nalazimo na pocetku naredbe
+<span class="fc" id="L80">		boolean newStatement = true;</span>
+
+		// Flagovi koji oznacavaju da li naredne promenljive u naredbi predstavljaju definiciju ili upotrebu
+<span class="fc" id="L83">		boolean definition = false;</span>
+<span class="fc" id="L84">		boolean use = false;</span>
+
+		// Flag koji oznacava da li se nalazimo u naredbi koja predstavlja kontrolnu rec (if, while, for...)
+<span class="fc" id="L87">		boolean controlWord = false;</span>
+		
+		// Flag koji oznacava da li se nalazimo u naredbi koja predstavlja definiciju konstante
+<span class="fc" id="L90">		boolean constant = false;</span>
+
+		// Brojac zagrada koji se koristi kod obrade uslova kontrolne reci
+<span class="fc" id="L93">		int brackets = 0;</span>
+		
+		// Tekuci nivo na kome se nalazi program
+<span class="fc" id="L96">		int level = 0;</span>
+
+		// Pomocna promenljiva koja se koristi kad imamo pristup poljima objekta
+<span class="fc" id="L99">		String possibleDefUse = &quot;&quot;;</span>
+		
+		// Lista u kojoj se pamte formalni argumenti funkcije
+<span class="fc" id="L102">		ArrayList&lt;String&gt; funcArgs = new ArrayList&lt;&gt;();</span>
+		
+		// Tekuca if-else struktura
+<span class="fc" id="L105">		int currentIfElse = -1;</span>
+		
+		// Otvaranje &quot;universe&quot; opsega
+<span class="fc" id="L108">		ScopeType currentType = ScopeType.REGULAR;</span>
+<span class="fc" id="L109">		Scope currentScope = new Scope(null, level, currentType);</span>
+<span class="fc" id="L110">		currentScope.setRowStart(1);</span>
+<span class="fc" id="L111">		Scope previousScope = null;</span>
+<span class="fc" id="L112">		symTable.addScope(currentScope);</span>
+		
+		// Flag koji oznacava da li je tekuci opseg do-while petlja i tekuca do-while petlja
+<span class="fc" id="L115">		boolean doLoop = false;</span>
+<span class="fc" id="L116">		int currentDoWhile = -1;</span>
+		
+		// Jos neki pomocni flagovi...
+<span class="fc" id="L119">		boolean isElse = false;</span>
+<span class="fc" id="L120">		boolean functionCall = false;</span>
+<span class="fc" id="L121">		boolean isCondition = false;</span>
+<span class="fc" id="L122">		boolean isDefault = false;</span>
+
+		// Citamo sve tokene i obradjujemo ih redom
+<span class="fc bfc" id="L125" title="All 2 branches covered.">		while ((token = lexer.nextToken()) != null) {</span>
+<span class="fc" id="L126">			String word = token.getToken();</span>
+
+			// Ako se nalazimo na pocetku naredbe
+<span class="fc bfc" id="L129" title="All 2 branches covered.">			if (newStatement) {</span>
+				// Ako naredba pocinje modifikatorom pristupa, literalom ili tipom, potencijalno se radi o definiciji
+<span class="pc bpc" id="L131" title="2 of 6 branches missed.">				if (lexer.isAccessModifier(word) || lexer.isLiteral(word) || (lexer.isType(word))) {</span>
+<span class="fc" id="L132">					definition = true;</span>
+<span class="fc" id="L133">					use = false;</span>
+<span class="fc" id="L134">				}</span>
+
+				// Ako naredba pocinje promenljivom, sigurno se radi o definiciji
+<span class="pc bpc" id="L137" title="1 of 6 branches missed.">				else if (lexer.isVariable(word) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;(&quot;)) {</span>
+<span class="fc" id="L138">					definition = true;</span>
+<span class="fc" id="L139">					use = false;</span>
+<span class="fc" id="L140">				}</span>
+
+				// Ako naredba pocinje funkcijom, potencijalno ce doci do upotrebe argumenata
+<span class="pc bpc" id="L143" title="2 of 6 branches missed.">				else if (lexer.isVariable(word) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equals(&quot;(&quot;)) {</span>
+<span class="fc" id="L144">					definition = false;</span>
+<span class="fc" id="L145">					use = true;</span>
+<span class="fc" id="L146">				}</span>
+
+				// Ako naredba pocinje kontrolnom recju, sigurno ce doci do upotrebe promenljivih iz uslova 
+<span class="pc bpc" id="L149" title="2 of 8 branches missed.">				else if (word.equalsIgnoreCase(&quot;for&quot;) || word.equalsIgnoreCase(&quot;if&quot;) || word.equalsIgnoreCase(&quot;switch&quot;) || word.equalsIgnoreCase(&quot;while&quot;)) {</span>
+<span class="fc" id="L150">					definition = false;</span>
+<span class="fc" id="L151">					use = true;</span>
+<span class="fc" id="L152">					controlWord = true;</span>
+					// Ako se radi o for ili while petlji
+<span class="pc bpc" id="L154" title="1 of 4 branches missed.">					if (word.equalsIgnoreCase(&quot;for&quot;) || word.equalsIgnoreCase(&quot;while&quot;))</span>
+<span class="fc" id="L155">						currentType = ScopeType.LOOP;</span>
+					// Ako se radi o if naredbi
+<span class="fc bfc" id="L157" title="All 2 branches covered.">					if (word.equalsIgnoreCase(&quot;if&quot;)) {</span>
+<span class="fc" id="L158">						currentType = ScopeType.IF_ELSE;</span>
+						// Otvaranje nove if-else strukture
+<span class="fc" id="L160">						IfElseStmt ifElse = new IfElseStmt(currentIfElse);</span>
+<span class="fc" id="L161">						ifElseStmts.add(ifElse);</span>
+<span class="fc" id="L162">						currentIfElse = ifElseStmts.size() - 1;</span>
+					}
+					// Ako se radi o switch naredbi
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">					if (word.equalsIgnoreCase(&quot;switch&quot;))</span>
+<span class="nc" id="L166">						currentType = ScopeType.SWITCH;</span>
+<span class="nc" id="L167">				}</span>
+				
+				// Ako se radi o do-while petlji
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">				else if (word.equalsIgnoreCase(&quot;do&quot;)) {</span>
+<span class="nc" id="L171">					currentType = ScopeType.LOOP;</span>
+<span class="nc" id="L172">					doLoop = true;</span>
+					// Ako se radi o opsegu koji se sastoji iz samo jedne naredbe odmah ga otvaramo
+<span class="nc bnc" id="L174" title="All 4 branches missed.">					if (lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;{&quot;)) {</span>
+<span class="nc" id="L175">						level++;</span>
+<span class="nc" id="L176">						previousScope = currentScope;</span>
+<span class="nc" id="L177">						currentScope = new Scope(previousScope, level, currentType);</span>
+<span class="nc" id="L178">						currentScope.setRowStart(token.getRowNo());</span>
+						
+<span class="nc" id="L180">						currentScope.setDoLoop(true);</span>
+<span class="nc" id="L181">						doLoop = false;</span>
+						
+<span class="nc" id="L183">						currentType = ScopeType.REGULAR;</span>
+<span class="nc" id="L184">						currentScope.setOneStmtScope(true);</span>
+<span class="nc" id="L185">						symTable.addScope(currentScope);</span>
+						
+<span class="nc" id="L187">						previousToken = token;</span>
+<span class="nc" id="L188">						continue;</span>
+					}
+				}
+
+				// Ako se radi o else naredbi
+<span class="fc bfc" id="L193" title="All 2 branches covered.">				else if (word.equalsIgnoreCase(&quot;else&quot;)) {</span>
+<span class="fc" id="L194">					currentType = ScopeType.IF_ELSE;</span>
+<span class="fc" id="L195">					isElse = true;</span>
+					// Ako se radi o opsegu koji se sastoji iz samo jedne naredbe odmah ga otvaramo
+<span class="pc bpc" id="L197" title="2 of 4 branches missed.">					if (lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;{&quot;)) {</span>
+<span class="fc" id="L198">						level++;</span>
+<span class="fc" id="L199">						previousScope = currentScope;</span>
+<span class="fc" id="L200">						currentScope = new Scope(previousScope, level, currentType);</span>
+<span class="fc" id="L201">						currentScope.setRowStart(token.getRowNo());</span>
+						
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">						if (isElse) {</span>
+<span class="fc" id="L204">							currentScope.setElse(true);</span>
+<span class="fc" id="L205">							isElse = false;</span>
+						}
+						
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">						if (currentScope.getType() == ScopeType.IF_ELSE) {</span>
+<span class="fc" id="L209">							ifElseStmts.get(currentIfElse).setElseScope(currentScope.getId());</span>
+						}
+						
+<span class="fc" id="L212">						currentType = ScopeType.REGULAR;</span>
+<span class="fc" id="L213">						currentScope.setOneStmtScope(true);</span>
+<span class="fc" id="L214">						symTable.addScope(currentScope);</span>
+					}
+<span class="fc" id="L216">					previousToken = token;</span>
+<span class="fc" id="L217">					continue;</span>
+				}
+				
+				// Ako se radi o case ili default
+<span class="pc bpc" id="L221" title="2 of 4 branches missed.">				else if (word.equalsIgnoreCase(&quot;case&quot;) || word.equalsIgnoreCase(&quot;default&quot;)) {</span>
+<span class="nc" id="L222">					currentType = ScopeType.CASE;</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">					if (word.equalsIgnoreCase(&quot;default&quot;))</span>
+<span class="nc" id="L224">						isDefault = true;</span>
+<span class="nc" id="L225">				}</span>
+				
+				// Ako se radi o break naredbi
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">				else if (word.equalsIgnoreCase(&quot;break&quot;)) {</span>
+<span class="nc" id="L229">					addBreakStmt(currentScope, token.getRowNo());</span>
+<span class="nc" id="L230">				}</span>
+				
+				// Ako se radi o continue naredbi
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">				else if (word.equalsIgnoreCase(&quot;continue&quot;)) {</span>
+<span class="nc" id="L234">					addContinueStmt(currentScope, token.getRowNo());</span>
+<span class="nc" id="L235">				}</span>
+
+				// Ako naredba pocinje operatorom ++ ili --, sigurno se radi o upotrebi i definiciji naredne promenljive
+<span class="pc bpc" id="L238" title="2 of 4 branches missed.">				else if (word.equals(&quot;++&quot;) || word.equals(&quot;--&quot;)) {</span>
+<span class="nc" id="L239">					previousToken = token;</span>
+<span class="nc" id="L240">					token = lexer.nextToken();</span>
+<span class="nc" id="L241">					word = token.getToken();</span>
+<span class="nc" id="L242">					possibleDefUse = &quot;&quot;;</span>
+					// Za slucaj da se pristupa poljima objekta, potrebno je nadovezati sva ta polja u pomocnoj promenljivoj
+<span class="nc bnc" id="L244" title="All 4 branches missed.">					while (lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;;&quot;)) {</span>
+<span class="nc" id="L245">						possibleDefUse += token.getToken();</span>
+<span class="nc" id="L246">						previousToken = token;</span>
+<span class="nc" id="L247">						token = lexer.nextToken();</span>
+<span class="nc" id="L248">						word = token.getToken();</span>
+					}
+<span class="nc" id="L250">					possibleDefUse += token.getToken();</span>
+<span class="nc" id="L251">					Token t = new Token(possibleDefUse, token.getRowNo());</span>
+					// Dodajemo definiciju i c-upotrebu
+<span class="nc" id="L253">					addDefinition(t, currentScope);</span>
+<span class="nc" id="L254">					addCUse(t, currentScope);</span>
+<span class="nc" id="L255">					possibleDefUse = &quot;&quot;;</span>
+<span class="nc" id="L256">				}</span>
+
+				// Ako se radi o return naredbi, potencijalno se radi o upotrebi naredne promenljive
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">				else if (word.equalsIgnoreCase(&quot;return&quot;)) {</span>
+<span class="nc" id="L260">					definition = false;</span>
+<span class="nc" id="L261">					use = true;</span>
+				}
+			} 
+
+			// Ako u naredbi imamo potencijalne definicije
+<span class="fc bfc" id="L266" title="All 2 branches covered.">			if (definition) {</span>
+
+				// Ako je tekuci token promenljiva
+<span class="fc bfc" id="L269" title="All 2 branches covered.">				if (lexer.isVariable(word)) {</span>
+					
+					// Ako se radi o definiciji konstante
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">					if (constant) {</span>
+<span class="nc" id="L273">						lexer.addConstant(token.getToken());</span>
+<span class="nc" id="L274">						constant = false;</span>
+<span class="nc" id="L275">						definition = false;</span>
+<span class="nc" id="L276">						use = false;</span>
+<span class="nc" id="L277">						newStatement = false;</span>
+<span class="nc" id="L278">						previousToken = token;</span>
+<span class="nc" id="L279">						continue;</span>
+					}
+					
+					// Ako je prethodni token tip ili &quot;,&quot;
+<span class="fc bfc" id="L283" title="All 6 branches covered.">					if ((previousToken != null &amp;&amp; (lexer.isType(previousToken.getToken()) || previousToken.getToken().equals(&quot;,&quot;)))) {</span>
+						// Ako se radi o deklaraciji funkcije
+						// dodajemo sve argumente u pomocnu listu
+<span class="pc bpc" id="L286" title="2 of 4 branches missed.">						if (lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equals(&quot;(&quot;)) {</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">							while (!token.getToken().equals(&quot;)&quot;)) {</span>
+<span class="nc" id="L288">								previousToken = token;</span>
+<span class="nc" id="L289">								token = lexer.nextToken();</span>
+<span class="nc" id="L290">								word = token.getToken();</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">								if (lexer.isVariable(word))</span>
+<span class="nc" id="L292">									funcArgs.add(token.getToken());</span>
+							}
+<span class="nc" id="L294">							currentType = ScopeType.FUNCTION;</span>
+<span class="nc" id="L295">							definition = false;</span>
+<span class="nc" id="L296">							use = false;</span>
+<span class="nc" id="L297">							newStatement = false;</span>
+<span class="nc" id="L298">							previousToken = token;</span>
+<span class="nc" id="L299">							continue;</span>
+						}
+						// Ako se radi o deklaraciji promenljive
+						else {
+							// Ako se nalazimo u uslovu for petlje, bice potrebno dodati deklarisanu promenljivu u opseg for petlje
+							// U suprotnom pamtimo deklaraciju u tekucem opsegu
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">							if (isCondition)</span>
+<span class="nc" id="L306">								funcArgs.add(token.getToken());</span>
+							else 
+<span class="fc" id="L308">								currentScope.addVar(token.getToken());</span>
+						}
+					}	
+					
+					// Citamo sledeci token i na osnovu njega donosimo odluku
+<span class="fc" id="L313">					previousToken = token;</span>
+<span class="fc" id="L314">					token = lexer.nextToken();</span>
+<span class="fc" id="L315">					word = token.getToken();</span>
+
+					// Ako nakon promenljive sledi znak = (a posle = nije new) 
+					// dodajemo definiciju prethodno procitane promenljive
+					// Sve promenljive nakon znaka dodele predstavljaju upotrebu
+<span class="pc bpc" id="L320" title="1 of 6 branches missed.">					if (word.equals(&quot;=&quot;) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equalsIgnoreCase(&quot;new&quot;)) {</span>
+<span class="fc" id="L321">						possibleDefUse += previousToken.getToken();</span>
+<span class="fc" id="L322">						Token t = new Token(possibleDefUse, previousToken.getRowNo());</span>
+<span class="fc" id="L323">						addDefinition(t, currentScope);</span>
+<span class="fc" id="L324">						possibleDefUse = &quot;&quot;;</span>
+<span class="fc" id="L325">						definition = false;</span>
+<span class="fc" id="L326">						use = true;</span>
+<span class="fc" id="L327">					}</span>
+					
+					// Ako nakon promenljive sledi znak = (a posle = je new)
+					// ne radi se o definiciji, ali moze da sledi upotreba
+<span class="pc bpc" id="L331" title="2 of 6 branches missed.">					else if (word.equals(&quot;=&quot;) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equalsIgnoreCase(&quot;new&quot;)) {</span>
+<span class="fc" id="L332">						definition = false;</span>
+<span class="fc" id="L333">						use = true;</span>
+<span class="fc" id="L334">					}</span>
+
+					// Ako nakon promenljive sledi ., znaci da se prisupa poljima/metodama objekta
+<span class="fc bfc" id="L337" title="All 2 branches covered.">					else if (word.equals(&quot;.&quot;)) {</span>
+<span class="fc" id="L338">						possibleDefUse += previousToken.getToken() + &quot;.&quot;;</span>
+<span class="fc" id="L339">					}</span>
+
+					// Ako slede naredni znaci dodele 
+					// potrebno je dodati i definiciju i c-upotrebu prethodne promenljive.
+					// Sve promenljive nakon znaka dodele predstavljaju upotrebu
+<span class="pc bpc" id="L344" title="4 of 8 branches missed.">					else if (word.equals(&quot;+=&quot;) || word.equals(&quot;-=&quot;) || word.equals(&quot;*=&quot;) || word.equals(&quot;/=&quot;) ||</span>
+<span class="pc bpc" id="L345" title="4 of 8 branches missed.">							word.equals(&quot;&lt;&lt;=&quot;) || word.equals(&quot;&gt;&gt;=&quot;) || word.equals(&quot;&gt;&gt;&gt;=&quot;) || word.equals(&quot;&amp;=&quot;) ||</span>
+<span class="pc bpc" id="L346" title="2 of 4 branches missed.">							word.equals(&quot;^=&quot;) || word.equals(&quot;|=&quot;)) {</span>
+<span class="nc" id="L347">						possibleDefUse += previousToken.getToken();</span>
+<span class="nc" id="L348">						Token t = new Token(possibleDefUse, previousToken.getRowNo());</span>
+<span class="nc" id="L349">						addDefinition(t, currentScope);</span>
+<span class="nc" id="L350">						addCUse(t, currentScope);</span>
+<span class="nc" id="L351">						possibleDefUse = &quot;&quot;;</span>
+<span class="nc" id="L352">						definition = false;</span>
+<span class="nc" id="L353">						use = true;</span>
+<span class="nc" id="L354">					}</span>
+
+					// Ako se radi o postfiksnim operatorima ++ i --
+					// potrebno je dodati i definiciju i upotrebu prethodne promenljive.
+<span class="pc bpc" id="L358" title="2 of 4 branches missed.">					else if (word.equals(&quot;++&quot;) || word.equals(&quot;--&quot;)) {</span>
+<span class="nc" id="L359">						possibleDefUse += previousToken.getToken();</span>
+<span class="nc" id="L360">						Token t = new Token(possibleDefUse, previousToken.getRowNo());</span>
+<span class="nc" id="L361">						addDefinition(t, currentScope);</span>
+<span class="nc" id="L362">						addCUse(t, currentScope);</span>
+<span class="nc" id="L363">						possibleDefUse = &quot;&quot;;</span>
+<span class="nc" id="L364">						definition = false;</span>
+<span class="nc" id="L365">						use = false;</span>
+<span class="nc" id="L366">					}</span>
+
+					// Ako se radi o pristupu elementu niza
+					// potrebno je dodati definiciju prethodne promenljive.
+					// Sve promenljive unutar [ i ] predstavljaju upotrebu
+<span class="pc bpc" id="L371" title="1 of 2 branches missed.">					else if (word.equals(&quot;[&quot;)) {</span>
+<span class="nc" id="L372">						possibleDefUse += previousToken.getToken();</span>
+<span class="nc" id="L373">						Token t = new Token(possibleDefUse, previousToken.getRowNo());</span>
+<span class="nc" id="L374">						addDefinition(t, currentScope);</span>
+<span class="nc" id="L375">						possibleDefUse = &quot;&quot;;</span>
+<span class="nc" id="L376">						definition = false;</span>
+<span class="nc" id="L377">						use = true;</span>
+<span class="nc" id="L378">					}</span>
+
+					// Ako se radi o pozivu metode
+					// imamo potencijalne upotrebe u vidu stvarnih argumenata
+<span class="fc bfc" id="L382" title="All 2 branches covered.">					else if (word.equals(&quot;(&quot;)) {</span>
+<span class="fc" id="L383">						possibleDefUse = &quot;&quot;;</span>
+<span class="fc" id="L384">						definition = false; </span>
+<span class="fc" id="L385">						use = true;</span>
+<span class="fc" id="L386">					}</span>
+
+					// Ako se udje u ovu granu znaci da u naredbi nemamo ni definiciju, ni upotrebu
+<span class="fc bfc" id="L389" title="All 2 branches covered.">					else if (!word.equals(&quot;,&quot;)){</span>
+<span class="fc" id="L390">						definition = false;</span>
+<span class="fc" id="L391">						use = false;</span>
+					}
+<span class="fc" id="L393">				}</span>
+				
+				// Ako se radi o konstruktoru
+				// pamtimo njegove formalne parametre
+<span class="pc bpc" id="L397" title="2 of 6 branches missed.">				else if (lexer.isType(word) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equals(&quot;(&quot;)) {</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">					while (!token.getToken().equals(&quot;)&quot;)) {</span>
+<span class="nc" id="L399">						previousToken = token;</span>
+<span class="nc" id="L400">						token = lexer.nextToken();</span>
+<span class="nc" id="L401">						word = token.getToken();</span>
+<span class="nc bnc" id="L402" title="All 2 branches missed.">						if (lexer.isVariable(word))</span>
+<span class="nc" id="L403">							funcArgs.add(token.getToken());</span>
+					}
+<span class="nc" id="L405">					currentType = ScopeType.FUNCTION;</span>
+<span class="nc" id="L406">					definition = false;</span>
+<span class="nc" id="L407">					use = false;</span>
+<span class="nc" id="L408">					newStatement = false;</span>
+<span class="nc" id="L409">					previousToken = token;</span>
+<span class="nc" id="L410">					continue;</span>
+				}
+				
+			}
+
+			// Ako u naredbi imamo potencijalne upotrebe
+<span class="fc bfc" id="L416" title="All 2 branches covered.">			else if (use) {</span>
+
+				// Ako se radi o kontrolnoj reci i ulazimo u zagradu sa uslovom, povecavamo broj otvorenih zagrada
+<span class="fc bfc" id="L419" title="All 4 branches covered.">				if (word.equals(&quot;(&quot;) &amp;&amp; controlWord) {</span>
+<span class="fc" id="L420">					brackets++;</span>
+					// Ako posle zagrade sledi tip
+					// znaci da imamo definiciju promenljive u okviru for petlje
+<span class="pc bpc" id="L423" title="2 of 4 branches missed.">					if (lexer.peakNextToken() != null &amp;&amp; lexer.isType(lexer.peakNextToken().getToken())) {</span>
+<span class="nc" id="L424">						definition = true;</span>
+<span class="nc" id="L425">						use = false;</span>
+<span class="nc" id="L426">						isCondition = true;</span>
+					}
+<span class="nc" id="L428">				}</span>
+
+				// Ako se radi o kontrolnoj reci i dolazimo do zatvorene zagrade, smanjujemo broj zatvorenih zagrada
+<span class="fc bfc" id="L431" title="All 4 branches covered.">				else if (word.equals(&quot;)&quot;) &amp;&amp; controlWord) {</span>
+<span class="fc" id="L432">					brackets--;</span>
+					
+					// Ako su sve zagrade zatvorene znaci da je uslov zavrsen
+<span class="pc bpc" id="L435" title="1 of 2 branches missed.">					if (brackets == 0) {</span>
+<span class="fc" id="L436">						newStatement = true;</span>
+<span class="fc" id="L437">						definition = false;</span>
+<span class="fc" id="L438">						use = false;</span>
+<span class="fc" id="L439">						controlWord = false;</span>
+<span class="fc" id="L440">						currentDoWhile = -1;</span>
+						
+						// Ako se radi o opsegu koji se sastoji iz samo jedne naredbe odmah ga otvaramo
+<span class="pc bpc" id="L443" title="2 of 6 branches missed.">						if (lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;{&quot;) &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;;&quot;)) {</span>
+<span class="fc" id="L444">							level++;</span>
+<span class="fc" id="L445">							previousScope = currentScope;</span>
+<span class="fc" id="L446">							currentScope = new Scope(previousScope, level, currentType);</span>
+<span class="fc" id="L447">							currentScope.setRowStart(token.getRowNo());</span>
+							
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">							if (currentScope.getType() == ScopeType.IF_ELSE) {</span>
+<span class="fc" id="L450">								ifElseStmts.get(currentIfElse).setIfScope(currentScope.getId());</span>
+							}
+							
+<span class="fc" id="L453">							currentType = ScopeType.REGULAR;</span>
+<span class="fc" id="L454">							currentScope.setOneStmtScope(true);</span>
+<span class="fc" id="L455">							symTable.addScope(currentScope);</span>
+						}
+
+<span class="fc" id="L458">						previousToken = token;</span>
+<span class="fc" id="L459">						continue;</span>
+					}
+				}
+				
+				// Ako se radi o zatvorenoj zagradi a u toku je poziv funkcije
+<span class="pc bpc" id="L464" title="1 of 6 branches missed.">				else if (word.equals(&quot;)&quot;) &amp;&amp; !controlWord &amp;&amp; functionCall) {</span>
+<span class="fc" id="L465">					functionCall = false;</span>
+<span class="fc" id="L466">				}</span>
+
+				// Ako se radi o operatorima ++ i --, dodajemo i definiciju i upotrebu odgovarajuce promenljive
+<span class="pc bpc" id="L469" title="2 of 4 branches missed.">				else if (word.equals(&quot;++&quot;) || word.equals(&quot;--&quot;)) {</span>
+					// Postfiksni ++ i --
+<span class="nc bnc" id="L471" title="All 2 branches missed.">					if (lexer.isVariable(previousToken.getToken())) {</span>
+<span class="nc" id="L472">						Token t = new Token (possibleDefUse, previousToken.getRowNo());</span>
+<span class="nc" id="L473">						addDefinition(t, currentScope);</span>
+<span class="nc" id="L474">						addCUse(t, currentScope);</span>
+<span class="nc" id="L475">						possibleDefUse = &quot;&quot;;</span>
+<span class="nc" id="L476">					}</span>
+					// Prefiksni ++ i --
+					else {
+<span class="nc" id="L479">						previousToken = token;</span>
+<span class="nc" id="L480">						token = lexer.nextToken();</span>
+<span class="nc" id="L481">						word = token.getToken();</span>
+<span class="nc bnc" id="L482" title="All 4 branches missed.">						while (lexer.isVariable(word) || word.equals(&quot;.&quot;)) {</span>
+<span class="nc" id="L483">							possibleDefUse += word;</span>
+<span class="nc" id="L484">							previousToken = token;</span>
+<span class="nc" id="L485">							token = lexer.nextToken();</span>
+<span class="nc" id="L486">							word = token.getToken();</span>
+						}
+<span class="nc" id="L488">						Token t = new Token (possibleDefUse, previousToken.getRowNo());</span>
+<span class="nc" id="L489">						addDefinition(t, currentScope);</span>
+<span class="nc" id="L490">						addCUse(t, currentScope);</span>
+<span class="nc" id="L491">						addCUse(t, currentScope);</span>
+<span class="nc" id="L492">						possibleDefUse = &quot;&quot;;</span>
+					}
+<span class="nc" id="L494">				}</span>
+				
+				// Ako se radi o zarezu, a ne nalazimo se u pozivu funkcije
+				// potencijalno sledi definicija
+<span class="pc bpc" id="L498" title="1 of 4 branches missed.">				else if (word.equals(&quot;,&quot;) &amp;&amp; !functionCall) {</span>
+<span class="nc" id="L499">					definition = true;</span>
+<span class="nc" id="L500">					use = false;</span>
+				}
+
+				// Ako je tekuca rec promenljiva dodajemo odgovarajucu c ili p upotrebu
+<span class="pc bpc" id="L504" title="1 of 6 branches missed.">				if (lexer.isVariable(word) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equals(&quot;(&quot;)) {</span>
+<span class="fc bfc" id="L505" title="All 2 branches covered.">					if (lexer.peakNextToken().getToken().equals(&quot;.&quot;)) {</span>
+<span class="fc" id="L506">						possibleDefUse += word + &quot;.&quot;;</span>
+<span class="fc" id="L507">					}</span>
+					else {
+<span class="fc" id="L509">						possibleDefUse += word;</span>
+<span class="fc" id="L510">						Token t = new Token(possibleDefUse, token.getRowNo());</span>
+						// Ako se radi o kontrolnoj reci
+<span class="fc bfc" id="L512" title="All 2 branches covered.">						if (controlWord) {</span>
+							// Ako nije u pitanju do-while, uslov se odnosi na naredni opseg koji tek treba da se otvori
+<span class="pc bpc" id="L514" title="1 of 2 branches missed.">							if (currentDoWhile == -1)</span>
+<span class="fc" id="L515">								addPUse(t, currentScope, Scope.posId);</span>
+							// Ako je u pitanju do-while, vec znamo na koji opseg se uslov odnosi
+							else {
+<span class="nc" id="L518">								addPUse(t, currentScope, currentDoWhile);</span>
+<span class="nc" id="L519">								Scope s = symTable.getScopeWithId(currentDoWhile);</span>
+<span class="nc" id="L520">								s.setRowEnd(t.getRowNo());</span>
+							}
+<span class="nc" id="L522">						}</span>
+						else {
+<span class="fc" id="L524">							addCUse(t, currentScope);</span>
+						}
+						// Ako sledi znak jednakosti potrebno je da dodamo i definiciju tekuce promenljive
+<span class="fc" id="L527">						Token next = lexer.peakNextToken();</span>
+<span class="pc bpc" id="L528" title="4 of 8 branches missed.">						if (next != null &amp;&amp; (next.getToken().equals(&quot;+=&quot;) || next.getToken().equals(&quot;-=&quot;) || next.getToken().equals(&quot;*=&quot;) || </span>
+<span class="pc bpc" id="L529" title="4 of 8 branches missed.">								next.getToken().equals(&quot;/=&quot;) || next.getToken().equals(&quot;&lt;&lt;=&quot;) || next.getToken().equals(&quot;&gt;&gt;=&quot;) || next.getToken().equals(&quot;&gt;&gt;&gt;=&quot;) || </span>
+<span class="pc bpc" id="L530" title="4 of 8 branches missed.">								next.getToken().equals(&quot;&amp;=&quot;) || next.getToken().equals(&quot;^=&quot;) || next.getToken().equals(&quot;|=&quot;) || next.getToken().equals(&quot;=&quot;))) </span>
+<span class="nc" id="L531">							addDefinition(t, currentScope);</span>
+						// Ako je sledeci token ++ ili --, ne treba da resetujemo pomocnu promenljivu
+<span class="pc bpc" id="L533" title="3 of 6 branches missed.">						if (next != null &amp;&amp; !(next.getToken().equals(&quot;++&quot;) || next.getToken().equals(&quot;--&quot;)))</span>
+<span class="fc" id="L534">							possibleDefUse = &quot;&quot;;</span>
+					}
+<span class="fc" id="L536">				}</span>
+				
+				// Ako se radi o pozivu funkcije
+<span class="pc bpc" id="L539" title="2 of 6 branches missed.">				else if (lexer.isVariable(word) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equals(&quot;(&quot;)) {</span>
+<span class="fc" id="L540">					possibleDefUse = &quot;&quot;;</span>
+<span class="fc" id="L541">					functionCall = true;</span>
+				}
+			}
+
+			// Ako se radi o definiciji klase ili nabrajanja, potrebno je da dodamo novi tip u korisnicke tipove
+<span class="pc bpc" id="L546" title="2 of 4 branches missed.">			if (word.equalsIgnoreCase(&quot;class&quot;) || word.equalsIgnoreCase(&quot;enum&quot;)) {</span>
+<span class="nc bnc" id="L547" title="All 2 branches missed.">				if (word.equalsIgnoreCase(&quot;class&quot;))</span>
+<span class="nc" id="L548">					currentType = ScopeType.CLASS;</span>
+<span class="nc" id="L549">				previousToken = token;</span>
+<span class="nc" id="L550">				token = lexer.nextToken();</span>
+<span class="nc" id="L551">				word = token.getToken();</span>
+<span class="nc" id="L552">				lexer.addUserType(word);</span>
+			}
+			
+			// Ako se radi o definiciji konstante
+<span class="pc bpc" id="L556" title="1 of 2 branches missed.">			if (word.equalsIgnoreCase(&quot;final&quot;)) {</span>
+<span class="nc" id="L557">				constant = true;</span>
+			}
+
+<span class="fc" id="L560">			newStatement = false;</span>
+<span class="fc" id="L561">			previousToken = token;</span>
+<span class="pc bpc" id="L562" title="1 of 8 branches missed.">			if (word.equals(&quot;;&quot;) || word.equals(&quot;{&quot;) || word.equals(&quot;}&quot;) || word.equals(&quot;:&quot;)) {</span>
+				
+				// Ako se radi o pocetku bloka, otvaramo novi opseg
+<span class="fc bfc" id="L565" title="All 2 branches covered.">				if (word.equals(&quot;{&quot;)) {</span>
+<span class="fc" id="L566">					level++;</span>
+<span class="fc" id="L567">					previousScope = currentScope;</span>
+<span class="fc" id="L568">					currentScope = new Scope(previousScope, level, currentType);</span>
+<span class="fc" id="L569">					currentScope.setRowStart(token.getRowNo());</span>
+					
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">					if (doLoop) {</span>
+<span class="nc" id="L572">						currentScope.setDoLoop(true);</span>
+<span class="nc" id="L573">						doLoop = false;</span>
+<span class="nc" id="L574">					}</span>
+<span class="pc bpc" id="L575" title="1 of 2 branches missed.">					else if (isElse) {</span>
+<span class="nc" id="L576">						currentScope.setElse(true);</span>
+<span class="nc" id="L577">						isElse = false;</span>
+					}
+					
+<span class="fc" id="L580">					symTable.addScope(currentScope);</span>
+					
+<span class="fc bfc" id="L582" title="All 2 branches covered.">					if (currentScope.getType() == ScopeType.IF_ELSE) {</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">						if (currentScope.isElse()) {</span>
+<span class="nc" id="L584">							ifElseStmts.get(currentIfElse).setElseScope(currentScope.getId());</span>
+<span class="nc" id="L585">						}</span>
+						else {
+<span class="fc" id="L587">							ifElseStmts.get(currentIfElse).setIfScope(currentScope.getId());</span>
+						}
+					}
+					
+<span class="fc" id="L591">					currentType = ScopeType.REGULAR;</span>
+					
+					// Ako se radi o funkciji, dodajemo njene formalne argumente u tekuci opseg
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">					if (!funcArgs.isEmpty()) {</span>
+<span class="nc bnc" id="L595" title="All 2 branches missed.">						for (int i=0; i&lt;funcArgs.size(); i++)</span>
+<span class="nc" id="L596">							currentScope.addVar(funcArgs.get(i));</span>
+<span class="nc" id="L597">						funcArgs = new ArrayList&lt;&gt;();</span>
+					}
+				}
+				
+				// Ako se radi o kraju bloka, zatvaramo tekuci opseg
+<span class="fc bfc" id="L602" title="All 2 branches covered.">				if (word.equals(&quot;}&quot;)) {</span>
+<span class="fc" id="L603">					level--;</span>
+<span class="fc" id="L604">					currentScope.setRowEnd(token.getRowNo());</span>
+					
+					// Ako smo dosli do kraja if-else strukture, prelazimo na obuhvatajucu if-else strukturu
+<span class="pc bpc" id="L607" title="1 of 2 branches missed.">					if (currentScope.isElse()) {</span>
+<span class="nc" id="L608">						currentIfElse = ifElseStmts.get(currentIfElse).getParentIfElse();</span>
+					}
+					
+					// Ako je tekuca petlja do-while, pamtimo njen id
+<span class="pc bpc" id="L612" title="1 of 4 branches missed.">					if (currentScope.getType() == ScopeType.LOOP &amp;&amp; currentScope.isDoLoop()) {</span>
+<span class="nc" id="L613">						currentDoWhile = currentScope.getId();</span>
+					}
+					
+<span class="fc" id="L616">					boolean ifClosed = false;</span>
+<span class="pc bpc" id="L617" title="1 of 4 branches missed.">					if (currentScope.getType() == ScopeType.IF_ELSE &amp;&amp; !currentScope.isElse())</span>
+<span class="fc" id="L618">						ifClosed = true;</span>
+					
+<span class="fc" id="L620">					currentScope = previousScope;</span>
+<span class="fc" id="L621">					previousScope = currentScope.getParentScope();</span>
+					
+					// Ako imamo vise ugnjezdenih opsega koji se sastoje iz jedne naredbe
+					// potrebno je da ih sve zatvorimo
+<span class="pc bpc" id="L625" title="1 of 2 branches missed.">					while (currentScope.isOneStmtScope()) {</span>
+						// Tekuci opseg jos uvek ne treba zatvoriti ako se radi o do-while petlji ili ako sledi else
+<span class="nc bnc" id="L627" title="All 6 branches missed.">						if (ifClosed &amp;&amp; lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equals(&quot;else&quot;))</span>
+<span class="nc" id="L628">							break;</span>
+<span class="nc bnc" id="L629" title="All 4 branches missed.">						if (currentScope.getType() == ScopeType.LOOP &amp;&amp; currentScope.isDoLoop())</span>
+<span class="nc" id="L630">							break;</span>
+						
+<span class="nc" id="L632">						level--;</span>
+<span class="nc" id="L633">						currentScope.setRowEnd(token.getRowNo());</span>
+					
+<span class="nc bnc" id="L635" title="All 2 branches missed.">						if (currentScope.isElse()) {</span>
+<span class="nc" id="L636">							currentIfElse = ifElseStmts.get(currentIfElse).getParentIfElse();</span>
+						}
+						
+<span class="nc bnc" id="L639" title="All 4 branches missed.">						if (currentScope.getType() == ScopeType.LOOP &amp;&amp; currentScope.isDoLoop()) {</span>
+<span class="nc" id="L640">							currentDoWhile = currentScope.getId();</span>
+						}
+						
+<span class="nc bnc" id="L643" title="All 4 branches missed.">						if (currentScope.getType() == ScopeType.IF_ELSE &amp;&amp; !currentScope.isElse())</span>
+<span class="nc" id="L644">							ifClosed = true;</span>
+						
+<span class="nc" id="L646">						currentScope = previousScope;</span>
+<span class="nc" id="L647">						previousScope = currentScope.getParentScope();</span>
+					}
+				}
+				
+				// Ako smo dosli do kraja naredbe u okviru uslova for-petlje
+				// vise nemamo definiciju, ali zato mogu da slede potencijalne upotrebe
+<span class="pc bpc" id="L653" title="1 of 4 branches missed.">				if (word.equals(&quot;;&quot;) &amp;&amp; isCondition) {</span>
+<span class="nc" id="L654">					definition = false;</span>
+<span class="nc" id="L655">					use = true;</span>
+<span class="nc" id="L656">					isCondition = false;</span>
+<span class="nc" id="L657">					continue;</span>
+				}
+				
+				// Ako procitamo &quot;:&quot;, otvaramo case opseg
+<span class="pc bpc" id="L661" title="7 of 8 branches missed.">				if (word.equals(&quot;:&quot;) &amp;&amp; lexer.peakNextToken() != null &amp;&amp; !lexer.peakNextToken().getToken().equalsIgnoreCase(&quot;case&quot;) &amp;&amp; !lexer.peakNextToken().getToken().equalsIgnoreCase(&quot;default&quot;)) {</span>
+<span class="nc" id="L662">					level++;</span>
+<span class="nc" id="L663">					previousScope = currentScope;</span>
+<span class="nc" id="L664">					currentScope = new Scope(previousScope, level, currentType);</span>
+<span class="nc" id="L665">					currentScope.setRowStart(token.getRowNo());</span>
+					
+<span class="nc bnc" id="L667" title="All 2 branches missed.">					if (isDefault) {</span>
+<span class="nc" id="L668">						currentScope.setDefault(true);</span>
+<span class="nc" id="L669">						isDefault = false;</span>
+					}
+					
+<span class="nc" id="L672">					symTable.addScope(currentScope);</span>
+<span class="nc" id="L673">					currentType = ScopeType.REGULAR;</span>
+				}
+				
+				// Ako smo dosli do kraja naredbe, a tekuci opseg se sastoji samo iz jedne naredbe
+				// potrebno je da zatvorimo tekuci opseg
+<span class="pc bpc" id="L678" title="1 of 4 branches missed.">				if (currentScope.isOneStmtScope() &amp;&amp; word.equals(&quot;;&quot;)) {</span>
+<span class="fc" id="L679">					boolean ifClosed = false;</span>
+<span class="fc bfc" id="L680" title="All 2 branches covered.">					while (currentScope.isOneStmtScope()) {</span>
+<span class="fc" id="L681">						level--;</span>
+<span class="fc" id="L682">						currentScope.setRowEnd(token.getRowNo());</span>
+						
+<span class="fc bfc" id="L684" title="All 2 branches covered.">						if (currentScope.isElse()) {</span>
+<span class="fc" id="L685">							currentIfElse = ifElseStmts.get(currentIfElse).getParentIfElse();</span>
+						}
+						
+<span class="pc bpc" id="L688" title="3 of 4 branches missed.">						if (currentScope.getType() == ScopeType.LOOP &amp;&amp; currentScope.isDoLoop()) {</span>
+<span class="nc" id="L689">							currentDoWhile = currentScope.getId();</span>
+						}
+						
+<span class="pc bpc" id="L692" title="1 of 4 branches missed.">						if (currentScope.getType() == ScopeType.IF_ELSE &amp;&amp; !currentScope.isElse())</span>
+<span class="fc" id="L693">							ifClosed = true;</span>
+						
+<span class="fc" id="L695">						currentScope = previousScope;</span>
+<span class="fc" id="L696">						previousScope = currentScope.getParentScope();</span>
+						
+						// Tekuci opseg jos uvek ne treba zatvoriti ako se radi o do-while petlji ili ako sledi else
+<span class="pc bpc" id="L699" title="2 of 6 branches missed.">						if (ifClosed &amp;&amp; lexer.peakNextToken() != null &amp;&amp; lexer.peakNextToken().getToken().equals(&quot;else&quot;))</span>
+<span class="fc" id="L700">							break;</span>
+<span class="pc bpc" id="L701" title="1 of 4 branches missed.">						if (currentScope.getType() == ScopeType.LOOP &amp;&amp; currentScope.isDoLoop())</span>
+<span class="nc" id="L702">							break;</span>
+					}
+				}
+				
+				// Ako smo dosli do kraja naredbe u okviru case bloka, a sledi case, default ili }
+				// treba zatvoriti case blok
+<span class="pc bpc" id="L708" title="3 of 4 branches missed.">				if (currentScope.getType() == ScopeType.CASE &amp;&amp; word.equals(&quot;;&quot;)) {</span>
+<span class="nc bnc" id="L709" title="All 8 branches missed.">					if (lexer.peakNextToken() != null &amp;&amp; (lexer.peakNextToken().getToken().equalsIgnoreCase(&quot;case&quot;) || lexer.peakNextToken().getToken().equalsIgnoreCase(&quot;default&quot;) || lexer.peakNextToken().getToken().equals(&quot;}&quot;))) {</span>
+<span class="nc" id="L710">						level--;</span>
+<span class="nc" id="L711">						currentScope.setRowEnd(token.getRowNo());</span>
+<span class="nc" id="L712">						currentScope = previousScope;</span>
+<span class="nc" id="L713">						previousScope = currentScope.getParentScope();</span>
+					}
+				}
+				// Pocinjemo novu naredbu
+<span class="fc" id="L717">				newStatement = true;</span>
+<span class="fc" id="L718">				definition = false;</span>
+<span class="fc" id="L719">				use = false;</span>
+			}
+		}
+		
+		// Postavljanje kraja &quot;universe&quot; opsega
+<span class="pc bpc" id="L724" title="1 of 2 branches missed.">		if (previousToken != null)</span>
+<span class="fc" id="L725">			currentScope.setRowEnd(previousToken.getRowNo());</span>
+		else
+<span class="nc" id="L727">			currentScope.setRowEnd(1);</span>
+<span class="fc" id="L728">	}</span>
+	
+	// Dodavanje break naredbe
+	public void addBreakStmt(Scope scope, int rowNo) {
+<span class="nc" id="L732">		Scope currentScope = scope;</span>
+<span class="nc bnc" id="L733" title="All 2 branches missed.">		while (currentScope != null) {</span>
+<span class="nc bnc" id="L734" title="All 2 branches missed.">			if (currentScope.getType() == ScopeType.SWITCH) {</span>
+<span class="nc" id="L735">				breakStmts.add(new BreakStmt(rowNo, currentScope.getId(), BreakType.SWITCH_BREAK, scope));</span>
+<span class="nc" id="L736">				return;</span>
+			}
+<span class="nc bnc" id="L738" title="All 2 branches missed.">			else if (currentScope.getType() == ScopeType.LOOP) {</span>
+<span class="nc" id="L739">				breakStmts.add(new BreakStmt(rowNo, currentScope.getId(), BreakType.LOOP_BREAK, scope));</span>
+<span class="nc" id="L740">				return;</span>
+			}
+<span class="nc" id="L742">			currentScope = currentScope.getParentScope();</span>
+		}
+<span class="nc" id="L744">	}</span>
+	
+	// Dodavanje continue naredbe
+	public void addContinueStmt(Scope scope, int rowNo) {
+<span class="nc" id="L748">		Scope currentScope = scope;</span>
+<span class="nc bnc" id="L749" title="All 2 branches missed.">		while (currentScope != null) {</span>
+<span class="nc bnc" id="L750" title="All 2 branches missed.">			if (currentScope.getType() == ScopeType.LOOP) {</span>
+<span class="nc" id="L751">				breakStmts.add(new BreakStmt(rowNo, currentScope.getId(), BreakType.LOOP_CONT, scope));</span>
+<span class="nc" id="L752">				return;</span>
+			}
+<span class="nc" id="L754">			currentScope = currentScope.getParentScope();</span>
+		}
+<span class="nc" id="L756">	}</span>
+	
+	// Dodavanje nove definicije
+	public void addDefinition(Token token, Scope scope) {
+<span class="fc bfc" id="L760" title="All 4 branches covered.">		if (varsToInclude.includeAll() || varsToInclude.isIncluded(token.getToken()))</span>
+<span class="fc" id="L761">			definitions.add(new Definition(token.getToken(), token.getRowNo(), scope));</span>
+<span class="fc" id="L762">	}</span>
+	
+	// Dodavanje nove c-upotrebe
+	public void addCUse(Token token, Scope scope) {
+<span class="fc bfc" id="L766" title="All 4 branches covered.">		if (varsToInclude.includeAll() || varsToInclude.isIncluded(token.getToken())) </span>
+<span class="fc" id="L767">			uses.add(new Use(token.getToken(), token.getRowNo(), 'c', scope));</span>
+<span class="fc" id="L768">	}</span>
+	
+	// Dodavanje nove p-upotrebe
+	public void addPUse(Token token, Scope scope, int conditionFor) {
+<span class="fc bfc" id="L772" title="All 4 branches covered.">		if (varsToInclude.includeAll() || varsToInclude.isIncluded(token.getToken())) {</span>
+<span class="fc" id="L773">			Use u = new Use(token.getToken(), token.getRowNo(), 'p', scope);</span>
+<span class="fc" id="L774">			u.setConditionFor(conditionFor);</span>
+<span class="fc" id="L775">			uses.add(u);</span>
+		}
+<span class="fc" id="L777">	}</span>
+	
+	// Dodavanje novog DU-lanca
+	public void addDuChain(String var, int def, int use) {
+<span class="pc bpc" id="L781" title="1 of 4 branches missed.">		if (varsToInclude.includeAll() || varsToInclude.isIncluded(var))</span>
+<span class="fc" id="L782">			duChains.add(new DUChain(var, def, use));</span>
+<span class="fc" id="L783">	}</span>
+	
+	// Provera da li postoji nova definicija izmedju definicije i njene upotrebe
+	// Potrebno je proveriti da li se definicija odnosi na istu promenljivu i da li je obavezna
+	public boolean defExistsBetween(String var, int row1, int row2, Scope scopeDef, Scope scopeUse) {
+<span class="fc" id="L788">		boolean exists = false;</span>
+<span class="fc" id="L789">		int scopeDefId = getScopeWhereVarIsDef(scopeDef, var);</span>
+<span class="fc bfc" id="L790" title="All 2 branches covered.">		for (int i=0; i&lt;definitions.size(); i++) {</span>
+<span class="fc" id="L791">			Definition def = definitions.get(i);</span>
+<span class="fc bfc" id="L792" title="All 6 branches covered.">			if (def.getVariable().equals(var) &amp;&amp; def.getRowNo() &gt; row1 &amp;&amp; def.getRowNo() &lt; row2) {</span>
+<span class="fc" id="L793">				int scope = getScopeWhereVarIsDef(def.getScope(), def.getVariable());</span>
+<span class="pc bpc" id="L794" title="2 of 4 branches missed.">				if (scope == scopeDefId &amp;&amp; isMandatory(def.getScope(), scopeDef, scopeUse)) {</span>
+<span class="nc" id="L795">					exists = true;</span>
+<span class="nc" id="L796">					break;</span>
+				}
+			}
+		}
+<span class="fc" id="L800">		return exists;</span>
+	}
+	
+	// Provera da li je definicija obavezna
+	public boolean isMandatory(Scope scope, Scope scopeDef, Scope scopeUse) {
+		// Ako se nalazi u istom opsegu sa zadatom definicijom ili upotrebom sigurno je obavezna
+<span class="pc bpc" id="L806" title="2 of 4 branches missed.">		if (scope.getId() == scopeDef.getId() || scope.getId() == scopeUse.getId())</span>
+<span class="nc" id="L807">			return true;</span>
+		
+		// Definicija nije obavezna ako se nalazi u okviru if/else/petlje/switch-a,
+		// u kome se ne nalaze zadata definicija i upotreba
+<span class="fc" id="L811">		Scope currentScope = scope;</span>
+<span class="pc bpc" id="L812" title="1 of 2 branches missed.">		while (currentScope != null) {</span>
+<span class="fc" id="L813">			ScopeType type = currentScope.getType();</span>
+<span class="pc bpc" id="L814" title="5 of 6 branches missed.">			if ((type == ScopeType.IF_ELSE || type == ScopeType.LOOP || type == ScopeType.SWITCH) &amp;&amp;</span>
+<span class="pc bpc" id="L815" title="2 of 4 branches missed.">					!isInScope(scopeDef, currentScope.getId()) &amp;&amp; !isInScope(scopeUse, currentScope.getId()))</span>
+<span class="fc" id="L816">				return false;</span>
+<span class="nc" id="L817">			currentScope = currentScope.getParentScope();</span>
+		}
+		
+<span class="nc" id="L820">		return true;</span>
+	}
+	
+	// Provera da li se opseg nalazi u okviru drugog zadatog opsega
+	public boolean isInScope(Scope scope, int scopeToFind) {
+<span class="fc" id="L825">		Scope currentScope = scope;</span>
+<span class="fc bfc" id="L826" title="All 2 branches covered.">		while(currentScope != null) {</span>
+<span class="pc bpc" id="L827" title="1 of 2 branches missed.">			if (currentScope.getId() == scopeToFind)</span>
+<span class="nc" id="L828">				return true;</span>
+<span class="fc" id="L829">			currentScope = currentScope.getParentScope();</span>
+		}
+<span class="fc" id="L831">		return false;</span>
+	}
+	
+	// Dohvatanje opsega gde je promenljiva deklarisana
+	public int getScopeWhereVarIsDef(Scope scope, String var) {
+		// Ako se radi o polju klase
+<span class="pc bpc" id="L837" title="1 of 2 branches missed.">		if (var.contains(&quot;.&quot;)) {</span>
+<span class="nc" id="L838">			boolean hasThis = lexer.hasThis(var);</span>
+<span class="nc" id="L839">			String topObj = lexer.getTopObject(var);</span>
+<span class="nc bnc" id="L840" title="All 2 branches missed.">			if (hasThis) {</span>
+<span class="nc" id="L841">				Scope currentScope = scope;</span>
+<span class="nc bnc" id="L842" title="All 4 branches missed.">				while (currentScope != null &amp;&amp; currentScope.getType() != ScopeType.CLASS) {</span>
+<span class="nc" id="L843">					currentScope = currentScope.getParentScope();</span>
+				}
+<span class="nc bnc" id="L845" title="All 2 branches missed.">				if (currentScope == null) return 0;</span>
+<span class="nc" id="L846">				return currentScope.getId();</span>
+			}
+			else {
+<span class="nc" id="L849">				Scope currentScope = scope;</span>
+<span class="nc bnc" id="L850" title="All 4 branches missed.">				while (currentScope != null &amp;&amp; !currentScope.containsVar(topObj)) {</span>
+<span class="nc" id="L851">					currentScope = currentScope.getParentScope();</span>
+				}
+<span class="nc bnc" id="L853" title="All 2 branches missed.">				if (currentScope == null) return 0;</span>
+<span class="nc" id="L854">				return currentScope.getId();</span>
+			}
+		}
+		// Ako se radi o obicnoj promenljivoj
+		else {
+<span class="fc" id="L859">			Scope currentScope = scope;</span>
+<span class="fc bfc" id="L860" title="All 4 branches covered.">			while (currentScope != null &amp;&amp; !currentScope.containsVar(var)) {</span>
+<span class="fc" id="L861">				currentScope = currentScope.getParentScope();</span>
+			}
+<span class="fc bfc" id="L863" title="All 2 branches covered.">			if (currentScope == null) return 0;</span>
+<span class="fc" id="L864">			return currentScope.getId();</span>
+		}
+	}
+	
+	// Dohvatanje klase u kojoj se opseg nalazi
+	public int getClassScope(Scope scope) {
+<span class="fc" id="L870">		Scope currentScope = scope;</span>
+<span class="pc bpc" id="L871" title="1 of 4 branches missed.">		while (currentScope != null &amp;&amp; currentScope.getType() != ScopeType.CLASS) {</span>
+<span class="fc" id="L872">			currentScope = currentScope.getParentScope();</span>
+		}
+<span class="pc bpc" id="L874" title="1 of 2 branches missed.">		if (currentScope == null) return 0;</span>
+<span class="nc" id="L875">		return currentScope.getId();</span>
+	}
+	
+	// Dohvatanje funkcije u kojoj se opseg nalazi
+	public int getFunctionScope(Scope scope) {
+<span class="fc" id="L880">		Scope currentScope = scope;</span>
+<span class="pc bpc" id="L881" title="1 of 4 branches missed.">		while (currentScope != null &amp;&amp; currentScope.getType() != ScopeType.FUNCTION) {</span>
+<span class="fc" id="L882">			currentScope = currentScope.getParentScope();</span>
+		}
+<span class="pc bpc" id="L884" title="1 of 2 branches missed.">		if (currentScope == null) return 0;</span>
+<span class="nc" id="L885">		return currentScope.getId();</span>
+	}
+	
+	// Dohvatanje opsega na osnovu uslova za taj opseg
+	public Scope getLoopScopeCond(Scope scope, int condFor) {
+<span class="fc" id="L890">		Scope currentScope = scope;</span>
+<span class="fc bfc" id="L891" title="All 2 branches covered.">		while (currentScope != null) {</span>
+<span class="fc bfc" id="L892" title="All 4 branches covered.">			if (currentScope.getType() == ScopeType.LOOP &amp;&amp; currentScope.getId() == condFor)</span>
+<span class="fc" id="L893">				return currentScope;</span>
+<span class="fc" id="L894">			currentScope = currentScope.getParentScope();</span>
+		}
+<span class="fc" id="L896">		return null;</span>
+	}
+	
+	// Dohvatanje zajednicke petlje u kojoj se nalaze i definicija i upotreba
+	public Scope getScopeWithLoop(Scope defScope, Scope useScope) {
+<span class="fc" id="L901">		Scope currentDef = defScope;</span>
+<span class="fc" id="L902">		Scope currentUse = useScope;</span>
+		
+<span class="fc bfc" id="L904" title="All 2 branches covered.">		while(currentDef.getLevel() &gt; currentUse.getLevel())</span>
+<span class="fc" id="L905">			currentDef = currentDef.getParentScope();</span>
+<span class="fc bfc" id="L906" title="All 2 branches covered.">		while(currentDef.getLevel() &lt; currentUse.getLevel())</span>
+<span class="fc" id="L907">			currentUse = currentUse.getParentScope();</span>
+		
+<span class="pc bpc" id="L909" title="1 of 4 branches missed.">		while (currentDef != null &amp;&amp; currentUse != null) {</span>
+<span class="fc bfc" id="L910" title="All 4 branches covered.">			if (currentDef.getId() == currentUse.getId() &amp;&amp; currentDef.getType() == ScopeType.LOOP)</span>
+<span class="fc" id="L911">				return currentDef;</span>
+<span class="fc" id="L912">			currentDef = currentDef.getParentScope();</span>
+<span class="fc" id="L913">			currentUse = currentUse.getParentScope();</span>
+		}
+<span class="fc" id="L915">		return null;</span>
+	}
+	
+	// Dohvatanje zajednickog switch-a u kom se nalaze i definicija i upotreba
+	public Scope getScopeWithSwitch(Scope defScope, Scope useScope) {
+<span class="fc" id="L920">		Scope currentDef = defScope;</span>
+<span class="fc" id="L921">		Scope currentUse = useScope;</span>
+		
+<span class="fc bfc" id="L923" title="All 2 branches covered.">		while(currentDef.getLevel() &gt; currentUse.getLevel())</span>
+<span class="fc" id="L924">			currentDef = currentDef.getParentScope();</span>
+<span class="fc bfc" id="L925" title="All 2 branches covered.">		while(currentDef.getLevel() &lt; currentUse.getLevel())</span>
+<span class="fc" id="L926">			currentUse = currentUse.getParentScope();</span>
+		
+<span class="pc bpc" id="L928" title="1 of 4 branches missed.">		while (currentDef != null &amp;&amp; currentUse != null) {</span>
+<span class="pc bpc" id="L929" title="1 of 4 branches missed.">			if (currentDef.getId() == currentUse.getId() &amp;&amp; currentDef.getType() == ScopeType.SWITCH)</span>
+<span class="nc" id="L930">				return currentDef;</span>
+<span class="fc" id="L931">			currentDef = currentDef.getParentScope();</span>
+<span class="fc" id="L932">			currentUse = currentUse.getParentScope();</span>
+		}
+<span class="fc" id="L934">		return null;</span>
+	}
+	
+	// Provera da li postoji break izmedju dve naredbe u okviru switch-a
+	public boolean breakExistsBetween(Definition def, Use use, int switchId) {
+<span class="nc bnc" id="L939" title="All 2 branches missed.">		for (int i=0; i&lt;breakStmts.size(); i++) {</span>
+<span class="nc" id="L940">			BreakStmt breakStmt = breakStmts.get(i);</span>
+<span class="nc bnc" id="L941" title="All 4 branches missed.">			if (breakStmt.getType() != BreakType.SWITCH_BREAK || breakStmt.getScopeId() != switchId)</span>
+<span class="nc" id="L942">				continue;</span>
+<span class="nc bnc" id="L943" title="All 2 branches missed.">			if (isMandatory(breakStmt.getBelongsToScope(), def.getScope(), use.getScope()) &amp;&amp; </span>
+<span class="nc bnc" id="L944" title="All 4 branches missed.">					breakStmt.getRowNo() &gt; def.getRowNo() &amp;&amp; breakStmt.getRowNo() &lt; use.getRowNo())</span>
+<span class="nc" id="L945">				return true;</span>
+		}
+<span class="nc" id="L947">		return false;</span>
+	}
+	
+	// Provera da li su dva opsega medjusobno iskljuciva
+	public boolean areExclusive(Scope scopeDef, Scope scopeUse) {
+<span class="fc bfc" id="L952" title="All 2 branches covered.">		for (int i=0; i&lt;ifElseStmts.size(); i++) {</span>
+<span class="fc" id="L953">			IfElseStmt ifElse = ifElseStmts.get(i);</span>
+<span class="fc" id="L954">			Scope currentDef = scopeDef;</span>
+<span class="fc bfc" id="L955" title="All 2 branches covered.">			while (currentDef != null) {</span>
+<span class="fc" id="L956">				int defScopeId = currentDef.getId();</span>
+<span class="fc" id="L957">				Scope currentUse = scopeUse;</span>
+<span class="fc bfc" id="L958" title="All 2 branches covered.">				while (currentUse != null) {</span>
+<span class="fc" id="L959">					int useScopeId = currentUse.getId();</span>
+<span class="fc bfc" id="L960" title="All 4 branches covered.">					if (defScopeId != useScopeId &amp;&amp; ifElse.areExclusive(defScopeId, useScopeId))</span>
+<span class="fc" id="L961">						return true;</span>
+<span class="fc" id="L962">					currentUse = currentUse.getParentScope();</span>
+				}
+<span class="fc" id="L964">				currentDef = currentDef.getParentScope();</span>
+			}
+		}
+<span class="fc" id="L967">		return false;</span>
+	}
+	
+	// Provera da li su dve promenljive iste
+	public boolean sameVars(String var1, String var2) {
+<span class="pc bpc" id="L972" title="1 of 2 branches missed.">		if (var1.contains(&quot;this&quot;))</span>
+<span class="nc" id="L973">			var1 = var1.substring(5, var1.length());</span>
+<span class="pc bpc" id="L974" title="1 of 2 branches missed.">		if (var2.contains(&quot;this&quot;))</span>
+<span class="nc" id="L975">			var2 = var2.substring(5, var2.length());</span>
+<span class="fc bfc" id="L976" title="All 2 branches covered.">		if (var1.equals(var2)) return true;</span>
+<span class="fc" id="L977">		return false;</span>
+	}
+	
+	// Pronalazenje DU-lanaca
+	public void findDuChains() {
+<span class="fc bfc" id="L982" title="All 2 branches covered.">		for (int i=0; i&lt;definitions.size(); i++) {</span>
+<span class="fc" id="L983">			Definition def = definitions.get(i);</span>
+<span class="fc bfc" id="L984" title="All 2 branches covered.">			for (int j=0; j&lt;uses.size(); j++) {</span>
+<span class="fc" id="L985">				Use use = uses.get(j);</span>
+				
+				// Ako se definicija i upotreba ne odnose na istu promenljivu nastavljamo dalje
+<span class="fc bfc" id="L988" title="All 2 branches covered.">				if (!sameVars(def.getVariable(), use.getVariable()))</span>
+<span class="fc" id="L989">					continue;</span>
+				
+<span class="fc" id="L991">				int scopeDef = getScopeWhereVarIsDef(def.getScope(), def.getVariable());</span>
+<span class="fc" id="L992">				int scopeUse = getScopeWhereVarIsDef(use.getScope(), use.getVariable());</span>
+<span class="pc bpc" id="L993" title="1 of 2 branches missed.">				if (scopeDef != scopeUse)</span>
+<span class="nc" id="L994">					continue;</span>
+				
+				// Ako definicija i upotreba nisu u istoj klasi nastavljamo dalje
+<span class="fc" id="L997">				int classDef = getClassScope(def.getScope());</span>
+<span class="fc" id="L998">				int classUse = getClassScope(use.getScope());</span>
+<span class="pc bpc" id="L999" title="1 of 2 branches missed.">				if (classDef != classUse)</span>
+<span class="nc" id="L1000">					continue;</span>
+				
+				// Ako definicija i upotreba nisu u istoj funkciji nastavljamo dalje
+<span class="fc" id="L1003">				int funcDef = getFunctionScope(def.getScope());</span>
+<span class="fc" id="L1004">				int funcUse = getFunctionScope(use.getScope());</span>
+<span class="pc bpc" id="L1005" title="1 of 2 branches missed.">				if (funcDef != funcUse)</span>
+<span class="nc" id="L1006">					continue;</span>
+				
+<span class="fc" id="L1008">				Scope loopScope = getScopeWithLoop(def.getScope(), use.getScope());</span>
+				
+				// Ako se definicija i upotreba nalaze u medjusobno iskljucivim opsezima, a nemaju zajednicku petlju
+				// nastavljamo dalje
+<span class="pc bpc" id="L1012" title="1 of 4 branches missed.">				if (areExclusive(def.getScope(), use.getScope()) &amp;&amp; loopScope == null)</span>
+<span class="nc" id="L1013">					continue;</span>
+				
+				// Ako se definicija i upotreba nalaze u istom switch-u, izmedju njih postoji break, a nemaju zajednicku petlju
+				// nastavljamo dalje
+<span class="fc" id="L1017">				Scope switchScope = getScopeWithSwitch(def.getScope(), use.getScope());</span>
+<span class="pc bpc" id="L1018" title="5 of 6 branches missed.">				if (switchScope != null &amp;&amp; breakExistsBetween(def, use, switchScope.getId()) &amp;&amp; loopScope == null)</span>
+<span class="nc" id="L1019">					continue;</span>
+				
+				// Ako se definicija nalazi pre upotrebe
+				// dovoljno je proveriti da li izmedju njih postoji jos neka definicija
+<span class="fc bfc" id="L1023" title="All 2 branches covered.">				if (def.getRowNo() &lt; use.getRowNo()) {</span>
+<span class="pc bpc" id="L1024" title="1 of 2 branches missed.">					if (!defExistsBetween(def.getVariable(), def.getRowNo(), use.getRowNo(), def.getScope(), use.getScope()))</span>
+<span class="fc" id="L1025">							addDuChain(def.getVariable(), def.getRowNo(), use.getRowNo());</span>
+<span class="fc" id="L1026">				}</span>
+				// Ako se upotreba nalazi pre definicije
+				// moguce je da postoji DU-lanac izmedju njih ako se nalaze u zajednickoj petlji
+				else {
+<span class="fc" id="L1030">					Scope defLoop = getLoopScopeCond(def.getScope(), use.getConditionFor());</span>
+					// Ako je upotreba u uslovu petlje
+<span class="fc bfc" id="L1032" title="All 2 branches covered.">					if (defLoop == null) {</span>
+<span class="pc bpc" id="L1033" title="1 of 2 branches missed.">						if (loopScope == null)</span>
+<span class="nc" id="L1034">							continue;</span>
+<span class="pc bpc" id="L1035" title="1 of 2 branches missed.">						if (!defExistsBetween(def.getVariable(), loopScope.getRowStart(), use.getRowNo(), def.getScope(), use.getScope()) &amp;&amp; </span>
+<span class="pc bpc" id="L1036" title="1 of 2 branches missed.">								!defExistsBetween(def.getVariable(), def.getRowNo(), loopScope.getRowEnd(), def.getScope(), use.getScope()))</span>
+<span class="fc" id="L1037">							addDuChain(def.getVariable(), def.getRowNo(), use.getRowNo());</span>
+<span class="fc" id="L1038">					}</span>
+					// Ako su i definicija i upotreba u okviru iste petlje
+					else {
+<span class="pc bpc" id="L1041" title="1 of 2 branches missed.">						if (!defExistsBetween(def.getVariable(), def.getRowNo(), defLoop.getRowEnd(), def.getScope(), use.getScope()))</span>
+<span class="fc" id="L1042">							addDuChain(def.getVariable(), def.getRowNo(), use.getRowNo());</span>
+					}
+				}
+				
+			}
+		}
+<span class="fc" id="L1048">	}</span>
+	
+	// Dodavanje nove LCSAJ sekvence
+	public void addLcsaj(int seqStart, int seqEnd, int jump) {
+<span class="fc" id="L1052">		lcsaj.add(new Lcsaj(seqStart, seqEnd, jump));</span>
+<span class="fc" id="L1053">	}</span>
+	
+	// Provera da li postoji obavezan skok izmedju dve linije koda
+	public boolean jumpExistsBetween(ArrayList&lt;Jump&gt; jumps, int start, int end, int priority) {
+<span class="fc bfc" id="L1057" title="All 2 branches covered.">		for (int i=0; i&lt;jumps.size(); i++) {</span>
+<span class="fc" id="L1058">			Jump jump = jumps.get(i);</span>
+<span class="fc bfc" id="L1059" title="All 4 branches covered.">			if (jump.isMandatory() &amp;&amp; jump.getStart() &gt; start) {</span>
+<span class="fc bfc" id="L1060" title="All 2 branches covered.">				if (jump.getStart() &lt; end)</span>
+<span class="fc" id="L1061">					return true;</span>
+<span class="pc bpc" id="L1062" title="1 of 4 branches missed.">				else if (jump.getStart() == end &amp;&amp; jump.getPriority() &gt; priority)</span>
+<span class="nc" id="L1063">					return true;</span>
+			}
+		}
+<span class="fc" id="L1066">		return false;</span>
+	}
+	
+	// Pronalazenje LCSAJ sekvenci
+	public void findLcsaj() {
+<span class="fc" id="L1071">		ArrayList&lt;Integer&gt; seqStarts = symTable.findSeqStarts();</span>
+<span class="fc" id="L1072">		ArrayList&lt;Jump&gt; jumps = symTable.findJumps(ifElseStmts, breakStmts);</span>
+		
+<span class="fc bfc" id="L1074" title="All 2 branches covered.">		for (int i=0; i&lt;seqStarts.size(); i++) {</span>
+<span class="fc" id="L1075">			int seqStart = seqStarts.get(i);</span>
+<span class="fc bfc" id="L1076" title="All 2 branches covered.">			for (int j=0; j&lt;jumps.size(); j++) {</span>
+<span class="fc" id="L1077">				int seqEnd = jumps.get(j).getStart();</span>
+<span class="fc" id="L1078">				int jump = jumps.get(j).getEnd();</span>
+<span class="fc" id="L1079">				int priority = jumps.get(j).getPriority();</span>
+				// Pocetak sekvence mora da bude pre kraja sekvence
+<span class="fc bfc" id="L1081" title="All 2 branches covered.">				if (seqStart &gt; seqEnd)</span>
+<span class="fc" id="L1082">					continue;</span>
+				// Potrebno je da izmedju pocetka i kraja sekvence nema obaveznog skoka
+<span class="pc bpc" id="L1084" title="1 of 6 branches missed.">				if (!jumpExistsBetween(jumps, seqStart, seqEnd, priority) &amp;&amp; (seqStart == seqEnd || !symTable.areInSameSwitch(seqStart, seqEnd))) {</span>
+<span class="fc" id="L1085">					addLcsaj(seqStart, seqEnd, jump);</span>
+				}
+			}
+		}
+		
+		// Dodajemo poslednju LCSAJ sekvencu (od neke linije do kraja programa)
+<span class="fc" id="L1091">		int lastSeqStart = seqStarts.get(seqStarts.size() - 1);</span>
+<span class="fc" id="L1092">		int lastRow = symTable.getScope(0).getRowEnd();</span>
+<span class="fc bfc" id="L1093" title="All 2 branches covered.">		if (lastRow &gt; lastSeqStart)</span>
+<span class="fc" id="L1094">			addLcsaj(lastSeqStart, lastRow, -1);</span>
+<span class="fc" id="L1095">	}</span>
+	
+	// Dohvatanje definicija za ispis
+	public String getDefinitions() {
+<span class="fc" id="L1099">		String defStr = &quot;&quot;;</span>
+<span class="fc bfc" id="L1100" title="All 2 branches covered.">		for (int i=0; i&lt;definitions.size(); i++) {</span>
+<span class="fc" id="L1101">			Definition d = definitions.get(i);</span>
+<span class="fc" id="L1102">			String var = d.getVariable();</span>
+<span class="pc bpc" id="L1103" title="1 of 2 branches missed.">			if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1104">				var = var.substring(5, var.length());</span>
+<span class="fc" id="L1105">			defStr += var + &quot; (red &quot; + d.getRowNo() + &quot;)\n&quot;;</span>
+		}
+<span class="fc" id="L1107">		defStr += &quot;\nBroj definicija: &quot; + definitions.size();</span>
+<span class="fc" id="L1108">		return defStr;</span>
+	}
+	
+	// Dohvatanje upotreba za ispis
+	public String getUses() {
+<span class="fc" id="L1113">		String useStr = &quot;&quot;;</span>
+<span class="fc" id="L1114">		int cUses = 0;</span>
+<span class="fc" id="L1115">		int pUses = 0;</span>
+<span class="fc bfc" id="L1116" title="All 2 branches covered.">		for (int i=0; i&lt;uses.size(); i++) {</span>
+<span class="fc" id="L1117">			Use u = uses.get(i);</span>
+<span class="fc" id="L1118">			String var = u.getVariable();</span>
+<span class="pc bpc" id="L1119" title="1 of 2 branches missed.">			if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1120">				var = var.substring(5, var.length());</span>
+<span class="fc" id="L1121">			useStr += var + &quot; (red &quot; + u.getRowNo() + &quot;, &quot; + u.getType() + &quot;-upotreba)\n&quot;;</span>
+<span class="fc bfc" id="L1122" title="All 2 branches covered.">			if (u.getType() == 'c')</span>
+<span class="fc" id="L1123">				cUses++;</span>
+			else
+<span class="fc" id="L1125">				pUses++;</span>
+		}
+<span class="fc" id="L1127">		useStr += &quot;\nBroj c-upotreba: &quot; + cUses;</span>
+<span class="fc" id="L1128">		useStr += &quot;\nBroj p-upotreba: &quot; + pUses;</span>
+<span class="fc" id="L1129">		return useStr;</span>
+	}
+	
+	// Dohvatanje DU-lanaca za ispis
+	public String getDuChains() {
+<span class="fc" id="L1134">		String duStr = &quot;&quot;;</span>
+<span class="fc bfc" id="L1135" title="All 2 branches covered.">		for (int i=0; i&lt;duChains.size(); i++) {</span>
+<span class="fc" id="L1136">			DUChain du = duChains.get(i);</span>
+<span class="fc" id="L1137">			String var = du.getVariable();</span>
+<span class="pc bpc" id="L1138" title="1 of 2 branches missed.">			if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1139">				var = var.substring(5, var.length());</span>
+<span class="fc" id="L1140">			duStr += &quot;[&quot; + var + &quot;, &quot; + du.getRowNoDef() + &quot;, &quot; + du.getRowNoUse() + &quot;]\n&quot;;</span>
+		}
+<span class="fc" id="L1142">		duStr += &quot;\nBroj DU-lanaca: &quot; + duChains.size();</span>
+<span class="fc" id="L1143">		return duStr;</span>
+	}
+	
+	// Dohvatanje LCSAJ sekvenci za ispis
+	public String getLcsaj() {
+		// Ispis tabele simbola (samo za testiranje)
+<span class="fc" id="L1149">		String s = &quot;&quot;;</span>
+<span class="fc bfc" id="L1150" title="All 2 branches covered.">		for (int i=0; i&lt;symTable.numberOfScopes(); i++) {</span>
+<span class="fc" id="L1151">			Scope scope = symTable.getScope(i);</span>
+<span class="fc" id="L1152">			s += scope.getId() + &quot; (&quot; + scope.getRowStart() + &quot;-&quot; + scope.getRowEnd() + &quot;, &quot; + scope.getType() + &quot;, &quot; + scope.isDoLoop() + &quot;): &quot; + scope.getVars() + &quot;\n&quot;;</span>
+		}
+<span class="fc" id="L1154">		System.out.println(s);</span>
+		
+		// Ispis if-else struktura (samo za testiranje)
+<span class="fc" id="L1157">		s = &quot;&quot;;</span>
+<span class="fc bfc" id="L1158" title="All 2 branches covered.">		for (int i=0; i&lt;ifElseStmts.size(); i++) {</span>
+<span class="fc" id="L1159">			IfElseStmt ie = ifElseStmts.get(i);</span>
+<span class="fc" id="L1160">			s += &quot;if: &quot; + ie.getIfScope() + &quot;, else: &quot; + ie.getElseScope() + &quot;, parent: &quot; + ie.getParentIfElse() + &quot;\n&quot;;</span>
+		}
+<span class="fc" id="L1162">		System.out.println(s);</span>
+		
+		// Ispis break/continue naredbi (samo za testiranje)
+<span class="fc" id="L1165">		s = &quot;&quot;;</span>
+<span class="pc bpc" id="L1166" title="1 of 2 branches missed.">		for (int i=0; i&lt;breakStmts.size(); i++) {</span>
+<span class="nc" id="L1167">			BreakStmt bs = breakStmts.get(i);</span>
+<span class="nc" id="L1168">			s += bs.getType() + &quot;: pripada &quot; + bs.getBelongsToScope().getId() + &quot;, odnosi se na &quot; + bs.getScopeId() + &quot;\n&quot;; </span>
+		}
+<span class="fc" id="L1170">		System.out.println(s);</span>
+		
+<span class="fc" id="L1172">		s = &quot;&quot;;</span>
+<span class="fc bfc" id="L1173" title="All 2 branches covered.">		for (int i=0; i&lt;lcsaj.size(); i++) {</span>
+<span class="fc" id="L1174">			Lcsaj lc = lcsaj.get(i);</span>
+<span class="pc bpc" id="L1175" title="1 of 2 branches missed.">			if (lc.getJump() != -1)</span>
+<span class="fc" id="L1176">				s += &quot;(&quot; + lc.getStartSeq() + &quot;, &quot; + lc.getEndSeq() + &quot;, &quot; + lc.getJump() + &quot;)\n&quot;;</span>
+			else
+<span class="nc" id="L1178">				s += &quot;(&quot; + lc.getStartSeq() + &quot;, &quot; + lc.getEndSeq() + &quot;)\n&quot;;</span>
+		}
+<span class="fc" id="L1180">		s += &quot;\nBroj LCSAJ sekvenci: &quot; + lcsaj.size();</span>
+<span class="fc" id="L1181">		return s;</span>
+	}
+	
+	// Provera da li se nalazimo u step-by-step modu rada
+	public boolean isStepByStep() {
+<span class="fc" id="L1186">		return stepByStep;</span>
+	}
+	
+	// Zapocinjanje step-by-step moda rada
+	public void startStepByStep() {
+<span class="fc" id="L1191">		stepByStep = true;</span>
+<span class="fc" id="L1192">		currentRow = 1;</span>
+<span class="fc" id="L1193">	}</span>
+	
+	// Prelazak na sledeci korak u step-by-step modu rada
+	public boolean nextStep(JTextArea defArea, JTextArea useArea, JTextArea duChainsArea) {
+<span class="fc" id="L1197">		boolean newDefUseAdded = false;</span>
+<span class="fc" id="L1198">		int lastRow = symTable.getScope(0).getRowEnd();</span>
+		
+		// Sve dok ne dodamo novu definiciju/upotrebu ili dok ne dodjemo do kraja programa
+<span class="pc bpc" id="L1201" title="1 of 4 branches missed.">		while (!newDefUseAdded &amp;&amp; currentRow &lt;= lastRow) {</span>
+			
+			// Dodajemo sve definicije na tekucoj liniji
+<span class="fc bfc" id="L1204" title="All 2 branches covered.">			for (int i=0; i&lt;definitions.size(); i++) {</span>
+<span class="fc" id="L1205">				Definition d = definitions.get(i);</span>
+<span class="fc bfc" id="L1206" title="All 2 branches covered.">				if (d.getRowNo() == currentRow) {</span>
+<span class="fc" id="L1207">					String var = d.getVariable();</span>
+<span class="pc bpc" id="L1208" title="1 of 2 branches missed.">					if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1209">						var = var.substring(5, var.length());</span>
+<span class="fc" id="L1210">					defArea.append(var + &quot; (red &quot; + d.getRowNo() + &quot;)\n&quot;); </span>
+<span class="fc" id="L1211">					newDefUseAdded = true;</span>
+				}
+			}
+			
+			// Dodajemo sve upotrebe na tekucoj liniji
+<span class="fc bfc" id="L1216" title="All 2 branches covered.">			for (int i=0; i&lt;uses.size(); i++) {</span>
+<span class="fc" id="L1217">				Use u = uses.get(i);</span>
+<span class="fc bfc" id="L1218" title="All 2 branches covered.">				if (u.getRowNo() == currentRow) {</span>
+<span class="fc" id="L1219">					String var = u.getVariable();</span>
+<span class="pc bpc" id="L1220" title="1 of 2 branches missed.">					if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1221">						var = var.substring(5, var.length());</span>
+<span class="fc" id="L1222">					useArea.append(var + &quot; (red &quot; + u.getRowNo() + &quot;, &quot; + u.getType() + &quot;-upotreba)\n&quot;);</span>
+<span class="fc" id="L1223">					newDefUseAdded = true;</span>
+				}
+			}
+			
+			// Dodajemo sve DU-lance na tekucoj liniji
+<span class="fc bfc" id="L1228" title="All 2 branches covered.">			for (int i=0; i&lt;duChains.size(); i++) {</span>
+<span class="fc" id="L1229">				DUChain du = duChains.get(i);</span>
+<span class="fc bfc" id="L1230" title="All 2 branches covered.">				if (du.getRowNoDef() &gt;= du.getRowNoUse()) {</span>
+<span class="pc bpc" id="L1231" title="1 of 2 branches missed.">					if (du.getRowNoDef() == currentRow) {</span>
+<span class="nc" id="L1232">						String var = du.getVariable();</span>
+<span class="nc bnc" id="L1233" title="All 2 branches missed.">						if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1234">							var = var.substring(5, var.length());</span>
+<span class="nc" id="L1235">						duChainsArea.append(&quot;[&quot; + var + &quot;, &quot; + du.getRowNoDef() + &quot;, &quot; + du.getRowNoUse() + &quot;]\n&quot;);</span>
+					}
+<span class="nc" id="L1237">				}</span>
+				else {
+<span class="fc bfc" id="L1239" title="All 2 branches covered.">					if (du.getRowNoUse() == currentRow) {</span>
+<span class="fc" id="L1240">						String var = du.getVariable();</span>
+<span class="pc bpc" id="L1241" title="1 of 2 branches missed.">						if (var.contains(&quot;this&quot;))</span>
+<span class="nc" id="L1242">							var = var.substring(5, var.length());</span>
+<span class="fc" id="L1243">						duChainsArea.append(&quot;[&quot; + var + &quot;, &quot; + du.getRowNoDef() + &quot;, &quot; + du.getRowNoUse() + &quot;]\n&quot;);</span>
+					}
+				}
+			}
+			
+			// Prelazimo na sledecu liniju
+<span class="fc" id="L1249">			currentRow++;</span>
+		}
+		
+		// Ako smo dosli do kraja programa
+<span class="pc bpc" id="L1253" title="1 of 2 branches missed.">		if (currentRow &gt; lastRow) {</span>
+<span class="nc" id="L1254">			int cUses = 0;</span>
+<span class="nc" id="L1255">			int pUses = 0;</span>
+<span class="nc bnc" id="L1256" title="All 2 branches missed.">			for (int i=0; i&lt;uses.size(); i++) {</span>
+<span class="nc" id="L1257">				Use u = uses.get(i);</span>
+<span class="nc bnc" id="L1258" title="All 2 branches missed.">				if (u.getType() == 'c')</span>
+<span class="nc" id="L1259">					cUses++;</span>
+				else
+<span class="nc" id="L1261">					pUses++;</span>
+			}
+			
+			// Ispisujemo broj definicija/upotreba/DU-lanaca
+<span class="nc" id="L1265">			defArea.append(&quot;\nBroj definicija: &quot; + definitions.size());</span>
+<span class="nc" id="L1266">			useArea.append(&quot;\nBroj c-upotreba: &quot; + cUses);</span>
+<span class="nc" id="L1267">			useArea.append(&quot;\nBroj p-upotreba: &quot; + pUses);</span>
+<span class="nc" id="L1268">			duChainsArea.append(&quot;\nBroj DU-lanaca: &quot; + duChains.size());</span>
+			// Izlazimo iz step-by-step moda
+<span class="nc" id="L1270">			stepByStep = false;</span>
+<span class="nc" id="L1271">			return true;</span>
+		}
+<span class="fc" id="L1273">		return false;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

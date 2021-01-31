@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>TreeFiller.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">TreeFiller.java</span></div><h1>TreeFiller.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+// Klasa koja popunjava stablo sa fajlovima i folderima
+class TreeFiller extends SimpleFileVisitor&lt;Path&gt; {
+	
+	private JTree tree;
+	private DefaultMutableTreeNode currentNode;
+	
+    public TreeFiller(JTree tree) {
+<span class="nc" id="L19">		super();</span>
+<span class="nc" id="L20">		this.tree = tree;</span>
+<span class="nc" id="L21">		currentNode = null;</span>
+<span class="nc" id="L22">	}</span>
+
+	public JTree getTree() {
+<span class="nc" id="L25">		return tree;</span>
+	}
+	
+	private String getFileExtension(File file) {
+<span class="nc" id="L29">	    String name = file.getName();</span>
+	    try {
+<span class="nc" id="L31">	        return name.substring(name.lastIndexOf(&quot;.&quot;) + 1);</span>
+<span class="nc" id="L32">	    } catch (Exception e) {</span>
+<span class="nc" id="L33">	        return &quot;&quot;;</span>
+	    }
+	}
+	
+	// Metoda koja posećuje jedan fajl
+	@Override 
+	public FileVisitResult visitFile(Path aFile, BasicFileAttributes aAttrs) throws IOException {
+		// Ignoriše fajlove koji nisu .java ili .txt
+<span class="nc" id="L41">		String ext = getFileExtension(aFile.toFile());</span>
+<span class="nc bnc" id="L42" title="All 4 branches missed.">		if (!(ext.equals(&quot;java&quot;) || ext.equals(&quot;txt&quot;)))</span>
+<span class="nc" id="L43">			return FileVisitResult.CONTINUE;</span>
+		
+		// Ako još uvek nemamo koreni čvor ovde se stvara
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		if (currentNode == null) {</span>
+<span class="nc" id="L47">			currentNode = new DefaultMutableTreeNode(new FileInfo(aFile.getFileName().toString(), aFile, aFile.getParent()));</span>
+<span class="nc" id="L48">			tree.setModel(new DefaultTreeModel(currentNode));</span>
+<span class="nc" id="L49">			((DefaultTreeModel)tree.getModel()).reload();</span>
+<span class="nc" id="L50">		}</span>
+		else {
+			// Vraćamo se do čvora (foldera) u kome se nalazi tekući fajl i dodajemo ga u stablo
+<span class="nc" id="L53">			FileInfo fileInfo = (FileInfo) currentNode.getUserObject();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">			while (!fileInfo.getFilePath().equals(aFile.getParent())) {</span>
+<span class="nc" id="L55">				currentNode = (DefaultMutableTreeNode) currentNode.getParent();</span>
+<span class="nc" id="L56">				fileInfo = (FileInfo) currentNode.getUserObject();</span>
+			}
+<span class="nc" id="L58">			DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(new FileInfo(aFile.getFileName().toString(), aFile, aFile.getParent()));</span>
+<span class="nc" id="L59">			currentNode.add(newChild);</span>
+		}
+      
+<span class="nc" id="L62">		return FileVisitResult.CONTINUE;</span>
+    }
+    
+	// Metoda koja posećuje jedan folder
+    @Override  
+    public FileVisitResult preVisitDirectory(Path aDir, BasicFileAttributes aAttrs) throws IOException {
+    	// Ako još uvek nemamo koreni čvor ovde se stvara
+<span class="nc bnc" id="L69" title="All 2 branches missed.">    	if (currentNode == null) {</span>
+<span class="nc" id="L70">    		currentNode = new DefaultMutableTreeNode(new FileInfo(aDir.getFileName().toString(), aDir, aDir.getParent()));</span>
+<span class="nc" id="L71">    		tree.setModel(new DefaultTreeModel(currentNode));</span>
+<span class="nc" id="L72">    		((DefaultTreeModel)tree.getModel()).reload();</span>
+<span class="nc" id="L73">    	}</span>
+    	else {
+    		// Vraćamo se do čvora (foldera) u kome se nalazi tekući folder i dodajemo ga u stablo
+<span class="nc" id="L76">    		FileInfo fileInfo = (FileInfo) currentNode.getUserObject();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    		while (!fileInfo.getFilePath().equals(aDir.getParent())) {</span>
+<span class="nc" id="L78">    			currentNode = (DefaultMutableTreeNode) currentNode.getParent();</span>
+<span class="nc" id="L79">    			fileInfo = (FileInfo) currentNode.getUserObject();</span>
+    		}
+<span class="nc" id="L81">    		DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(new FileInfo(aDir.getFileName().toString(), aDir, aDir.getParent()));</span>
+<span class="nc" id="L82">    		currentNode.add(newChild);</span>
+    		// Novi folder postaje tekući čvor u stablu
+<span class="nc" id="L84">    		currentNode = newChild;</span>
+    	}
+      
+<span class="nc" id="L87">    	return FileVisitResult.CONTINUE;</span>
+    }
+  }
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

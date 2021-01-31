@@ -1,0 +1,521 @@
+{
+  "id": "10fead1b-c7af-4db3-8384-148069f6472e",
+  "version": "2.0",
+  "name": "LoginTesting",
+  "url": "http://localhost/ankete2/login.php",
+  "tests": [{
+    "id": "600979a8-c314-4c0c-8e04-1cad196bcf77",
+    "name": "LoginSuccess",
+    "commands": [{
+      "id": "739b85ed-2214-4b5d-9144-7a5f3153b131",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "eebfb80d-d700-40d4-8b77-1b9562248e2d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1056",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "04e91f09-ad88-48f5-9772-ca21124246db",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "46f7eaa8-9db9-44cb-ad90-0250f1ccc495",
+      "comment": "",
+      "command": "type",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "petar4444"
+    }, {
+      "id": "c0f7fffc-3593-4c7a-8108-23ebf7d339d5",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bec00134-2110-441a-8dfa-6d5d2f95dcc5",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0edf7aa8-895e-4a8a-a6e7-483149f0b281",
+      "comment": "",
+      "command": "click",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "066d94cb-eb7d-4845-8343-fc8271542755",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$"
+    }, {
+      "id": "9f034e70-1e08-4638-96d9-ba637e6b1360",
+      "comment": "",
+      "command": "click",
+      "target": "name=logindugme",
+      "targets": [
+        ["name=logindugme", "name"],
+        ["css=.ui:nth-child(3)", "css:finder"],
+        ["xpath=//button[@name='logindugme']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "120265de-d7ef-4039-8b72-fd7c30d479f5",
+    "name": "UserNeispravanPwNeispravan",
+    "commands": [{
+      "id": "4d190b1f-a1da-47d2-a251-850323cc1539",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "145f3792-7eb6-4219-af3f-011c3e02f272",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4adc10e1-2737-43b0-853a-0d766655041e",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a1bb10e9-ca30-48ce-88c6-64b6993ce3fa",
+      "comment": "",
+      "command": "type",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9e84669f-455f-4c63-a8c7-8a961683e889",
+      "comment": "",
+      "command": "click",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e17775f4-8b1a-4d97-9970-3f6e0919f588",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "13aec841-1844-415d-b2ca-77b04ac53b1e",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "aad455d3-c8d7-41ac-8f60-503944ddfa0e",
+      "comment": "",
+      "command": "click",
+      "target": "name=formlogin",
+      "targets": [
+        ["name=formlogin", "name"],
+        ["css=#log > .ui", "css:finder"],
+        ["xpath=//form[@name='formlogin']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form", "xpath:idRelative"],
+        ["xpath=//form", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "57da0272-740b-42b1-9ae3-91f7b76699b0",
+      "comment": "",
+      "command": "click",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a8a06334-4838-4335-9d26-49ebce91966c",
+      "comment": "",
+      "command": "type",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "pepepe"
+    }, {
+      "id": "81d9afcf-9dac-42bf-bb44-54f0a4975d5a",
+      "comment": "",
+      "command": "click",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b27f64ad-bab9-461c-97e8-f03ee11df75a",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "123123123"
+    }, {
+      "id": "f1cf0b9e-6c73-4519-a18f-7385a290d497",
+      "comment": "",
+      "command": "click",
+      "target": "name=logindugme",
+      "targets": [
+        ["name=logindugme", "name"],
+        ["css=.ui:nth-child(3)", "css:finder"],
+        ["xpath=//button[@name='logindugme']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "9ae6c385-6dc6-4e5a-9fa2-a6b5ff32afac",
+    "name": "UserLabelBlank",
+    "commands": [{
+      "id": "7f333290-03b3-4865-82a2-7ab88301ca7c",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6563a1fc-46c5-4761-b6ef-b84ebaf9ff29",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "887f4ba9-2b63-4d8c-bc54-b93ce8db1a29",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "71d8f603-ba21-40c6-8fa9-264236c190bb",
+      "comment": "",
+      "command": "type",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bd43ea2f-7159-4018-a407-9917ca2c6b0b",
+      "comment": "",
+      "command": "click",
+      "target": "id=log",
+      "targets": [
+        ["id=log", "id"],
+        ["css=#log", "css:finder"],
+        ["xpath=//div[@id='log']", "xpath:attributes"],
+        ["xpath=//div[@id='sve']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a9e8cc8b-2dc0-4290-82ee-320eebd8cb6f",
+      "comment": "",
+      "command": "click",
+      "target": "name=logindugme",
+      "targets": [
+        ["name=logindugme", "name"],
+        ["css=.ui:nth-child(3)", "css:finder"],
+        ["xpath=//button[@name='logindugme']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "d081cf78-0de6-4bf2-a475-a0f0c1695722",
+    "name": "PwLabelBlank",
+    "commands": [{
+      "id": "c44641fd-73cb-4c93-a616-02b71c2065a9",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9402e663-07c7-4eb1-b918-3fb136c187c5",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d09f71bb-7526-4ea3-a85d-4e1bae341692",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "566ade87-9d1c-470b-91d6-9d9108c26fc3",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b2271955-6bd9-472d-843d-1b2cd7f8dfa3",
+      "comment": "",
+      "command": "click",
+      "target": "id=log",
+      "targets": [
+        ["id=log", "id"],
+        ["css=#log", "css:finder"],
+        ["xpath=//div[@id='log']", "xpath:attributes"],
+        ["xpath=//div[@id='sve']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "db775010-f75e-40e7-b064-a990667d06f5",
+      "comment": "",
+      "command": "click",
+      "target": "name=logindugme",
+      "targets": [
+        ["name=logindugme", "name"],
+        ["css=.ui:nth-child(3)", "css:finder"],
+        ["xpath=//button[@name='logindugme']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "01c97a24-2f89-4f07-9398-6e3da06b6105",
+    "name": "PwIncorrect",
+    "commands": [{
+      "id": "b718ca65-002e-490e-bc2d-ce86d90430cb",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6994c378-7938-4e3b-8290-91a30011446f",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8ad564c1-36b7-4fcf-bdc0-87b7472fe86e",
+      "comment": "",
+      "command": "click",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bddd3f83-f9d7-44c1-a937-bab1cb8f3128",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1781e12b-e755-4973-aa84-60980d90be97",
+      "comment": "",
+      "command": "type",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "petar4444"
+    }, {
+      "id": "20b4a07a-e97f-469d-9fab-51719de1050a",
+      "comment": "",
+      "command": "click",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "114650c9-0115-4686-b7b9-c9d50b970541",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "neispravanPW"
+    }, {
+      "id": "62c218d7-47e3-4177-a1c5-1e0935900cbc",
+      "comment": "",
+      "command": "click",
+      "target": "name=logindugme",
+      "targets": [
+        ["name=logindugme", "name"],
+        ["css=.ui:nth-child(3)", "css:finder"],
+        ["xpath=//button[@name='logindugme']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "8e96a7fa-da72-4b4d-bb59-314ca1c441b8",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["600979a8-c314-4c0c-8e04-1cad196bcf77"]
+  }],
+  "urls": ["http://localhost/ankete2/login.php"],
+  "plugins": []
+}

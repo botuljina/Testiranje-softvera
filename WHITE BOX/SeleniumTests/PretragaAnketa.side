@@ -1,0 +1,59 @@
+{
+  "id": "10f57445-45b2-4a94-acef-fab9e51650d9",
+  "version": "2.0",
+  "name": "PretragaAnketa",
+  "url": "http://localhost/ankete2/index.php",
+  "tests": [{
+    "id": "368b5568-3ca8-4efa-a39c-aa01715e7f7e",
+    "name": "PrikazSvihAnketa",
+    "commands": [{
+      "id": "f5994327-c95a-40e2-aa57-c6be33e7d5b9",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "eb36e8f7-8833-47bf-8a62-424002d21cb3",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e0a37310-0a20-4900-949e-bf97304c9211",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) > a",
+      "targets": [
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Ankete')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'pretragaAnketa.php')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3ee0645f-ca03-4649-96aa-e755d4977d19",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(1) > a",
+      "targets": [
+        ["css=li:nth-child(1) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Pocetna')]", "xpath:link"],
+        ["xpath=(//a[contains(@href, 'index.php')])[2]", "xpath:href"],
+        ["xpath=//li/a", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "9c1eb479-176f-4794-a7aa-fd7ed1cd5f1a",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://localhost/ankete2/index.php"],
+  "plugins": []
+}

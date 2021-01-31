@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>T2.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">testovi</a> &gt; <span class="el_source">T2.java</span></div><h1>T2.java</h1><pre class="source lang-java linenums">package testovi;
+
+
+
+import helpers.*;
+import simulator.*;
+import static org.junit.Assert.assertEquals;
+import org.junit.*;
+
+<span class="fc" id="L10">public class T2 {</span>
+	//test all simulator package methods 
+	
+	//VarsToInclude klasa provera svih metoda
+	@Test
+	public void vars_to_include_test() {
+<span class="fc" id="L16">		VarsToInclude v = new VarsToInclude();</span>
+		
+<span class="fc" id="L18">		StringBuilder s = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L19">		s.append(&quot;ID\nIG\nIS\n&quot;);</span>
+		//scan vars je void
+<span class="fc" id="L21">		v.scanVars(&quot;ID IG IS&quot;);</span>
+<span class="fc" id="L22">		assertEquals(&quot;Nije dobar isInlcuded&quot;,true,v.isIncluded(&quot;ID&quot;));</span>
+<span class="fc" id="L23">		assertEquals(&quot;Nije dobar inludeAll&quot;,false,v.includeAll());</span>
+<span class="fc" id="L24">		assertEquals(&quot;Nije dobar print&quot;,s.toString(),v.printVars());</span>
+				
+<span class="fc" id="L26">	}</span>
+	
+	//Token klasa provera svih metoda
+	@Test
+	public void Token_test() {
+<span class="fc" id="L31">		Token t = new Token(&quot;d&quot;,15);</span>
+		
+<span class="fc" id="L33">		assertEquals(&quot;Nije dobar metod getToken()&quot;,&quot;d&quot;,t.getToken());</span>
+<span class="fc" id="L34">		assertEquals(&quot;Nije dobar metod getRowNo()&quot;,15,t.getRowNo());</span>
+		
+<span class="fc" id="L36">		t.setToken(&quot;f&quot;);		</span>
+<span class="fc" id="L37">		assertEquals(&quot;Nije dobar metod setToken()&quot;,&quot;f&quot;,t.getToken());</span>
+		
+<span class="fc" id="L39">		t.setRowNo(14);</span>
+<span class="fc" id="L40">		assertEquals(&quot;Nije dobar metod setRowNo()&quot;,14,t.getRowNo());</span>
+		
+<span class="fc" id="L42">	}</span>
+	//DuChain klasa provera svih metoda
+	@Test
+	public void du_chain_test() {
+<span class="fc" id="L46">		DUChain d = new DUChain(&quot;y&quot;, 6, 10);</span>
+	
+<span class="fc" id="L48">		assertEquals(&quot;Neispravna variabla&quot;,&quot;y&quot;,d.getVariable());</span>
+<span class="fc" id="L49">		assertEquals(&quot;Neispravan RowNoDef&quot;,6,d.getRowNoDef());</span>
+<span class="fc" id="L50">		assertEquals(&quot;Neispravan RowNoUse&quot;,10,d.getRowNoUse());	</span>
+<span class="fc" id="L51">	}</span>
+	//LCSAJ klasa provera svih metoda
+	@Test
+	public void lcsaj_class_test() {
+<span class="fc" id="L55">		Lcsaj l = new Lcsaj(1,5,15);</span>
+<span class="fc" id="L56">		assertEquals(&quot;Nije ispravna vrednost startSeq&quot;,1,l.getStartSeq());</span>
+<span class="fc" id="L57">		assertEquals(&quot;Nije ispravna vrednost endSeq&quot;,5,l.getEndSeq());</span>
+<span class="fc" id="L58">		assertEquals(&quot;Nije ispravna vrednost Jump&quot;,15,l.getJump());</span>
+		
+<span class="fc" id="L60">		l.setStartSeq(2);</span>
+<span class="fc" id="L61">		assertEquals(&quot;Nije ispravna vrednost startSeq, neispravno implementirana metoda setStartSeq&quot;,2,l.getStartSeq());</span>
+<span class="fc" id="L62">		l.setEndSeq(38);</span>
+<span class="fc" id="L63">		assertEquals(&quot;Nije ispravna vrednost endSeq, neispravno implementirana metoda setendSeq&quot;,38,l.getEndSeq());</span>
+<span class="fc" id="L64">		l.setJump(45);</span>
+<span class="fc" id="L65">		assertEquals(&quot;Nije ispravna vrednost getJump, neispravno implementirana metoda setJump&quot;,45,l.getJump());</span>
+		
+<span class="fc" id="L67">	}</span>
+		
+	
+	//HELPERS PACKAGE TESTING ALL METHODS
+	//SwitchCases klasa provera svih metoda
+	@Test
+	public void switch_cases_test() {
+<span class="fc" id="L74">		SwitchCases s = new SwitchCases(2);</span>
+<span class="fc" id="L75">		assertEquals(&quot;Nije dobar metod getSwitchId()&quot;,2,s.getSwitchId());</span>
+		
+<span class="fc" id="L77">		s.addCase(11);</span>
+<span class="fc" id="L78">		assertEquals(&quot;Nije dobar metod contains()&quot;,true,s.contains(11));</span>
+	
+<span class="fc" id="L80">	}</span>
+	
+	//JUMP klasa provera svih metoda
+	@Test
+	public void jump_test() {
+<span class="fc" id="L85">		Jump j = new Jump(3,13,false,9);</span>
+		
+<span class="fc" id="L87">		assertEquals(&quot;Nije dobar metod getStart()&quot;,3,j.getStart());</span>
+<span class="fc" id="L88">		assertEquals(&quot;Nije dobar metod getEnd()&quot;,13,j.getEnd());</span>
+<span class="fc" id="L89">		assertEquals(&quot;Nije dobar metod isMandatory()&quot;,false,j.isMandatory());</span>
+<span class="fc" id="L90">		assertEquals(&quot;Nije dobar metod getPriority()&quot;,9,j.getPriority());</span>
+	
+<span class="fc" id="L92">	}</span>
+	//SwitchCases klasa provera svih metoda
+	@Test
+	public void If_Else_Stmt_test() {
+<span class="fc" id="L96">		IfElseStmt i = new IfElseStmt(15);</span>
+<span class="fc" id="L97">		assertEquals(&quot;Nije dobar metod getIfScope&quot;,-1,i.getIfScope());</span>
+<span class="fc" id="L98">		assertEquals(&quot;Nije dobar metod getElseScope&quot;,-1,i.getElseScope());</span>
+<span class="fc" id="L99">		assertEquals(&quot;Nije dobar metod getparentIfElse&quot;,15,i.getParentIfElse());</span>
+		
+<span class="fc" id="L101">		i.setIfScope(11);</span>
+<span class="fc" id="L102">		assertEquals(&quot;Nije dobra fja setIfScope()&quot;,11,i.getIfScope());</span>
+<span class="fc" id="L103">		i.setElseScope(25);</span>
+<span class="fc" id="L104">		assertEquals(&quot;Nije dobar metod getElseScope&quot;,25,i.getElseScope());</span>
+	
+<span class="fc" id="L106">	}</span>
+	//Break klasu nmg da testiram zbog ovog scop-a
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

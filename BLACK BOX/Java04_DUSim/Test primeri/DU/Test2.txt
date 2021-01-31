@@ -1,0 +1,11 @@
+locks = 5;
+while (locks != -1) {
+	stocks = 3;
+	num_locks = num_locks + locks;
+	num_stocks = num_stocks + stocks;
+	locks = 4; }
+sales = 45 * num_locks + 30 * num_stocks;
+if (sales > 1000.0) {
+	commission = 0.1 * 1000;
+	commision = commission + 0.2 * (sales - 1000); }
+else commission = 0.1 * sales;

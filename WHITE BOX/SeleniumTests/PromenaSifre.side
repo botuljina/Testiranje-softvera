@@ -1,0 +1,1418 @@
+{
+  "id": "6ddf0045-c4f1-42fe-891d-ebd47a6cd8f3",
+  "version": "2.0",
+  "name": "PromenaSifre",
+  "url": "http://localhost/ankete2/login.php",
+  "tests": [{
+    "id": "79db7198-901a-440c-af81-216f39888fef",
+    "name": "UspesnaPromenaLozinke",
+    "commands": [{
+      "id": "d565fa1f-204a-440a-9341-6d9baa4b62ba",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b54c789e-319c-4e7a-ab23-3b2adf06e4e3",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a350d6bd-77df-47b6-9642-180873150d24",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4785ac13-8196-42f0-a5be-625a9251a0ef",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "99699dbb-22d5-488b-ab36-119a26d400de",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "12e15b6b-bef3-44b6-b9d9-12488672a995",
+      "comment": "",
+      "command": "click",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a41416e0-8869-4162-aa03-5ee8f9b927a8",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$"
+    }, {
+      "id": "1f012af2-b30b-415a-a175-04f0218ff7e0",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bc8bc5ae-307e-453e-8bff-4ddc4d65e709",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "1b2e531a-7b44-41d3-bb25-28921842eb6c",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "99b21b8e-ab5b-4d90-900a-2d85e4d38395",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "bff39dee-f64b-4ecf-8f53-f5573d9fca40",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "f9af0ab7-7185-4b00-98fc-323cfc6aa544",
+    "name": "KorImePrazno",
+    "commands": [{
+      "id": "b7abd56a-d7af-44d9-8ce6-d4010f57dc80",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9585c4b8-2e5c-4d65-b5cf-5c71195d3981",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6a3c1903-bb6a-4070-ab69-656f66fd0a43",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "96acb2d0-8e39-48f2-bfc3-75b5c15b7d35",
+      "comment": "",
+      "command": "click",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e9e12d9d-c324-4ac3-958f-280ac9c5f822",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7d31d7a5-d813-42d2-a970-5dfaf93176a5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "88742a9d-b95d-4c9d-8b1b-7917426ce3bb",
+      "comment": "",
+      "command": "click",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "af44243a-c3ce-4a9f-b98a-22c37e90ea30",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$"
+    }, {
+      "id": "81b5b595-37fa-4799-a5ba-898456070443",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "56bbefaf-287e-44d8-b313-873b8d515fbc",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "6cdad6b1-6c0d-44df-9f21-586e05595c52",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "58026c99-641b-44b8-8309-6eb2e32340c4",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "29c21ae2-6c33-476a-acbc-67e4036b4e0c",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "5c299a4d-047c-4ca4-ab08-e191d57e6c58",
+    "name": "NeispravnoKorIme",
+    "commands": [{
+      "id": "702d296f-f648-49fc-b41b-96fb915e0f72",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c9622d06-5fd2-46ed-b33d-e9efcc091faf",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "07f8f767-1510-4ca1-acac-d2863ef9316a",
+      "comment": "",
+      "command": "click",
+      "target": "id=log",
+      "targets": [
+        ["id=log", "id"],
+        ["css=#log", "css:finder"],
+        ["xpath=//div[@id='log']", "xpath:attributes"],
+        ["xpath=//div[@id='sve']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "57abe810-87b4-45f2-b273-82dababfcc1c",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e3a05510-7077-4070-b41c-0b2f2bf9fcb4",
+      "comment": "",
+      "command": "click",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7cc5a194-033a-451a-a413-84d9613bcdbc",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka19961"
+    }, {
+      "id": "9172572f-ee2a-404a-8928-f9d72810f1e2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7a69605a-5d21-4e4b-8705-7c01996d240f",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "3d452469-6418-4917-8b86-08cc3746ba03",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d44023af-4322-4780-9537-4a339bb4caa7",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$11"
+    }, {
+      "id": "223ddc5c-feec-4ae7-b02c-cb2c5263d7ff",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8b4e1997-e2d8-49c6-8b63-3cd46080ff66",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$11"
+    }, {
+      "id": "db991401-4b43-4fc1-a781-aabf01e760c3",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "90609c69-ef95-4799-b4bf-4ac9838f34dd",
+    "name": "PraznaStaraSifra",
+    "commands": [{
+      "id": "1f7b3ee0-4e9c-4d2c-89f3-5ae129fefc81",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4899e3a9-506e-4f53-9ad2-08e03e552a0c",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3a008606-3ec9-4837-94f7-096ef595e50a",
+      "comment": "",
+      "command": "click",
+      "target": "id=sve",
+      "targets": [
+        ["id=sve", "id"],
+        ["css=#sve", "css:finder"],
+        ["xpath=//div[@id='sve']", "xpath:attributes"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d683b55a-398f-45ae-bf65-f58dc1dc4b44",
+      "comment": "",
+      "command": "type",
+      "target": "name=password1",
+      "targets": [
+        ["name=password1", "name"],
+        ["css=#log .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5005c213-f26d-4c51-9904-aea03f1a004d",
+      "comment": "",
+      "command": "click",
+      "target": "id=log",
+      "targets": [
+        ["id=log", "id"],
+        ["css=#log", "css:finder"],
+        ["xpath=//div[@id='log']", "xpath:attributes"],
+        ["xpath=//div[@id='sve']/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9b16b4ed-4096-4983-ba34-a79c4b052773",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9a9884c1-a3be-4ea2-bc72-9b91de5a1ae4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a121c70c-4ee3-43f4-b0e6-ff7a3eba69db",
+      "comment": "",
+      "command": "click",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "28a0aed7-dcb3-4c91-b1e0-f621735c6cc8",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "85d9b682-26b5-4671-9406-e993f167439d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ec6c2c70-3f03-4e8c-8536-fe0d296c4a98",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4bf2a2b1-670d-4f44-9227-80ec82eeb24c",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9f79c490-39fc-40da-9f9b-9d3ac2bc597b",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "adc11962-b99b-4634-bd04-a280734e0082",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "bb6888c6-24f3-42f1-ac4c-48e5f1261899",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0d158f8f-c2f5-401d-9858-4925c2acb0ea",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "52f369f5-9efc-4605-9aac-3ed6ac5bdc2a",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "25d904c1-7730-4050-855b-af3497b1881c",
+    "name": "PogresnaStaraSifra",
+    "commands": [{
+      "id": "828591e0-4d4d-4c5d-a5bd-5125b8fd3240",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "15a489e3-575f-4560-a07a-d5cc26c22248",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "62f074ce-22d4-422f-bed7-ff216f0d81e9",
+      "comment": "",
+      "command": "click",
+      "target": "name=username1",
+      "targets": [
+        ["name=username1", "name"],
+        ["css=#log .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username1']", "xpath:attributes"],
+        ["xpath=//div[@id='log']/form/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "43607e53-c2e8-48ba-bbf1-e53566a09458",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "dac17e0a-f38a-4b1c-8b11-7e9f3fa25610",
+      "comment": "",
+      "command": "click",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "742581fb-17fd-4726-b0f0-87c845847954",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "5b26d60d-a12c-4da1-8e9b-f89c33445b28",
+      "comment": "",
+      "command": "click",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1bd40950-3484-4af6-a5f6-1a18592ec1eb",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "123123123"
+    }, {
+      "id": "67aa0f0c-bc19-4741-99e7-af55ef9a5924",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "37e531ba-3222-4793-91cb-548a731fb401",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "77e10405-4ff8-4744-841e-6c1600bc3061",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ee342e25-c05a-404b-aba8-60f2c0a3ddf4",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "8334db55-eca7-469b-82ed-c9d835c877e5",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "ab2aef17-ecac-4c81-93b9-bc2f1ee7b664",
+    "name": "NijeUnetaNovaSifra",
+    "commands": [{
+      "id": "42f4190d-e041-4550-990e-9de1e8b265f7",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "909175a2-9f85-4374-86af-82a8c97d2d2d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "81271d21-2df0-41cb-9ba1-f91a840a4391",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "072e8ab5-ba27-4d13-9ec9-b663a7005746",
+      "comment": "",
+      "command": "click",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "69f384ee-17ea-478b-a638-0cb9b584dc3c",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "835af80f-06d9-4d1d-91fd-8528b502767f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "dab51ffe-97b5-44e2-9491-4afe29107846",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "8a4446ed-43bc-4995-90ba-104896a36b0e",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a6636446-52b8-4c91-b9a4-4396f6382e4d",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "cbdb076f-157b-468f-bb40-d61c28d6a18b",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "eee3cd6c-504f-4d49-90e2-f60d133cab95",
+    "name": "PotvrdnaSifNijeIstaKaoNova",
+    "commands": [{
+      "id": "238505be-4007-455b-961e-8a81bb50fd4c",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "064ef1d2-e122-424c-bbae-cc95e9821e05",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8a9b2ba9-2d1a-40d0-9536-33d1728aacac",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "289c54e3-e670-4683-baa0-1746cae2b974",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "199b70cb-b946-42ce-b1be-738e4cc782c0",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "449d0a22-2332-432e-af43-b821d9c095ce",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "38741938-d8cc-41c7-8b73-cafeccf5a5be",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "273d3c1f-c996-45c9-a9d8-31c7dd96b25d",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a346913f-eec1-4dcc-8c24-575c2c4eaec2",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$11"
+    }, {
+      "id": "d843da3b-3e5a-4c30-b3be-cd7c7a6c5e80",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2835e445-dbd9-4ba6-b884-9ee7901012a7",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "2f0a5a89-a150-460d-8150-f7c7d1a63f68",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "88039768-b4ef-4736-bc6c-558641dd98a1",
+      "comment": "",
+      "command": "assertAlert",
+      "target": "Lozinke se moraju slagati!<br/>",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "662b3b9f-b012-415a-84bc-293dbf59b089",
+    "name": "TestiranjeDuzineLozinke",
+    "commands": [{
+      "id": "ab727a78-ce91-4efe-97d4-d6489b108529",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3d43f1f2-0ec9-429e-87d9-82f446b90460",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c0bbbfb1-028a-4ada-ad07-9098c15f4df7",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b1a21136-300f-4c3b-b7c0-f301a03b9734",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ed39f3bd-e008-467b-bb8d-8ebedf9df6a3",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "ca45498e-b91e-4f2e-965a-2e699dba96c8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "987daf1a-322b-43cc-808e-1196d08d7c60",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "8505d398-c4cc-4af2-87ce-560aca934a83",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "53d33205-136c-4a88-9833-dd2c75b3b503",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "1234"
+    }, {
+      "id": "731c8b0e-2375-418a-9020-0058535beac1",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2d6d7a34-3fb7-421e-b256-a1385e1d705e",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass1",
+      "targets": [
+        ["name=newpass1", "name"],
+        ["css=#novaloz .field:nth-child(4) > input", "css:finder"],
+        ["xpath=//input[@name='newpass1']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[4]/input", "xpath:position"]
+      ],
+      "value": "1234"
+    }, {
+      "id": "6ad1db9a-6682-44a1-aa60-1653f24eee4a",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "59d1456e-52ad-4eab-bff1-6ebf12401f1a",
+      "comment": "",
+      "command": "assertAlert",
+      "target": "Lozinka ne zadovoljava kriterijume tezine!<br/>",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "6bd9b58e-bd62-4678-a3f6-8cb4303324ce",
+    "name": "NijeUnetaPotvrdnaSifra",
+    "commands": [{
+      "id": "0d6fb134-96b5-41d7-9b08-58dad398e613",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/login.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3ad69421-060d-4b7e-a4d8-0304e12b74e1",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b7d467b8-8e81-4558-85ca-253930608155",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Promeni lozinku!",
+      "targets": [
+        ["linkText=Promeni lozinku!", "linkText"],
+        ["css=.loginlink", "css:finder"],
+        ["xpath=//a[contains(text(),'Promeni lozinku!')]", "xpath:link"],
+        ["xpath=//a[@onclick=\"showdiv('novaloz','log','reg')\"]", "xpath:attributes"],
+        ["xpath=//div[@id='log']/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#')])[3]", "xpath:href"],
+        ["xpath=//div[3]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Promeni lozinku!')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "916ddf25-b387-47ea-8bc2-ef354dbfe4da",
+      "comment": "",
+      "command": "click",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0785877a-d17d-4dd6-800f-0525ebe514a2",
+      "comment": "",
+      "command": "type",
+      "target": "name=username3",
+      "targets": [
+        ["name=username3", "name"],
+        ["css=#novaloz .field:nth-child(1) > input", "css:finder"],
+        ["xpath=//input[@name='username3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div/input", "xpath:position"]
+      ],
+      "value": "Luka1996"
+    }, {
+      "id": "34d24450-f08a-459f-8c35-d9b8ff455d95",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "aebabf77-cdaa-4de8-9fc7-2c65f06aab5b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mainWrap",
+      "targets": [
+        ["css=.mainWrap", "css:finder"],
+        ["xpath=//div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b2141442-7b87-4b52-b528-50c1685b141d",
+      "comment": "",
+      "command": "type",
+      "target": "name=password3",
+      "targets": [
+        ["name=password3", "name"],
+        ["css=#novaloz .field:nth-child(2) > input", "css:finder"],
+        ["xpath=//input[@name='password3']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[2]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$1"
+    }, {
+      "id": "312f32bd-c057-4930-a1e9-9daa474d5f8e",
+      "comment": "",
+      "command": "click",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c303a55b-a541-48ae-9151-6f940782a890",
+      "comment": "",
+      "command": "type",
+      "target": "name=newpass",
+      "targets": [
+        ["name=newpass", "name"],
+        ["css=#novaloz .field:nth-child(3) > input", "css:finder"],
+        ["xpath=//input[@name='newpass']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/form/div[3]/input", "xpath:position"]
+      ],
+      "value": "Sifra1234$11"
+    }, {
+      "id": "147c57a6-b31c-479d-aa59-934a537c6ce7",
+      "comment": "",
+      "command": "click",
+      "target": "name=novalozdugme",
+      "targets": [
+        ["name=novalozdugme", "name"],
+        ["css=.ui:nth-child(5)", "css:finder"],
+        ["xpath=//button[@name='novalozdugme']", "xpath:attributes"],
+        ["xpath=//div[@id='novaloz']/form/button", "xpath:idRelative"],
+        ["xpath=//div[4]/form/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "189a7916-c77f-41dc-9ec4-8cb0373c7a75",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://localhost/ankete2/login.php"],
+  "plugins": []
+}

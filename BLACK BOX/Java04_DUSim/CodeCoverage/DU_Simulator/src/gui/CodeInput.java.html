@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CodeInput.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">CodeInput.java</span></div><h1>CodeInput.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.awt.*;
+import java.beans.*;
+import java.util.HashMap;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
+
+public class CodeInput extends JPanel implements CaretListener, DocumentListener, PropertyChangeListener {
+
+	private static final long serialVersionUID = 1L;
+
+	public final static float LEFT = 0.0f;
+	public final static float CENTER = 0.5f;
+	public final static float RIGHT = 1.0f;
+
+<span class="fc" id="L19">	private final static Border OUTER = new MatteBorder(0, 0, 0, 2, Color.GRAY);</span>
+
+<span class="fc" id="L21">	private final static int HEIGHT = Integer.MAX_VALUE - 1000000;</span>
+
+	private JTextComponent component;
+
+	private boolean updateFont;
+	private int borderGap;
+	private Color currentLineForeground;
+	private float digitAlignment;
+	private int minimumDisplayDigits;
+
+	private int lastDigits;
+	private int lastHeight;
+	private int lastLine;
+
+	private HashMap&lt;String, FontMetrics&gt; fonts;
+
+	public CodeInput(JTextComponent component) {
+<span class="fc" id="L38">		this(component, 3);</span>
+<span class="fc" id="L39">	}</span>
+
+<span class="fc" id="L41">	public CodeInput(JTextComponent component, int minimumDisplayDigits) {</span>
+<span class="fc" id="L42">		this.component = component;</span>
+
+<span class="fc" id="L44">		setFont(component.getFont());</span>
+
+<span class="fc" id="L46">		setBorderGap(5);</span>
+<span class="fc" id="L47">		setCurrentLineForeground(Color.RED);</span>
+<span class="fc" id="L48">		setDigitAlignment(RIGHT);</span>
+<span class="fc" id="L49">		setMinimumDisplayDigits(minimumDisplayDigits);</span>
+
+<span class="fc" id="L51">		component.getDocument().addDocumentListener(this);</span>
+<span class="fc" id="L52">		component.addCaretListener(this);</span>
+<span class="fc" id="L53">		component.addPropertyChangeListener(&quot;font&quot;, this);</span>
+<span class="fc" id="L54">	}</span>
+
+	public boolean getUpdateFont() {
+<span class="nc" id="L57">		return updateFont;</span>
+	}
+
+	public void setUpdateFont(boolean updateFont) {
+<span class="nc" id="L61">		this.updateFont = updateFont;</span>
+<span class="nc" id="L62">	}</span>
+
+	public int getBorderGap() {
+<span class="nc" id="L65">		return borderGap;</span>
+	}
+
+	public void setBorderGap(int borderGap) {
+<span class="fc" id="L69">		this.borderGap = borderGap;</span>
+<span class="fc" id="L70">		Border inner = new EmptyBorder(0, borderGap, 0, borderGap);</span>
+<span class="fc" id="L71">		setBorder( new CompoundBorder(OUTER, inner) );</span>
+<span class="fc" id="L72">		lastDigits = 0;</span>
+<span class="fc" id="L73">		setPreferredWidth();</span>
+<span class="fc" id="L74">	}</span>
+
+	public Color getCurrentLineForeground() {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		return currentLineForeground == null ? getForeground() : currentLineForeground;</span>
+	}
+
+	public void setCurrentLineForeground(Color currentLineForeground) {
+<span class="fc" id="L81">		this.currentLineForeground = currentLineForeground;</span>
+<span class="fc" id="L82">	}</span>
+
+	public float getDigitAlignment() {
+<span class="nc" id="L85">		return digitAlignment;</span>
+	}
+
+	public void setDigitAlignment(float digitAlignment) {
+<span class="pc bpc" id="L89" title="2 of 4 branches missed.">		this.digitAlignment = digitAlignment &gt; 1.0f ? 1.0f : digitAlignment &lt; 0.0f ? -1.0f : digitAlignment;</span>
+<span class="fc" id="L90">	}</span>
+
+	public int getMinimumDisplayDigits() {
+<span class="nc" id="L93">		return minimumDisplayDigits;</span>
+	}
+
+	public void setMinimumDisplayDigits(int minimumDisplayDigits) {
+<span class="fc" id="L97">		this.minimumDisplayDigits = minimumDisplayDigits;</span>
+<span class="fc" id="L98">		setPreferredWidth();</span>
+<span class="fc" id="L99">	}</span>
+
+	private void setPreferredWidth() {
+<span class="fc" id="L102">		Element root = component.getDocument().getDefaultRootElement();</span>
+<span class="fc" id="L103">		int lines = root.getElementCount();</span>
+<span class="fc" id="L104">		int digits = Math.max(String.valueOf(lines).length(), minimumDisplayDigits);</span>
+		
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">		if (lastDigits != digits) {</span>
+<span class="fc" id="L107">			lastDigits = digits;</span>
+<span class="fc" id="L108">			FontMetrics fontMetrics = getFontMetrics(getFont());</span>
+<span class="fc" id="L109">			int width = fontMetrics.charWidth('0') * digits;</span>
+<span class="fc" id="L110">			Insets insets = getInsets();</span>
+<span class="fc" id="L111">			int preferredWidth = insets.left + insets.right + width;</span>
+
+<span class="fc" id="L113">			Dimension d = getPreferredSize();</span>
+<span class="fc" id="L114">			d.setSize(preferredWidth, HEIGHT);</span>
+<span class="fc" id="L115">			setPreferredSize(d);</span>
+<span class="fc" id="L116">			setSize(d);</span>
+		}
+<span class="fc" id="L118">	}</span>
+
+	@Override
+	public void paintComponent(Graphics g) {
+<span class="nc" id="L122">		super.paintComponent(g);</span>
+		
+<span class="nc" id="L124">		FontMetrics fontMetrics = component.getFontMetrics(component.getFont());</span>
+<span class="nc" id="L125">		Insets insets = getInsets();</span>
+<span class="nc" id="L126">		int availableWidth = getSize().width - insets.left - insets.right;</span>
+
+<span class="nc" id="L128">		java.awt.Rectangle clip = g.getClipBounds();</span>
+<span class="nc" id="L129">		int rowStartOffset = component.viewToModel( new Point(0, clip.y) );</span>
+<span class="nc" id="L130">		int endOffset = component.viewToModel(new Point(0, clip.y + clip.height));</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		while (rowStartOffset &lt;= endOffset) {</span>
+			try {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">				if (isCurrentLine(rowStartOffset))</span>
+<span class="nc" id="L135">					g.setColor( getCurrentLineForeground() );</span>
+				else
+<span class="nc" id="L137">					g.setColor( getForeground() );</span>
+
+<span class="nc" id="L139">				String lineNumber = getTextLineNumber(rowStartOffset);</span>
+<span class="nc" id="L140">				int stringWidth = fontMetrics.stringWidth( lineNumber );</span>
+<span class="nc" id="L141">				int x = getOffsetX(availableWidth, stringWidth) + insets.left;</span>
+<span class="nc" id="L142">				int y = getOffsetY(rowStartOffset, fontMetrics);</span>
+<span class="nc" id="L143">				g.drawString(lineNumber, x, y);</span>
+
+<span class="nc" id="L145">				rowStartOffset = Utilities.getRowEnd(component, rowStartOffset) + 1;</span>
+<span class="nc" id="L146">			}</span>
+<span class="nc" id="L147">			catch(Exception e) {</span>
+<span class="nc" id="L148">				break;}</span>
+		}
+<span class="nc" id="L150">	}</span>
+
+	private boolean isCurrentLine(int rowStartOffset) {
+<span class="nc" id="L153">		int caretPosition = component.getCaretPosition();</span>
+<span class="nc" id="L154">		Element root = component.getDocument().getDefaultRootElement();</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">		if (root.getElementIndex( rowStartOffset ) == root.getElementIndex(caretPosition))</span>
+<span class="nc" id="L157">			return true;</span>
+		else
+<span class="nc" id="L159">			return false;</span>
+	}
+
+	protected String getTextLineNumber(int rowStartOffset) {
+<span class="nc" id="L163">		Element root = component.getDocument().getDefaultRootElement();</span>
+<span class="nc" id="L164">		int index = root.getElementIndex(rowStartOffset);</span>
+<span class="nc" id="L165">		Element line = root.getElement(index);</span>
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">		if (line.getStartOffset() == rowStartOffset)</span>
+<span class="nc" id="L168">			return String.valueOf(index + 1);</span>
+		else
+<span class="nc" id="L170">			return &quot;&quot;;</span>
+	}
+
+	private int getOffsetX(int availableWidth, int stringWidth) {
+<span class="nc" id="L174">		return (int)((availableWidth - stringWidth) * digitAlignment);</span>
+	}
+
+	private int getOffsetY(int rowStartOffset, FontMetrics fontMetrics) throws BadLocationException {
+<span class="nc" id="L178">		java.awt.Rectangle r = component.modelToView(rowStartOffset);</span>
+<span class="nc" id="L179">		int lineHeight = fontMetrics.getHeight();</span>
+<span class="nc" id="L180">		int y = r.y + r.height;</span>
+<span class="nc" id="L181">		int descent = 0;</span>
+
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		if (r.height == lineHeight) {</span>
+<span class="nc" id="L184">			descent = fontMetrics.getDescent();</span>
+<span class="nc" id="L185">		}</span>
+		else {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">			if (fonts == null) fonts = new HashMap&lt;String, FontMetrics&gt;();</span>
+
+<span class="nc" id="L189">			Element root = component.getDocument().getDefaultRootElement();</span>
+<span class="nc" id="L190">			int index = root.getElementIndex(rowStartOffset);</span>
+<span class="nc" id="L191">			Element line = root.getElement(index);</span>
+
+<span class="nc bnc" id="L193" title="All 2 branches missed.">			for (int i = 0; i &lt; line.getElementCount(); i++) {</span>
+<span class="nc" id="L194">				Element child = line.getElement(i);</span>
+<span class="nc" id="L195">				AttributeSet as = child.getAttributes();</span>
+<span class="nc" id="L196">				String fontFamily = (String)as.getAttribute(StyleConstants.FontFamily);</span>
+<span class="nc" id="L197">				Integer fontSize = (Integer)as.getAttribute(StyleConstants.FontSize);</span>
+<span class="nc" id="L198">				String key = fontFamily + fontSize;</span>
+
+<span class="nc" id="L200">				FontMetrics fm = fonts.get( key );</span>
+
+<span class="nc bnc" id="L202" title="All 2 branches missed.">				if (fm == null) {</span>
+<span class="nc" id="L203">					Font font = new Font(fontFamily, Font.PLAIN, fontSize);</span>
+<span class="nc" id="L204">					fm = component.getFontMetrics( font );</span>
+<span class="nc" id="L205">					fonts.put(key, fm);</span>
+				}
+
+<span class="nc" id="L208">				descent = Math.max(descent, fm.getDescent());</span>
+			}
+		}
+
+<span class="nc" id="L212">		return y - descent;</span>
+	}
+
+	@Override
+	public void caretUpdate(CaretEvent e) {
+<span class="nc" id="L217">		int caretPosition = component.getCaretPosition();</span>
+<span class="nc" id="L218">		Element root = component.getDocument().getDefaultRootElement();</span>
+<span class="nc" id="L219">		int currentLine = root.getElementIndex( caretPosition );</span>
+		
+<span class="nc bnc" id="L221" title="All 2 branches missed.">		if (lastLine != currentLine) {</span>
+<span class="nc" id="L222">			repaint();</span>
+<span class="nc" id="L223">			lastLine = currentLine;</span>
+		}
+<span class="nc" id="L225">	}</span>
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+<span class="nc" id="L229">		documentChanged();</span>
+<span class="nc" id="L230">	}</span>
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+<span class="nc" id="L234">		documentChanged();</span>
+<span class="nc" id="L235">	}</span>
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+<span class="nc" id="L239">		documentChanged();</span>
+<span class="nc" id="L240">	}</span>
+
+	private void documentChanged() {
+<span class="nc" id="L243">		SwingUtilities.invokeLater(new Runnable() {</span>
+					@Override
+					public void run() {
+						try {
+<span class="nc" id="L247">							int endPos = component.getDocument().getLength();</span>
+<span class="nc" id="L248">							java.awt.Rectangle rect = component.modelToView(endPos);</span>
+
+<span class="nc bnc" id="L250" title="All 4 branches missed.">							if (rect != null &amp;&amp; rect.y != lastHeight) {</span>
+<span class="nc" id="L251">								setPreferredWidth();</span>
+<span class="nc" id="L252">								repaint();</span>
+<span class="nc" id="L253">								lastHeight = rect.y;</span>
+							}
+<span class="nc" id="L255">						}</span>
+<span class="nc" id="L256">						catch (BadLocationException ex) { /* nothing to do */ }</span>
+<span class="nc" id="L257">					}</span>
+				});
+<span class="nc" id="L259">	}</span>
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		if (evt.getNewValue() instanceof Font) {</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">			if (updateFont) {</span>
+<span class="nc" id="L265">				Font newFont = (Font) evt.getNewValue();</span>
+<span class="nc" id="L266">				setFont(newFont);</span>
+<span class="nc" id="L267">				lastDigits = 0;</span>
+<span class="nc" id="L268">				setPreferredWidth();</span>
+<span class="nc" id="L269">			}</span>
+			else {
+<span class="nc" id="L271">				repaint();</span>
+			}
+		}
+<span class="nc" id="L274">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

@@ -1,0 +1,27 @@
+Sifre za pristupanje korisnicima: baza podataka ankete2.sql
+-----------------------
+Administrator
+
+username: admin
+password: Admin123.
+
+------------------------
+Sluzbenik:
+
+username: petar4444
+sifra: Sifra1234$
+
+-------------------------
+Autor ankete:
+
+username: bojan7777
+sifra: Sifra1234$
+
+------------------------
+Ispitanici:
+
+username: Pera		(nije inicijalno odobren)
+sifra: Sifra1234$
+
+username: Luka1996
+sifra: Sifra1234$1

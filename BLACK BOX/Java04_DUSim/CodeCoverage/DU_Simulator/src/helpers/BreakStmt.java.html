@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>BreakStmt.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">helpers</a> &gt; <span class="el_source">BreakStmt.java</span></div><h1>BreakStmt.java</h1><pre class="source lang-java linenums">package helpers;
+
+import symtable.Scope;
+
+// Klasa koja predstavlja jednu BREAK ili CONTINUE naredbu
+public class BreakStmt {
+	
+<span class="nc" id="L8">	public enum BreakType { SWITCH_BREAK, LOOP_BREAK, LOOP_CONT }</span>
+	
+	private int rowNo;
+	// Id switch/loop bloka na kog se odnosi
+	private int scopeId;
+	private BreakType type;
+	// Opseg u kom se nalazi
+	private Scope belongsToScope;
+	
+	public BreakStmt(int rowNo, int scopeId, BreakType type, Scope belongsToScope) {
+<span class="nc" id="L18">		super();</span>
+<span class="nc" id="L19">		this.rowNo = rowNo;</span>
+<span class="nc" id="L20">		this.scopeId = scopeId;</span>
+<span class="nc" id="L21">		this.type = type;</span>
+<span class="nc" id="L22">		this.belongsToScope = belongsToScope;</span>
+<span class="nc" id="L23">	}</span>
+
+	public int getRowNo() {
+<span class="nc" id="L26">		return rowNo;</span>
+	}
+
+	public int getScopeId() {
+<span class="nc" id="L30">		return scopeId;</span>
+	}
+
+	public BreakType getType() {
+<span class="nc" id="L34">		return type;</span>
+	}
+
+	public Scope getBelongsToScope() {
+<span class="nc" id="L38">		return belongsToScope;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

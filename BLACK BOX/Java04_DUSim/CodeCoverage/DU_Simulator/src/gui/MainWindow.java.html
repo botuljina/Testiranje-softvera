@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>MainWindow.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">MainWindow.java</span></div><h1>MainWindow.java</h1><pre class="source lang-java linenums">package gui;
+
+import java.awt.event.*;
+import java.io.*;
+import java.nio.file.*;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.*;
+
+import simulator.Simulator;
+
+// Klasa glavnog prozora aplikacije
+// GUI je automatski izgenerisan u NetBeans IDE
+public class MainWindow extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private JButton browseButton;
+    private JTextArea codeArea;
+    public JTextArea defArea;
+    public JTextArea duChainsArea;
+    private JButton finishButton;
+    private JTree folderTree;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JScrollPane jScrollPane1;
+    private JScrollPane jScrollPane2;
+    private JScrollPane jScrollPane3;
+    private JScrollPane jScrollPane4;
+    private JScrollPane jScrollPane5;
+    private JScrollPane jScrollPane6;
+    private JTextArea lcsajArea;
+    private JButton openCodeButton;
+    private JButton resetButton;
+    private JButton startButton;
+    private JTabbedPane tabsPane;
+    public JTextArea useArea;
+    public JTextField varsArea1;
+    private JTextField varsArea2;
+	private JFileChooser chooser;
+	
+	public Simulator simulator;
+
+    public MainWindow() {
+<span class="fc" id="L53">        super(&quot;DU Simulator&quot;);</span>
+<span class="fc" id="L54">        initComponents();</span>
+<span class="fc" id="L55">        simulator = new Simulator();</span>
+<span class="fc" id="L56">    }</span>
+                  
+    private void initComponents() {
+
+<span class="fc" id="L60">        jScrollPane1 = new JScrollPane();</span>
+<span class="fc" id="L61">        codeArea = new JTextArea();</span>
+<span class="fc" id="L62">        tabsPane = new JTabbedPane();</span>
+<span class="fc" id="L63">        jPanel1 = new JPanel();</span>
+<span class="fc" id="L64">        jScrollPane3 = new JScrollPane();</span>
+<span class="fc" id="L65">        defArea = new JTextArea();</span>
+<span class="fc" id="L66">        jScrollPane4 = new JScrollPane();</span>
+<span class="fc" id="L67">        useArea = new JTextArea();</span>
+<span class="fc" id="L68">        jLabel4 = new JLabel();</span>
+<span class="fc" id="L69">        jLabel1 = new JLabel();</span>
+<span class="fc" id="L70">        jLabel2 = new JLabel();</span>
+<span class="fc" id="L71">        varsArea1 = new JTextField();</span>
+<span class="fc" id="L72">        jPanel2 = new JPanel();</span>
+<span class="fc" id="L73">        jScrollPane2 = new JScrollPane();</span>
+<span class="fc" id="L74">        duChainsArea = new JTextArea();</span>
+<span class="fc" id="L75">        jLabel3 = new JLabel();</span>
+<span class="fc" id="L76">        jLabel5 = new JLabel();</span>
+<span class="fc" id="L77">        varsArea2 = new JTextField();</span>
+<span class="fc" id="L78">        jPanel3 = new JPanel();</span>
+<span class="fc" id="L79">        jLabel6 = new JLabel();</span>
+<span class="fc" id="L80">        jScrollPane5 = new JScrollPane();</span>
+<span class="fc" id="L81">        lcsajArea = new JTextArea();</span>
+<span class="fc" id="L82">        jScrollPane6 = new JScrollPane();</span>
+<span class="fc" id="L83">        folderTree = new JTree();</span>
+<span class="fc" id="L84">        openCodeButton = new JButton();</span>
+<span class="fc" id="L85">        browseButton = new JButton();</span>
+<span class="fc" id="L86">        finishButton = new JButton();</span>
+<span class="fc" id="L87">        resetButton = new JButton();</span>
+<span class="fc" id="L88">        startButton = new JButton();</span>
+<span class="fc" id="L89">		chooser = new JFileChooser();</span>
+
+<span class="fc" id="L91">        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);</span>
+
+<span class="fc" id="L93">        codeArea.setColumns(20);</span>
+<span class="fc" id="L94">        codeArea.setRows(5);</span>
+<span class="fc" id="L95">        jScrollPane1 = new JScrollPane(codeArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);</span>
+<span class="fc" id="L96">        CodeInput tln = new CodeInput(codeArea);</span>
+<span class="fc" id="L97">        jScrollPane1.setRowHeaderView(tln);</span>
+
+<span class="fc" id="L99">        defArea.setColumns(20);</span>
+<span class="fc" id="L100">        defArea.setRows(5);</span>
+<span class="fc" id="L101">        defArea.setEnabled(false);</span>
+<span class="fc" id="L102">        defArea.setDisabledTextColor(new java.awt.Color(204, 0, 0));</span>
+<span class="fc" id="L103">        jScrollPane3.setViewportView(defArea);</span>
+
+<span class="fc" id="L105">        useArea.setColumns(20);</span>
+<span class="fc" id="L106">        useArea.setRows(5);</span>
+<span class="fc" id="L107">        useArea.setEnabled(false);</span>
+<span class="fc" id="L108">        useArea.setDisabledTextColor(new java.awt.Color(51, 51, 255));</span>
+<span class="fc" id="L109">        jScrollPane4.setViewportView(useArea);</span>
+
+<span class="fc" id="L111">        jLabel4.setText(&quot;Definicije:&quot;);</span>
+
+<span class="fc" id="L113">        jLabel1.setText(&quot;Upotrebe:&quot;);</span>
+
+<span class="fc" id="L115">        jLabel2.setText(&quot;Promenljive (razdvojene razmakom):&quot;);</span>
+
+<span class="fc" id="L117">        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);</span>
+<span class="fc" id="L118">        jPanel1.setLayout(jPanel1Layout);</span>
+<span class="fc" id="L119">        jPanel1Layout.setHorizontalGroup(</span>
+<span class="fc" id="L120">            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L121">            .addGroup(jPanel1Layout.createSequentialGroup()</span>
+<span class="fc" id="L122">                .addContainerGap()</span>
+<span class="fc" id="L123">                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L124">                    .addGroup(jPanel1Layout.createSequentialGroup()</span>
+<span class="fc" id="L125">                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)</span>
+<span class="fc" id="L126">                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="fc" id="L127">                            .addComponent(jScrollPane3))</span>
+<span class="fc" id="L128">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)</span>
+<span class="fc" id="L129">                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)</span>
+<span class="fc" id="L130">                            .addComponent(jScrollPane4)</span>
+<span class="fc" id="L131">                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))</span>
+<span class="fc" id="L132">                    .addComponent(varsArea1)</span>
+<span class="fc" id="L133">                    .addGroup(jPanel1Layout.createSequentialGroup()</span>
+<span class="fc" id="L134">                        .addComponent(jLabel2)</span>
+<span class="fc" id="L135">                        .addGap(0, 0, Short.MAX_VALUE)))</span>
+<span class="fc" id="L136">                .addContainerGap())</span>
+        );
+<span class="fc" id="L138">        jPanel1Layout.setVerticalGroup(</span>
+<span class="fc" id="L139">            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L140">            .addGroup(jPanel1Layout.createSequentialGroup()</span>
+<span class="fc" id="L141">                .addGap(19, 19, 19)</span>
+<span class="fc" id="L142">                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L143">                    .addComponent(jLabel4)</span>
+<span class="fc" id="L144">                    .addComponent(jLabel1))</span>
+<span class="fc" id="L145">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)</span>
+<span class="fc" id="L146">                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)</span>
+<span class="fc" id="L147">                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)</span>
+<span class="fc" id="L148">                    .addComponent(jScrollPane4))</span>
+<span class="fc" id="L149">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)</span>
+<span class="fc" id="L150">                .addComponent(jLabel2)</span>
+<span class="fc" id="L151">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L152">                .addComponent(varsArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L153">                .addContainerGap(15, Short.MAX_VALUE))</span>
+        );
+
+<span class="fc" id="L156">        tabsPane.addTab(&quot;Upotrebe i definicije&quot;, jPanel1);</span>
+
+<span class="fc" id="L158">        duChainsArea.setColumns(20);</span>
+<span class="fc" id="L159">        duChainsArea.setRows(5);</span>
+<span class="fc" id="L160">        duChainsArea.setEnabled(false);</span>
+<span class="fc" id="L161">        duChainsArea.setDisabledTextColor(new java.awt.Color(0, 102, 0));</span>
+<span class="fc" id="L162">        jScrollPane2.setViewportView(duChainsArea);</span>
+
+<span class="fc" id="L164">        jLabel3.setText(&quot;DU-lanci:&quot;);</span>
+
+<span class="fc" id="L166">        jLabel5.setText(&quot;Promenljive (razdvojene razmakom):&quot;);</span>
+
+<span class="fc" id="L168">        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);</span>
+<span class="fc" id="L169">        jPanel2.setLayout(jPanel2Layout);</span>
+<span class="fc" id="L170">        jPanel2Layout.setHorizontalGroup(</span>
+<span class="fc" id="L171">            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L172">            .addGroup(jPanel2Layout.createSequentialGroup()</span>
+<span class="fc" id="L173">                .addContainerGap()</span>
+<span class="fc" id="L174">                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L175">                    .addComponent(jScrollPane2)</span>
+<span class="fc" id="L176">                    .addComponent(varsArea2)</span>
+<span class="fc" id="L177">                    .addGroup(jPanel2Layout.createSequentialGroup()</span>
+<span class="fc" id="L178">                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L179">                            .addComponent(jLabel3)</span>
+<span class="fc" id="L180">                            .addComponent(jLabel5))</span>
+<span class="fc" id="L181">                        .addGap(0, 198, Short.MAX_VALUE)))</span>
+<span class="fc" id="L182">                .addContainerGap())</span>
+        );
+<span class="fc" id="L184">        jPanel2Layout.setVerticalGroup(</span>
+<span class="fc" id="L185">            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L186">            .addGroup(jPanel2Layout.createSequentialGroup()</span>
+<span class="fc" id="L187">                .addGap(18, 18, 18)</span>
+<span class="fc" id="L188">                .addComponent(jLabel3)</span>
+<span class="fc" id="L189">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)</span>
+<span class="fc" id="L190">                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L191">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L192">                .addComponent(jLabel5)</span>
+<span class="fc" id="L193">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L194">                .addComponent(varsArea2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L195">                .addContainerGap(22, Short.MAX_VALUE))</span>
+        );
+
+<span class="fc" id="L198">        tabsPane.addTab(&quot;DU-lanci&quot;, jPanel2);</span>
+
+<span class="fc" id="L200">        jLabel6.setText(&quot;LCSAJ sekvence:&quot;);</span>
+
+<span class="fc" id="L202">        lcsajArea.setColumns(20);</span>
+<span class="fc" id="L203">        lcsajArea.setRows(5);</span>
+<span class="fc" id="L204">        lcsajArea.setEnabled(false);</span>
+<span class="fc" id="L205">        lcsajArea.setDisabledTextColor(new java.awt.Color(102, 0, 102));</span>
+<span class="fc" id="L206">        jScrollPane5.setViewportView(lcsajArea);</span>
+
+<span class="fc" id="L208">        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);</span>
+<span class="fc" id="L209">        jPanel3.setLayout(jPanel3Layout);</span>
+<span class="fc" id="L210">        jPanel3Layout.setHorizontalGroup(</span>
+<span class="fc" id="L211">            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L212">            .addGroup(jPanel3Layout.createSequentialGroup()</span>
+<span class="fc" id="L213">                .addContainerGap()</span>
+<span class="fc" id="L214">                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L215">                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)</span>
+<span class="fc" id="L216">                    .addGroup(jPanel3Layout.createSequentialGroup()</span>
+<span class="fc" id="L217">                        .addComponent(jLabel6)</span>
+<span class="fc" id="L218">                        .addGap(0, 0, Short.MAX_VALUE)))</span>
+<span class="fc" id="L219">                .addContainerGap())</span>
+        );
+<span class="fc" id="L221">        jPanel3Layout.setVerticalGroup(</span>
+<span class="fc" id="L222">            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L223">            .addGroup(jPanel3Layout.createSequentialGroup()</span>
+<span class="fc" id="L224">                .addGap(23, 23, 23)</span>
+<span class="fc" id="L225">                .addComponent(jLabel6)</span>
+<span class="fc" id="L226">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)</span>
+<span class="fc" id="L227">                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L228">                .addContainerGap(35, Short.MAX_VALUE))</span>
+        );
+
+<span class="fc" id="L231">        tabsPane.addTab(&quot;LCSAJ sekvence&quot;, jPanel3);</span>
+
+<span class="fc" id="L233">        jScrollPane6.setViewportView(folderTree);</span>
+<span class="fc" id="L234">        folderTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);</span>
+<span class="fc" id="L235">        DefaultMutableTreeNode top = new DefaultMutableTreeNode(&quot;Nothing to display.&quot;);</span>
+<span class="fc" id="L236">        folderTree.setModel(new DefaultTreeModel(top));</span>
+<span class="fc" id="L237">        ((DefaultTreeModel)folderTree.getModel()).reload();</span>
+
+<span class="fc" id="L239">        openCodeButton.setText(&quot;Učitaj kod&quot;);</span>
+        // Dugme za učitavanje koda dohvata selektovani fajl iz stabla i učitava ga u oblast za kod
+<span class="fc" id="L241">        openCodeButton.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+<span class="nc" id="L244">				DefaultMutableTreeNode node = (DefaultMutableTreeNode) folderTree.getLastSelectedPathComponent();</span>
+<span class="nc bnc" id="L245" title="All 4 branches missed.">			    if (node == null || node.getUserObject().equals(&quot;Nothing to display.&quot;))</span>
+<span class="nc" id="L246">			    	return;</span>
+
+<span class="nc" id="L248">			    FileInfo fileInfo = (FileInfo) node.getUserObject();</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">			    if (node.isLeaf()) {</span>
+					try {
+<span class="nc" id="L251">						BufferedReader br = new BufferedReader(new FileReader(fileInfo.getFilePath().toString()));</span>
+<span class="nc" id="L252">						String code = &quot;&quot;;</span>
+<span class="nc" id="L253">			    	    String line = br.readLine();</span>
+
+<span class="nc bnc" id="L255" title="All 2 branches missed.">			    	    while (line != null) {</span>
+<span class="nc" id="L256">			    	        code += line + &quot;\n&quot;;</span>
+<span class="nc" id="L257">			    	        line = br.readLine();</span>
+			    	    }
+<span class="nc" id="L259">			    	    codeArea.setText(code);</span>
+<span class="nc" id="L260">			    	    br.close();</span>
+<span class="nc" id="L261">					} catch (Exception e) {</span>
+<span class="nc" id="L262">						e.printStackTrace();</span>
+					}
+			    } 
+<span class="nc" id="L265">			}</span>
+        });
+        
+<span class="fc" id="L268">        chooser.setCurrentDirectory(new java.io.File(&quot;.&quot;));</span>
+<span class="fc" id="L269">        chooser.setDialogTitle(&quot;Otvori...&quot;);</span>
+<span class="fc" id="L270">        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);</span>
+<span class="fc" id="L271">        FileNameExtensionFilter filter = new FileNameExtensionFilter(&quot;Java files&quot;, &quot;java&quot;, &quot;txt&quot;);</span>
+<span class="fc" id="L272">        chooser.setFileFilter(filter);</span>
+
+<span class="fc" id="L274">        browseButton.setText(&quot;Otvori...&quot;);</span>
+        // Dugme &quot;Otvori&quot; otvara file chooser za učitavanje foldera/fajlova
+<span class="fc" id="L276">        browseButton.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+<span class="nc" id="L279">				int returnVal = chooser.showOpenDialog(null);</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">			    if(returnVal == JFileChooser.APPROVE_OPTION) {</span>
+<span class="nc" id="L281">			    	fillTree(folderTree, chooser.getSelectedFile().getAbsolutePath());</span>
+			    } 
+<span class="nc" id="L283">			}</span>
+        });
+
+<span class="fc" id="L286">        finishButton.setText(&quot;Izvrši algoritam&quot;);</span>
+		// Dugme &quot;Izvrši algoritam&quot; izvrsava ceo algoritam
+<span class="fc" id="L288">        finishButton.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L291">				simulator = new Simulator();</span>
+<span class="nc" id="L292">				startButton.setText(&quot;Počni&quot;);</span>
+<span class="nc" id="L293">				simulator.analyseCode(codeArea.getText(), varsArea1.getText());</span>
+<span class="nc" id="L294">				defArea.setText(simulator.getDefinitions());</span>
+<span class="nc" id="L295">				useArea.setText(simulator.getUses());</span>
+<span class="nc" id="L296">				duChainsArea.setText(simulator.getDuChains());</span>
+<span class="nc" id="L297">				lcsajArea.setText(simulator.getLcsaj());</span>
+<span class="nc" id="L298">			}</span>
+        });
+
+<span class="fc" id="L301">        resetButton.setText(&quot;Obriši&quot;);</span>
+        // Dugme &quot;Obriši&quot; briše sve tekuće rezultate i tekući kod
+<span class="fc" id="L303">        resetButton.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L306">				simulator = new Simulator();</span>
+<span class="nc" id="L307">				codeArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L308">				varsArea1.setText(&quot;&quot;);</span>
+<span class="nc" id="L309">				varsArea2.setText(&quot;&quot;);</span>
+<span class="nc" id="L310">				defArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L311">				useArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L312">				duChainsArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L313">				lcsajArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L314">				startButton.setText(&quot;Počni&quot;);</span>
+<span class="nc" id="L315">			}</span>
+        });
+
+<span class="fc" id="L318">        startButton.setText(&quot;Počni&quot;);</span>
+        // Dugme &quot;Počni&quot; zapocinje step-by-step mod rada ili prelazi na sledeci korak
+<span class="fc" id="L320">        startButton.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// Ako je prvi put pritisnuto ovo dugme treba zapoceti step-by-step mod rada
+<span class="nc bnc" id="L324" title="All 2 branches missed.">				if (!simulator.isStepByStep()) {</span>
+<span class="nc" id="L325">					startButton.setText(&quot;Sledeći korak&quot;);</span>
+<span class="nc" id="L326">					simulator = new Simulator();</span>
+<span class="nc" id="L327">					simulator.startStepByStep();</span>
+<span class="nc" id="L328">					simulator.analyseCode(codeArea.getText(), varsArea1.getText());</span>
+<span class="nc" id="L329">					defArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L330">					useArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L331">					duChainsArea.setText(&quot;&quot;);</span>
+<span class="nc" id="L332">					lcsajArea.setText(simulator.getLcsaj());</span>
+				}
+				// Prelazimo na sledeci korak simulacije
+<span class="nc" id="L335">				boolean end = simulator.nextStep(defArea, useArea, duChainsArea);</span>
+				// Ako je simulacija zavrsena, resetujemo tekst na dugmetu
+<span class="nc bnc" id="L337" title="All 2 branches missed.">				if (end)</span>
+<span class="nc" id="L338">					startButton.setText(&quot;Počni&quot;);</span>
+<span class="nc" id="L339">			}</span>
+        });
+		
+		// Pošto imamo dva polja za unos promenljivih (u 2 taba) moramo da obezbedimo da ona uvek imaju isti sadržaj
+<span class="fc" id="L343">        varsArea1.addKeyListener(new KeyListener() {</span>
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+<span class="nc" id="L346">				varsArea2.setText(varsArea1.getText());</span>
+<span class="nc" id="L347">			}</span>
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+<span class="nc" id="L350">				varsArea2.setText(varsArea1.getText());</span>
+<span class="nc" id="L351">			}</span>
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+<span class="nc" id="L354">				varsArea2.setText(varsArea1.getText());</span>
+<span class="nc" id="L355">			}</span>
+        });
+        
+<span class="fc" id="L358">        varsArea2.addKeyListener(new KeyListener() {</span>
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+<span class="nc" id="L361">				varsArea1.setText(varsArea2.getText());</span>
+<span class="nc" id="L362">			}</span>
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+<span class="nc" id="L365">				varsArea1.setText(varsArea2.getText());</span>
+<span class="nc" id="L366">			}</span>
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+<span class="nc" id="L369">				varsArea1.setText(varsArea2.getText());</span>
+<span class="nc" id="L370">			}</span>
+        });
+
+<span class="fc" id="L373">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());</span>
+<span class="fc" id="L374">        getContentPane().setLayout(layout);</span>
+<span class="fc" id="L375">        layout.setHorizontalGroup(</span>
+<span class="fc" id="L376">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L377">            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L378">                .addContainerGap()</span>
+<span class="fc" id="L379">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L380">                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L381">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L382">                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L383">                        .addGap(68, 68, 68)</span>
+<span class="fc" id="L384">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)</span>
+<span class="fc" id="L385">                            .addComponent(openCodeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="fc" id="L386">                            .addComponent(browseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))</span>
+<span class="fc" id="L387">                .addGap(18, 18, 18)</span>
+<span class="fc" id="L388">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L389">                    .addComponent(tabsPane)</span>
+<span class="fc" id="L390">                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()</span>
+<span class="fc" id="L391">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="fc" id="L392">                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L393">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L394">                        .addComponent(finishButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L395">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L396">                        .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))</span>
+<span class="fc" id="L397">                .addContainerGap())</span>
+        );
+<span class="fc" id="L399">        layout.setVerticalGroup(</span>
+<span class="fc" id="L400">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L401">            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L402">                .addContainerGap()</span>
+<span class="fc" id="L403">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L404">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L405">                        .addComponent(jScrollPane1)</span>
+<span class="fc" id="L406">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L407">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L408">                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L409">                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L410">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L411">                                .addGap(35, 35, 35)</span>
+<span class="fc" id="L412">                                .addComponent(openCodeButton)</span>
+<span class="fc" id="L413">                                .addGap(18, 18, 18)</span>
+<span class="fc" id="L414">                                .addComponent(browseButton))))</span>
+<span class="fc" id="L415">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L416">                        .addComponent(tabsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L417">                        .addGap(18, 18, 18)</span>
+<span class="fc" id="L418">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L419">                            .addComponent(finishButton)</span>
+<span class="fc" id="L420">                            .addComponent(resetButton)</span>
+<span class="fc" id="L421">                            .addComponent(startButton))</span>
+<span class="fc" id="L422">                        .addGap(0, 8, Short.MAX_VALUE)))</span>
+<span class="fc" id="L423">                .addContainerGap())</span>
+        );
+
+<span class="fc" id="L426">        pack();</span>
+<span class="fc" id="L427">    }                     </span>
+
+    public static void main(String args[]) {
+        try {
+<span class="nc bnc" id="L431" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L432" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L433">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L434">                    break;</span>
+                }
+            }
+<span class="nc" id="L437">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L438">            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L439">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L440">            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L441">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L442">            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L443">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L444">            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+        }
+
+<span class="nc" id="L447">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L449">                MainWindow mainWindow = new MainWindow();</span>
+<span class="nc" id="L450">                mainWindow.setVisible(true);</span>
+<span class="nc" id="L451">                mainWindow.setResizable(false);</span>
+<span class="nc" id="L452">            }</span>
+        });
+<span class="nc" id="L454">    }</span>
+	
+	// Metoda za popunjavanje stabla sa fajlovima i folderima 
+    public void fillTree(JTree tree, String path) {
+<span class="nc" id="L458">    	String ROOT = path;</span>
+<span class="nc" id="L459">        FileVisitor&lt;Path&gt; fileProcessor = new TreeFiller(folderTree);</span>
+        try {
+<span class="nc" id="L461">			Files.walkFileTree(Paths.get(ROOT), fileProcessor);</span>
+<span class="nc" id="L462">		} catch (IOException e) {</span>
+<span class="nc" id="L463">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L465">    }</span>
+    
+                 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

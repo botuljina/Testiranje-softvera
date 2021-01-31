@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>MockitoTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">testovi</a> &gt; <span class="el_source">MockitoTest.java</span></div><h1>MockitoTest.java</h1><pre class="source lang-java linenums">package testovi;
+
+
+
+import simulator.*;
+import symtable.Scope;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.junit.*;
+import static org.mockito.Mockito.*;
+
+<span class="fc" id="L19">public class MockitoTest {</span>
+	//create fake object
+
+<span class="fc" id="L22">	private String myFile=&quot;&quot;;</span>
+<span class="fc" id="L23">	private String sc=&quot;&quot;;</span>
+	private Simulator sim;
+	@Before
+	public void ucitavanje_fajla() {
+<span class="fc" id="L27">		BufferedReader bufferdReader=null;</span>
+<span class="fc" id="L28">		myFile = &quot;&quot;;</span>
+<span class="fc" id="L29">		sc = &quot;&quot;;</span>
+		try {
+			//Ako promenim ovo, ne zaboravi da i expected value svih vrednosti se takodje menja
+<span class="fc" id="L32">			File rf = new File(&quot;C:\\Users\\lsimo\\OneDrive\\Desktop\\Java04_DUSim\\Test primeri\\DU\\Test4.txt&quot;);</span>
+<span class="fc" id="L33">			bufferdReader = new BufferedReader(new FileReader(rf));</span>
+<span class="fc" id="L34">			String line = bufferdReader.readLine();</span>
+			
+<span class="fc bfc" id="L36" title="All 2 branches covered.">			while(line!=null) {</span>
+<span class="fc" id="L37">				myFile+=line;</span>
+<span class="fc" id="L38">				myFile+=&quot;\n&quot;;</span>
+<span class="fc" id="L39">				line = bufferdReader.readLine();</span>
+			}
+			
+<span class="pc" id="L42">		}catch(Exception e) {</span>
+<span class="nc" id="L43">			System.out.println(&quot;Fajl ne moze da se ucita! Proveri putanju fajla&quot;);</span>
+		}finally{
+			try {
+<span class="fc" id="L46">				bufferdReader.close();</span>
+<span class="pc" id="L47">			} catch (IOException e) {</span>
+<span class="nc" id="L48">				System.out.println(&quot;Nisi uspeo da zatvoris buffered reader,znaci da je do greske u mom kodu.&quot;);</span>
+			}
+		}
+<span class="fc" id="L51">	}</span>
+	//LCSAJ TESTING WITH MOCKITO
+	@Test
+	public void test_mockito_lcsaj() {
+		//Mockito objects
+<span class="fc" id="L56">		Lcsaj s1 = mock(Lcsaj.class);	</span>
+<span class="fc" id="L57">		Lcsaj s2 = mock(Lcsaj.class);</span>
+		
+		
+		
+		//Mockito methods
+<span class="fc" id="L62">		when(s1.getStartSeq()).thenReturn(2);</span>
+<span class="fc" id="L63">		when(s1.getEndSeq()).thenReturn(5);</span>
+<span class="fc" id="L64">		when(s1.getJump()).thenReturn(9);		</span>
+<span class="fc" id="L65">		when(s2.getStartSeq()).thenReturn(3);</span>
+<span class="fc" id="L66">		when(s2.getEndSeq()).thenReturn(8);</span>
+<span class="fc" id="L67">		when(s2.getJump()).thenReturn(13);</span>
+		
+		
+<span class="fc" id="L70">		sim = new Simulator();</span>
+<span class="fc" id="L71">		sim.lcsaj = new ArrayList&lt;Lcsaj&gt;();</span>
+<span class="fc" id="L72">		sim.lcsaj.add(s1);</span>
+<span class="fc" id="L73">		sim.lcsaj.add(s2);</span>
+	
+<span class="fc" id="L75">		String validPrint = &quot;(2, 5, 9)\n(3, 8, 13)\n\nBroj LCSAJ sekvenci: 2&quot;;</span>
+
+<span class="fc" id="L77">		assertEquals(&quot;Nije dobar geter lcsaj&quot;, validPrint, sim.getLcsaj());</span>
+		
+		//mockito verify
+<span class="fc" id="L80">		verify(s1).getStartSeq();</span>
+<span class="fc" id="L81">		verify(s1).getEndSeq();		</span>
+<span class="fc" id="L82">	}</span>
+	
+	@Test
+	public void test_definicije() {
+<span class="fc" id="L86">		Scope sc1 = mock(Scope.class);	</span>
+<span class="fc" id="L87">		Definition def1 = mock(Definition.class);</span>
+<span class="fc" id="L88">		Definition def2 = mock(Definition.class);</span>
+		
+<span class="fc" id="L90">		when(def1.getVariable()).thenReturn(&quot;prom&quot;);</span>
+<span class="fc" id="L91">		when(def1.getRowNo()).thenReturn(1);</span>
+<span class="fc" id="L92">		when(def1.getScope()).thenReturn(sc1);</span>
+<span class="fc" id="L93">		when(def2.getVariable()).thenReturn(&quot;prom2&quot;);</span>
+<span class="fc" id="L94">		when(def2.getRowNo()).thenReturn(2);</span>
+<span class="fc" id="L95">		when(def2.getScope()).thenReturn(sc1);</span>
+				
+<span class="fc" id="L97">		sim = new Simulator();</span>
+<span class="fc" id="L98">		sim.definitions = new ArrayList&lt;Definition&gt;();</span>
+<span class="fc" id="L99">		sim.definitions.add(def1);</span>
+<span class="fc" id="L100">		sim.definitions.add(def2);</span>
+		
+<span class="fc" id="L102">		String validPrint = &quot;prom (red 1)\nprom2 (red 2)\n\nBroj definicija: 2&quot;;	</span>
+<span class="fc" id="L103">		assertEquals(&quot;Nije dobar geter definicija&quot;, validPrint, sim.getDefinitions());</span>
+			
+<span class="fc" id="L105">	}</span>
+	
+	private void create_mockito_objects_duchain(ArrayList&lt;DUChain&gt; du,String prom,int one,int two)
+	{
+<span class="fc" id="L109">		DUChain d = mock(DUChain.class);</span>
+<span class="fc" id="L110">		when(d.getVariable()).thenReturn(prom);</span>
+<span class="fc" id="L111">		when(d.getRowNoDef()).thenReturn(one);</span>
+<span class="fc" id="L112">		when(d.getRowNoUse()).thenReturn(two);</span>
+<span class="fc" id="L113">		du.add(d);</span>
+<span class="fc" id="L114">	}</span>
+	private void create_mockito_objects_lcsaj(ArrayList&lt;Lcsaj&gt; du,int zero,int one,int two)
+	{
+<span class="fc" id="L117">		Lcsaj d = mock(Lcsaj.class);</span>
+<span class="fc" id="L118">		when(d.getStartSeq()).thenReturn(zero);</span>
+<span class="fc" id="L119">		when(d.getEndSeq()).thenReturn(one);</span>
+<span class="fc" id="L120">		when(d.getJump()).thenReturn(two);</span>
+<span class="fc" id="L121">		du.add(d);</span>
+<span class="fc" id="L122">	}</span>
+	@Test
+	public void test_txt4_whole_example() {
+<span class="fc" id="L125">		int i =0;</span>
+		
+<span class="fc" id="L127">		String expected_definicije = &quot;&quot;;</span>
+<span class="fc" id="L128">		String expected_upotrebe = &quot;&quot;;</span>
+	
+		ArrayList&lt;DUChain&gt; du;
+		ArrayList&lt;Lcsaj&gt; lcsaj;
+<span class="fc" id="L132">	    ArrayList&lt;String&gt; vars = new ArrayList&lt;String&gt;();</span>
+		
+<span class="fc" id="L134">	    sim = new Simulator();</span>
+		
+<span class="fc" id="L136">		StringBuilder s = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L137">		s.append(&quot;gr (red 1)\n&quot;).</span>
+<span class="fc" id="L138">		append(&quot;a (red 2)\n&quot;).</span>
+<span class="fc" id="L139">		append(&quot;i (red 3)\n&quot;).</span>
+<span class="fc" id="L140">		append(&quot;a (red 5)\n&quot;).</span>
+<span class="fc" id="L141">		append(&quot;i (red 6)\n&quot;).</span>
+<span class="fc" id="L142">		append(&quot;\nBroj definicija: 5&quot;);</span>
+		
+		
+<span class="fc" id="L145">		expected_definicije = s.toString();</span>
+	
+<span class="fc" id="L147">		s = new StringBuilder(&quot;&quot;);</span>
+		
+<span class="fc" id="L149">		s.append(&quot;i (red 4, p-upotreba)\n&quot;).</span>
+<span class="fc" id="L150">		append(&quot;gr (red 4, p-upotreba)\n&quot;).</span>
+<span class="fc" id="L151">		append(&quot;a (red 5, c-upotreba)\n&quot;).</span>
+<span class="fc" id="L152">		append(&quot;i (red 6, c-upotreba)\n\n&quot;).</span>
+<span class="fc" id="L153">		append(&quot;Broj c-upotreba: 2\n&quot;).</span>
+<span class="fc" id="L154">		append(&quot;Broj p-upotreba: 2&quot;);</span>
+		
+<span class="fc" id="L156">		expected_upotrebe = s.toString();</span>
+	   
+		
+<span class="fc" id="L159">		du = new ArrayList&lt;DUChain&gt;();</span>
+           
+		//mock DUCHains	
+<span class="fc" id="L162">		create_mockito_objects_duchain(du,&quot;gr&quot;,1,4);</span>
+<span class="fc" id="L163">		create_mockito_objects_duchain(du,&quot;a&quot;,2,5);</span>
+<span class="fc" id="L164">		create_mockito_objects_duchain(du,&quot;i&quot;,3,4);</span>
+<span class="fc" id="L165">		create_mockito_objects_duchain(du,&quot;i&quot;,3,6);</span>
+<span class="fc" id="L166">		create_mockito_objects_duchain(du,&quot;a&quot;,5,5);</span>
+<span class="fc" id="L167">		create_mockito_objects_duchain(du,&quot;i&quot;,6,4);</span>
+<span class="fc" id="L168">		create_mockito_objects_duchain(du,&quot;i&quot;,6,6);</span>
+            	
+     
+<span class="fc" id="L171">        lcsaj = new ArrayList&lt;Lcsaj&gt;();</span>
+        //mock lcsaj
+<span class="fc" id="L173">        create_mockito_objects_lcsaj(lcsaj,1,4,8);</span>
+<span class="fc" id="L174">        create_mockito_objects_lcsaj(lcsaj,1,7,4);</span>
+<span class="fc" id="L175">        create_mockito_objects_lcsaj(lcsaj,4,4,8);</span>
+<span class="fc" id="L176">        create_mockito_objects_lcsaj(lcsaj,4,7,4);</span>
+   
+
+<span class="fc" id="L179">		vars.clear();</span>
+		
+<span class="fc" id="L181">		sim.analyseCode(myFile, sc);</span>
+<span class="fc" id="L182">		sim.getUses();</span>
+<span class="fc" id="L183">		sim.getDuChains();</span>
+<span class="fc" id="L184">		sim.getLcsaj();</span>
+		
+	
+		//provera definicija i upotreba
+<span class="fc" id="L188">		assertEquals(&quot;Ocekivana definicija nije ista kao definicija u simultoru&quot;,expected_definicije,sim.getDefinitions());</span>
+<span class="fc" id="L189">		assertEquals(&quot;Ocekivana upotreba nije ista kao upotreba u simultoru&quot;,expected_upotrebe,sim.getUses());</span>
+		
+<span class="fc" id="L191">		i =0;</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">		for (DUChain elem : du) {</span>
+<span class="fc" id="L193">			assertEquals(&quot;Neispravna variabla&quot;,elem.getVariable(),sim.duChains.get(i).getVariable());</span>
+<span class="fc" id="L194">			assertEquals(&quot;Neispravan RowNoDef&quot;,elem.getRowNoDef(),sim.duChains.get(i).getRowNoDef());</span>
+<span class="fc" id="L195">			assertEquals(&quot;Neispravan RowNoUse&quot;,elem.getRowNoUse(),sim.duChains.get(i).getRowNoUse());</span>
+<span class="fc" id="L196">			i++;</span>
+		}
+<span class="fc" id="L198">		i = 0;</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">		for (Lcsaj elem : lcsaj) {</span>
+<span class="fc" id="L200">			assertEquals(&quot;Nije ispravna vrednost startSeq&quot;,elem.getStartSeq(),sim.lcsaj.get(i).getStartSeq());</span>
+<span class="fc" id="L201">			assertEquals(&quot;Nije ispravna vrednost endSeq&quot;,elem.getEndSeq(),sim.lcsaj.get(i).getEndSeq());</span>
+<span class="fc" id="L202">			assertEquals(&quot;Nije ispravna vrednost Jump&quot;,elem.getJump(),sim.lcsaj.get(i).getJump());</span>
+<span class="fc" id="L203">			i++;</span>
+		}
+			
+<span class="fc" id="L206">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

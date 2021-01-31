@@ -1,0 +1,11 @@
+int n = niz.length;
+for (int i=1; i<n; i++) {
+	double p = niz[i];
+	int j = i - 1;
+	while (j>=0 && p < niz[j]) {
+		niz[j+1] = niz[j--];
+		prikazi(); 
+	}
+	niz[j+1] = p;
+	prikazi();
+}

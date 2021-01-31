@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>T4.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">testovi</a> &gt; <span class="el_source">T4.java</span></div><h1>T4.java</h1><pre class="source lang-java linenums">package testovi;
+
+import gui.*;
+import simulator.*;
+import static org.junit.Assert.*;
+
+import java.io.*;
+import java.util.ArrayList;
+
+
+import org.junit.*;
+
+//PROVERA KORAK PO KORAK KAKO RADI
+
+<span class="fc" id="L15">public class T4 {</span>
+<span class="fc" id="L16">	private String myFile = &quot;&quot;;</span>
+<span class="fc" id="L17">	private ArrayList&lt;String&gt; vars = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L18">	private String scannedVars = &quot;&quot;;</span>
+	private MainWindow main_window;
+<span class="fc" id="L20">	public ArrayList&lt;DUChain&gt; du = new ArrayList&lt;DUChain&gt;();</span>
+<span class="fc" id="L21">	public ArrayList&lt;Lcsaj&gt; lcsaj = new ArrayList&lt;Lcsaj&gt;();</span>
+	
+
+	@Before
+	public void ucitavanje_fajla() {
+<span class="fc" id="L26">		BufferedReader bufferdReader=null;</span>
+<span class="fc" id="L27">		myFile = &quot;&quot;;</span>
+		try {
+			//Ako promenim ovo, ne zaboravi da i expected value svih vrednosti se takodje menja
+<span class="fc" id="L30">			File rf = new File(&quot;C:\\Users\\lsimo\\OneDrive\\Desktop\\Java04_DUSim\\Test primeri\\LCSAJ\\Test1.txt&quot;);</span>
+<span class="fc" id="L31">			bufferdReader = new BufferedReader(new FileReader(rf));</span>
+<span class="fc" id="L32">			String line = bufferdReader.readLine();</span>
+			
+<span class="fc bfc" id="L34" title="All 2 branches covered.">			while(line!=null) {</span>
+<span class="fc" id="L35">				myFile+=line;</span>
+<span class="fc" id="L36">				myFile+=&quot;\n&quot;;</span>
+<span class="fc" id="L37">				line = bufferdReader.readLine();</span>
+			}
+			
+<span class="pc" id="L40">		}catch(Exception e) {</span>
+<span class="nc" id="L41">			System.out.println(&quot;Fajl ne moze da se ucita! Proveri putanju fajla&quot;);</span>
+		}finally{
+			try {
+<span class="fc" id="L44">				bufferdReader.close();</span>
+<span class="pc" id="L45">			} catch (IOException e) {</span>
+<span class="nc" id="L46">				System.out.println(&quot;Nisi uspeo da zatvoris buffered reader,znaci da je do greske u mom kodu.&quot;);</span>
+			}
+		}
+		
+<span class="fc" id="L50">		main_window = new MainWindow();</span>
+<span class="fc" id="L51">	}</span>
+	
+	@Test
+	public void start_step_by_step() {
+<span class="fc" id="L55">		main_window.simulator.startStepByStep();</span>
+<span class="fc" id="L56">		assertTrue(&quot;StepByStepNeRadi.&quot;, main_window.simulator.isStepByStep());</span>
+<span class="fc" id="L57">	}</span>
+	
+	@Test
+	public void test_two_steps() {
+		
+<span class="fc" id="L62">		String expected_definicije = &quot;&quot;;</span>
+<span class="fc" id="L63">		String expected_upotrebe = &quot;&quot;;</span>
+	
+		
+<span class="fc" id="L66">		main_window.simulator.startStepByStep();</span>
+<span class="fc" id="L67">		assertTrue(&quot;Bag u koracima - Nije zapoceto step-by-step, a trebalo je.&quot;, main_window.simulator.isStepByStep());</span>
+<span class="fc" id="L68">		scannedVars = &quot;&quot;;</span>
+<span class="fc" id="L69">		main_window.simulator.analyseCode(myFile, scannedVars);</span>
+<span class="fc" id="L70">		main_window.defArea.setText(&quot;&quot;);</span>
+<span class="fc" id="L71">		main_window.useArea.setText(&quot;&quot;);</span>
+<span class="fc" id="L72">		main_window.duChainsArea.setText(&quot;&quot;);</span>
+		
+		//odradimo 2 koraka
+<span class="fc" id="L75">		main_window.simulator.nextStep(main_window.defArea, main_window.useArea, main_window.duChainsArea);</span>
+<span class="fc" id="L76">	    main_window.simulator.nextStep(main_window.defArea, main_window.useArea, main_window.duChainsArea);</span>
+<span class="fc" id="L77">	    main_window.simulator.nextStep(main_window.defArea, main_window.useArea, main_window.duChainsArea);</span>
+<span class="fc" id="L78">	    main_window.simulator.nextStep(main_window.defArea, main_window.useArea, main_window.duChainsArea);</span>
+<span class="fc" id="L79">	    main_window.simulator.nextStep(main_window.defArea, main_window.useArea, main_window.duChainsArea);</span>
+
+<span class="fc" id="L81">	    StringBuilder s = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L82">		s.append(&quot;brojac (red 4)\n&quot;)</span>
+<span class="fc" id="L83">		.append(&quot;x (red 6)\n&quot;)</span>
+<span class="fc" id="L84">		.append(&quot;y (red 7)\n&quot;);</span>
+		
+		
+<span class="fc" id="L87">		expected_definicije = s.toString();</span>
+	
+<span class="fc" id="L89">		s = new StringBuilder(&quot;&quot;);</span>
+		
+<span class="fc" id="L91">		s.append(&quot;in (red 1, c-upotreba)\n&quot;).</span>
+<span class="fc" id="L92">		append(&quot;brojac (red 8, p-upotreba)\n&quot;);</span>
+		
+<span class="fc" id="L94">		expected_upotrebe = s.toString();</span>
+		
+		
+<span class="fc" id="L97">		assertEquals(&quot;Definicije nisu dobre.&quot;, expected_definicije, main_window.defArea.getText());	</span>
+<span class="fc" id="L98">		assertEquals(&quot;Upotrebe nisu dobre.&quot;, expected_upotrebe, main_window.useArea.getText());</span>
+		
+<span class="fc" id="L100">		du.add(new DUChain(&quot;brojac&quot;, 4, 8));</span>
+	
+	
+<span class="fc" id="L103">		assertEquals(&quot;Neispravna variabla&quot;,du.get(0).getVariable(), main_window.simulator.duChains.get(0).getVariable());</span>
+<span class="fc" id="L104">		assertEquals(&quot;Neispravan RowNoDef&quot;,du.get(0).getRowNoDef(), main_window.simulator.duChains.get(0).getRowNoDef());</span>
+<span class="fc" id="L105">		assertEquals(&quot;Neispravan RowNoUse&quot;,du.get(0).getRowNoUse(), main_window.simulator.duChains.get(0).getRowNoUse());</span>
+		
+
+<span class="fc" id="L108">	    lcsaj.add(new Lcsaj(1, 8, 15));</span>
+<span class="fc" id="L109">	    lcsaj.add(new Lcsaj(1, 9, 11));</span>
+<span class="fc" id="L110">	    lcsaj.add(new Lcsaj(1, 10, 13));</span>
+<span class="fc" id="L111">	    lcsaj.add(new Lcsaj(8, 8, 15));</span>
+<span class="fc" id="L112">	    lcsaj.add(new Lcsaj(8, 9, 11));</span>
+<span class="fc" id="L113">	    lcsaj.add(new Lcsaj(8, 10, 13));</span>
+<span class="fc" id="L114">	    lcsaj.add(new Lcsaj(11, 14, 8));</span>
+<span class="fc" id="L115">	    lcsaj.add(new Lcsaj(13, 14, 8));</span>
+<span class="fc" id="L116">	    lcsaj.add(new Lcsaj(15, 16,-1));</span>
+	    
+<span class="fc" id="L118">	    int j = 0;</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">		while(j &lt; lcsaj.size()) {</span>
+<span class="fc" id="L120">			assertEquals(&quot;Nije ispravna vrednost startSeq&quot;,lcsaj.get(j).getStartSeq(), main_window.simulator.lcsaj.get(j).getStartSeq());</span>
+<span class="fc" id="L121">			assertEquals(&quot;Nije ispravna vrednost endSeq&quot;,lcsaj.get(j).getEndSeq(), main_window.simulator.lcsaj.get(j).getEndSeq());</span>
+<span class="fc" id="L122">			assertEquals(&quot;Nije ispravna vrednost Jump&quot;,lcsaj.get(j).getJump(), main_window.simulator.lcsaj.get(j).getJump());</span>
+<span class="fc" id="L123">			j++;</span>
+		}
+		
+<span class="fc" id="L126">	}</span>
+	
+	
+	@After
+	public void deleteSimulatorByDeletingMainWindow() {
+<span class="fc" id="L131">		vars.clear();</span>
+<span class="fc" id="L132">		lcsaj.clear();</span>
+<span class="fc" id="L133">		main_window = null;		</span>
+<span class="fc" id="L134">		du.clear();</span>
+		
+<span class="fc" id="L136">	}</span>
+	
+
+	
+	
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

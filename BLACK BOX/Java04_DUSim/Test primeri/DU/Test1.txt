@@ -1,0 +1,8 @@
+if (exp)
+	x = 1;
+else
+	x = 2;
+if (case1)
+	P1(x);
+else
+	P2(x);

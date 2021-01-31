@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SymbolTable.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">symtable</a> &gt; <span class="el_source">SymbolTable.java</span></div><h1>SymbolTable.java</h1><pre class="source lang-java linenums">package symtable;
+
+import helpers.BreakStmt.BreakType;
+import helpers.IfElseStmt;
+import helpers.Jump;
+import helpers.BreakStmt;
+import helpers.SwitchCases;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import symtable.Scope.ScopeType;
+
+// Klasa koja predstavlja tabelu simbola za uneti program
+public class SymbolTable {
+	
+	// Lista opsega
+	private ArrayList&lt;Scope&gt; scopes;
+	// Lista switch struktura sa njihovim case-ovima
+	private ArrayList&lt;SwitchCases&gt; switches;
+	
+<span class="fc" id="L22">	public SymbolTable() {</span>
+<span class="fc" id="L23">		scopes = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L24">		switches = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L25">	}</span>
+	
+	public void addScope(Scope scope) {
+<span class="fc" id="L28">		scopes.add(scope);</span>
+<span class="fc" id="L29">	}</span>
+	
+	public Scope getScope(int i) {
+<span class="fc" id="L32">		return scopes.get(i);</span>
+	}
+	
+	public int numberOfScopes() {
+<span class="fc" id="L36">		return scopes.size();</span>
+	}
+	
+	// Provera da li dva case-a pripadaju istom switch-u
+	public boolean areInSameSwitch(int case1, int case2) {
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">		for (int i = 0; i&lt;switches.size(); i++) {</span>
+<span class="nc" id="L42">			SwitchCases sw = switches.get(i);</span>
+<span class="nc bnc" id="L43" title="All 4 branches missed.">			if (sw.contains(case1) &amp;&amp; sw.contains(case2))</span>
+<span class="nc" id="L44">				return true;</span>
+		}
+<span class="fc" id="L46">		return false;</span>
+	}
+	
+	// Provera da li je zadati case prvi u okviru zadatog switch-a
+	public boolean isFirstCase(int switchId, int caseId) {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		for (int i=0; i&lt;scopes.size(); i++) {</span>
+<span class="nc" id="L52">			Scope s = scopes.get(i);</span>
+<span class="nc bnc" id="L53" title="All 4 branches missed.">			if (s.getType() == ScopeType.CASE &amp;&amp; s.getParentScope().getId() == switchId) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">				if (s.getId() &lt; caseId) return false;</span>
+			}
+		}
+<span class="nc" id="L57">		return true;</span>
+	}
+	
+	// Pronalazi sve početne tačke sekvenci u programu 
+	// (prva naredba + sve naredbe na koje može da se dođe sa neke druge naredbe osim prethodne)
+	public ArrayList&lt;Integer&gt; findSeqStarts() {
+<span class="fc" id="L63">		ArrayList&lt;Integer&gt; seqStarts = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		for (int i=0; i&lt;scopes.size(); i++) {</span>
+<span class="fc" id="L65">			Scope scope = scopes.get(i);</span>
+			
+			// Ako je tekući opseg petlja (a nije do-while)
+			// treba dodati prvu naredbu petlje i naredbu posle petlje
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">			if (scope.getType() == ScopeType.LOOP &amp;&amp; !scope.isDoLoop()) {</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">				if (!seqStarts.contains(scope.getRowStart()))</span>
+<span class="fc" id="L71">					seqStarts.add(scope.getRowStart());</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">				if (!seqStarts.contains(scope.getRowEnd() + 1))</span>
+<span class="fc" id="L73">					seqStarts.add(scope.getRowEnd() + 1);</span>
+<span class="fc" id="L74">			}</span>
+			
+			// Ako je tekući opseg if/else
+			// treba dodati naredbu nakon opsega
+<span class="fc bfc" id="L78" title="All 2 branches covered.">			else if (scope.getType() == ScopeType.IF_ELSE) {</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">				if (!seqStarts.contains(scope.getRowEnd() + 1))</span>
+<span class="fc" id="L80">					seqStarts.add(scope.getRowEnd() + 1);</span>
+<span class="fc" id="L81">			}</span>
+			
+			// Ako je tekuci opseg switch
+			// treba dodati novi switch u listu
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">			else if (scope.getType() == ScopeType.SWITCH) {</span>
+<span class="nc" id="L86">				switches.add(new SwitchCases(scope.getId()));</span>
+<span class="nc" id="L87">			}</span>
+			
+			// Ako je tekući opseg case (a nije prvi case u okviru switch-a)
+			// treba dodati prvu naredbu opsega
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">			else if (scope.getType() == ScopeType.CASE) {</span>
+				// Dodajemo case u tekuci switch
+<span class="nc bnc" id="L93" title="All 2 branches missed.">				if (!switches.isEmpty())</span>
+<span class="nc" id="L94">					switches.get(switches.size()-1).addCase(scope.getRowStart());</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">				if (!isFirstCase(scope.getParentScope().getId(), scope.getId())) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">					if (!seqStarts.contains(scope.getRowStart()))</span>
+<span class="nc" id="L97">						seqStarts.add(scope.getRowStart());</span>
+				}
+			}
+		}
+		
+		// Ako već nismo dodali prvu naredbu, dodajemo je sad
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		if (!seqStarts.contains(1))</span>
+<span class="fc" id="L104">			seqStarts.add(1);</span>
+		
+		// Sortiramo sve početke sekvenci (zbog preglednijeg ispisa)
+<span class="fc" id="L107">		Collections.sort(seqStarts);</span>
+<span class="fc" id="L108">		return seqStarts;</span>
+	}
+	
+	// Pronalazenje if-else strukture kojoj pripada if-opseg
+	public IfElseStmt belongsToIfElse(ArrayList&lt;IfElseStmt&gt; ifElseStmts, int scope) {
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">		for (int i=0; i&lt;ifElseStmts.size(); i++)</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">			if (ifElseStmts.get(i).getIfScope() == scope)</span>
+<span class="fc" id="L115">				return ifElseStmts.get(i);</span>
+<span class="nc" id="L116">		return null;</span>
+	}
+	
+	// Dohvata opseg na osnovu njegovog id-a
+	public Scope getScopeWithId(int id) {
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">		for (int i=0; i&lt;scopes.size(); i++)</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">			if (scopes.get(i).getId() == id)</span>
+<span class="fc" id="L123">				return scopes.get(i);</span>
+<span class="nc" id="L124">		return null;</span>
+	}
+	
+	// Pronalazi sve skokove u programu
+	public ArrayList&lt;Jump&gt; findJumps(ArrayList&lt;IfElseStmt&gt; ifElseStmts, ArrayList&lt;BreakStmt&gt; breakStmts) {
+<span class="fc" id="L129">		ArrayList&lt;Jump&gt; jumps = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">		for (int i=0; i&lt;scopes.size(); i++) {</span>
+<span class="fc" id="L131">			Scope scope = scopes.get(i);</span>
+			
+			// Ako je opseg petlja (a nije do-while)
+			// dodajemo skok (početak petlje -&gt; naredba posle petlje)
+			// i skok (kralj petlje -&gt; početak petlje) 
+<span class="pc bpc" id="L136" title="1 of 4 branches missed.">			if (scope.getType() == ScopeType.LOOP &amp;&amp; !scope.isDoLoop()) {</span>
+<span class="fc" id="L137">				jumps.add(new Jump(scope.getRowStart(), scope.getRowEnd() + 1, false, 1));</span>
+<span class="fc" id="L138">				jumps.add(new Jump(scope.getRowEnd(), scope.getRowStart(), true, 2));</span>
+			}
+			
+			// Ako je opseg do-while petlja
+			// dodajemo skok (kraj petlje -&gt; početak petlje)
+<span class="pc bpc" id="L143" title="1 of 4 branches missed.">			if (scope.getType() == ScopeType.LOOP &amp;&amp; scope.isDoLoop()) </span>
+<span class="nc" id="L144">				jumps.add(new Jump(scope.getRowEnd(), scope.getRowStart(), false, 2));</span>
+			
+			// Ako je opseg if
+			// dodajemo skok (početak opsega -&gt; naredba posle opsega)
+			// i skok (kraj opsega -&gt; naredba posle if-else strukture)
+<span class="fc bfc" id="L149" title="All 4 branches covered.">			if (scope.getType() == ScopeType.IF_ELSE &amp;&amp; !scope.isElse()) {</span>
+<span class="fc" id="L150">				jumps.add(new Jump(scope.getRowStart(), scope.getRowEnd() + 1, false, 1));</span>
+				
+<span class="fc" id="L152">				IfElseStmt ifElse = belongsToIfElse(ifElseStmts, scope.getId());</span>
+<span class="pc bpc" id="L153" title="2 of 4 branches missed.">				if (ifElse != null &amp;&amp; ifElse.getElseScope() != -1) {</span>
+<span class="fc" id="L154">					Scope s = getScopeWithId(ifElse.getElseScope());</span>
+<span class="fc" id="L155">					jumps.add(new Jump(scope.getRowEnd(), s.getRowEnd() + 1, true, 1));</span>
+				}
+			}
+			
+			// Ako je opseg case (a nije default)
+			// dodajemo skok (početak case-a -&gt; naredba posle case-a)
+<span class="pc bpc" id="L161" title="3 of 4 branches missed.">			if (scope.getType() == ScopeType.CASE &amp;&amp; !scope.isDefault())</span>
+<span class="nc" id="L162">				jumps.add(new Jump(scope.getRowStart(), scope.getRowEnd() + 1, false, 1));</span>
+		}
+		
+		// Ispitujemo sve break/continue naredbe u programu
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">		for (int i=0; i&lt;breakStmts.size(); i++) {</span>
+<span class="nc" id="L167">			BreakStmt breakStmt = breakStmts.get(i);</span>
+			// Za svaki break u okviru switch-a
+			// dodajemo skok (break -&gt; naredba posle switch-a)
+<span class="nc bnc" id="L170" title="All 2 branches missed.">			if (breakStmt.getType() == BreakType.SWITCH_BREAK) {</span>
+<span class="nc" id="L171">				Scope s = getScopeWithId(breakStmt.getScopeId());</span>
+<span class="nc" id="L172">				jumps.add(new Jump(breakStmt.getRowNo(), s.getRowEnd() + 1, true, 3));</span>
+<span class="nc" id="L173">			}</span>
+			// Za svaki break u okviru petlje
+			// dodajemo skok (break -&gt; naredba posle petlje)
+<span class="nc bnc" id="L176" title="All 2 branches missed.">			else if (breakStmt.getType() == BreakType.LOOP_BREAK) {</span>
+<span class="nc" id="L177">				Scope s = getScopeWithId(breakStmt.getScopeId());</span>
+<span class="nc" id="L178">				jumps.add(new Jump(breakStmt.getRowNo(), s.getRowEnd() + 1, true, 3));</span>
+<span class="nc" id="L179">			}</span>
+			// Za svaki continue u okviru petlje
+			// dodajemo skok (continue -&gt; početak petlje)
+<span class="nc bnc" id="L182" title="All 2 branches missed.">			else if (breakStmt.getType() == BreakType.LOOP_CONT) {</span>
+<span class="nc" id="L183">				Scope s = getScopeWithId(breakStmt.getScopeId());</span>
+<span class="nc" id="L184">				jumps.add(new Jump(breakStmt.getRowNo(), s.getRowStart(), true, 3));</span>
+			}
+		}
+		
+<span class="fc" id="L188">		return jumps;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>

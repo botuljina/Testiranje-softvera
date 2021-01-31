@@ -1,0 +1,664 @@
+{
+  "id": "670b85d9-5317-45bb-a896-36de07158ab9",
+  "version": "2.0",
+  "name": "PopunjavanjeAnketa",
+  "url": "http://localhost/ankete2/index.php",
+  "tests": [{
+    "id": "6ba87b65-dd19-4c96-a841-1f7e9e5368ec",
+    "name": "IstekaoDatum",
+    "commands": [{
+      "id": "d2e686dd-382d-44d2-8c61-16ba790d71f1",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "beb5675d-b624-43da-9947-c83ffa27ab15",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "78745449-f9e7-4aa0-981c-9becc1745c90",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) > a",
+      "targets": [
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Ankete')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'pretragaAnketa.php')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5af62803-7958-4bc3-9b5c-7a0ec779edf5",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Predmeti",
+      "targets": [
+        ["linkText=Predmeti", "linkText"],
+        ["css=tr:nth-child(2) .linkdugme", "css:finder"],
+        ["xpath=//a[contains(text(),'Predmeti')]", "xpath:link"],
+        ["xpath=//tbody[@id='tbody']/tr[2]/td/a", "xpath:idRelative"],
+        ["xpath=//tr[2]/td/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Predmeti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fac77a62-ea98-4f38-8604-46aca091f93d",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) > a",
+      "targets": [
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Ankete')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'pretragaAnketa.php')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "8d82c1d8-1c00-4a4f-868a-f8e4b0968943",
+    "name": "NesacuvanaPitanjaDelimicnoPopunjene",
+    "commands": [{
+      "id": "a23ea737-2b31-43db-839a-a21b72dc8959",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1825503c-7b7e-4500-a86b-4c09c0c3ca6a",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "68cbc159-36a0-42ae-94cf-1efca68b3bd9",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) > a",
+      "targets": [
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Ankete')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'pretragaAnketa.php')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "90e639f9-c43d-4321-b8da-9a9eb5531f58",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Anketa 1",
+      "targets": [
+        ["linkText=Anketa 1", "linkText"],
+        ["css=tr:nth-child(1) .linkdugme", "css:finder"],
+        ["xpath=//a[contains(text(),'Anketa 1')]", "xpath:link"],
+        ["xpath=//tbody[@id='tbody']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Anketa 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ff9ca74c-662b-4fe1-add1-008d2a8dc94b",
+      "comment": "",
+      "command": "click",
+      "target": "name=selizbor[0]",
+      "targets": [
+        ["name=selizbor[0]", "name"],
+        ["css=.izmenjiv:nth-child(3)", "css:finder"],
+        ["xpath=//select[@name='selizbor[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[0]']/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1b28a7f6-c3ac-4113-8c48-4553a9b82000",
+      "comment": "",
+      "command": "select",
+      "target": "name=selizbor[0]",
+      "targets": [],
+      "value": "label=Signali"
+    }, {
+      "id": "91f0bad6-812b-47e5-8bd9-c78fc7480fbb",
+      "comment": "",
+      "command": "click",
+      "target": "name=selizbor[0]",
+      "targets": [
+        ["name=selizbor[0]", "name"],
+        ["css=.izmenjiv:nth-child(3)", "css:finder"],
+        ["xpath=//select[@name='selizbor[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[0]']/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a91e8a7f-dae6-4a03-8882-66fdc03ff585",
+      "comment": "",
+      "command": "click",
+      "target": "name=chizbor[0]",
+      "targets": [
+        ["name=chizbor[0]", "name"],
+        ["css=#pitanje\\[1\\] td:nth-child(2) > .izmenjiv", "css:finder"],
+        ["xpath=//input[@id='']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[1]']/table/tbody/tr[2]/td[2]/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0a0c0c89-b402-472a-ab65-a969c0d977a1",
+      "comment": "",
+      "command": "click",
+      "target": "name=potvrdiAnketa",
+      "targets": [
+        ["name=potvrdiAnketa", "name"],
+        ["css=.submitdugme", "css:finder"],
+        ["xpath=//button[@name='potvrdiAnketa']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'POTVRDI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "61a4be12-ed16-4f03-99f2-32c2f314f88a",
+    "name": "TestPadajucegMenija",
+    "commands": [{
+      "id": "d3ab473a-b122-48af-b589-71e3f49b8673",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "12bdce85-8e8c-4ced-a98a-ce4c33540bcf",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6f75a90c-b406-47be-9b89-f8f1883b4db8",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) > a",
+      "targets": [
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Ankete')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'pretragaAnketa.php')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7b1493e7-697b-4cca-9fde-e0e599f3fc84",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Anketa 1",
+      "targets": [
+        ["linkText=Anketa 1", "linkText"],
+        ["css=tr:nth-child(1) .linkdugme", "css:finder"],
+        ["xpath=//a[contains(text(),'Anketa 1')]", "xpath:link"],
+        ["xpath=//tbody[@id='tbody']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Anketa 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "39be0a7b-d1c0-42b3-a1d6-74c6d2bcf970",
+      "comment": "",
+      "command": "click",
+      "target": "id=sledeca",
+      "targets": [
+        ["id=sledeca", "id"],
+        ["css=#sledeca", "css:finder"],
+        ["xpath=//input[@id='sledeca']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input", "xpath:idRelative"],
+        ["xpath=//form/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6ec29834-273f-499a-863e-58618c48e2f3",
+      "comment": "",
+      "command": "click",
+      "target": "id=sledeca",
+      "targets": [
+        ["id=sledeca", "id"],
+        ["css=#sledeca", "css:finder"],
+        ["xpath=//input[@id='sledeca']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input", "xpath:idRelative"],
+        ["xpath=//form/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d1a9df67-21c7-494e-b2d2-20b0d99de499",
+      "comment": "",
+      "command": "click",
+      "target": "id=prethodna",
+      "targets": [
+        ["id=prethodna", "id"],
+        ["css=#prethodna", "css:finder"],
+        ["xpath=//input[@id='prethodna']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input[2]", "xpath:idRelative"],
+        ["xpath=//form/input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "44c205e5-56bf-45ec-a9be-a54debe98066",
+      "comment": "",
+      "command": "click",
+      "target": "id=anketa",
+      "targets": [
+        ["id=anketa", "id"],
+        ["name=anketa", "name"],
+        ["css=#anketa", "css:finder"],
+        ["xpath=//form[@id='anketa']", "xpath:attributes"],
+        ["xpath=//form", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7e02ddfd-5ebd-4e4a-a67a-183aae3e530d",
+      "comment": "",
+      "command": "click",
+      "target": "id=prethodna",
+      "targets": [
+        ["id=prethodna", "id"],
+        ["css=#prethodna", "css:finder"],
+        ["xpath=//input[@id='prethodna']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input[2]", "xpath:idRelative"],
+        ["xpath=//form/input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b4dc7d56-3487-4022-8a15-5af5972d59a2",
+      "comment": "",
+      "command": "click",
+      "target": "name=selizbor[0]",
+      "targets": [
+        ["name=selizbor[0]", "name"],
+        ["css=.izmenjiv:nth-child(3)", "css:finder"],
+        ["xpath=//select[@name='selizbor[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[0]']/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "58cd9516-95c3-4fd1-b6f6-4e384f47dfc2",
+      "comment": "",
+      "command": "click",
+      "target": "name=selizbor[0]",
+      "targets": [
+        ["name=selizbor[0]", "name"],
+        ["css=.izmenjiv:nth-child(3)", "css:finder"],
+        ["xpath=//select[@name='selizbor[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[0]']/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "144e2c66-9cba-447d-810f-f07e6e88e7b2",
+      "comment": "",
+      "command": "click",
+      "target": "name=potvrdiAnketa",
+      "targets": [
+        ["name=potvrdiAnketa", "name"],
+        ["css=.submitdugme", "css:finder"],
+        ["xpath=//button[@name='potvrdiAnketa']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'POTVRDI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0646f999-4fc0-4cb7-b487-045231cba61a",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "name=potvrdiAnketa",
+      "targets": [
+        ["name=potvrdiAnketa", "name"],
+        ["css=.submitdugme", "css:finder"],
+        ["xpath=//button[@name='potvrdiAnketa']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'POTVRDI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8ce733ae-bd2c-4946-8a46-f1436c9f207d",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "name=potvrdiAnketa",
+      "targets": [
+        ["name=potvrdiAnketa", "name"],
+        ["css=.submitdugme", "css:finder"],
+        ["xpath=//button[@name='potvrdiAnketa']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'POTVRDI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ab8e237c-3127-4689-b230-f6b5dc9981a2",
+      "comment": "",
+      "command": "click",
+      "target": "id=porukadiv",
+      "targets": [
+        ["id=porukadiv", "id"],
+        ["css=#porukadiv", "css:finder"],
+        ["xpath=//div[@id='porukadiv']", "xpath:attributes"],
+        ["xpath=//div[@id='greskadiv']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e6c4d6e1-34ba-4f70-8969-d74e17f39304",
+      "comment": "",
+      "command": "click",
+      "target": "id=porukadiv",
+      "targets": [
+        ["id=porukadiv", "id"],
+        ["css=#porukadiv", "css:finder"],
+        ["xpath=//div[@id='porukadiv']", "xpath:attributes"],
+        ["xpath=//div[@id='greskadiv']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "ce071f48-5761-4d22-b2a6-e3b49873f3e6",
+    "name": "TestRadioAndCheckBox",
+    "commands": [{
+      "id": "baac58a4-97df-4809-9e5b-8af971e43177",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost/ankete2/index.php",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4fe6ea3e-ba44-4cbc-9eae-ff0bc7110424",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1040",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5c1d5718-ab1e-456e-aae0-7f01bc87dc1c",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) > a",
+      "targets": [
+        ["css=li:nth-child(2) > a", "css:finder"],
+        ["xpath=//a[contains(text(),'Ankete')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'pretragaAnketa.php')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5cb9a655-caaf-4b86-8de1-6c3c606825da",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Anketa 1",
+      "targets": [
+        ["linkText=Anketa 1", "linkText"],
+        ["css=tr:nth-child(1) .linkdugme", "css:finder"],
+        ["xpath=//a[contains(text(),'Anketa 1')]", "xpath:link"],
+        ["xpath=//tbody[@id='tbody']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Anketa 1')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e1997b34-a1d9-414e-aa13-100638870c0a",
+      "comment": "",
+      "command": "click",
+      "target": "name=selizbor[0]",
+      "targets": [
+        ["name=selizbor[0]", "name"],
+        ["css=.izmenjiv:nth-child(3)", "css:finder"],
+        ["xpath=//select[@name='selizbor[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[0]']/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb39cb1e-e304-4d9d-aebb-80321cab774d",
+      "comment": "",
+      "command": "select",
+      "target": "name=selizbor[0]",
+      "targets": [],
+      "value": "label=Signali"
+    }, {
+      "id": "1dacd7d0-9ef2-4174-8e24-188700dd51fc",
+      "comment": "",
+      "command": "click",
+      "target": "name=selizbor[0]",
+      "targets": [
+        ["name=selizbor[0]", "name"],
+        ["css=.izmenjiv:nth-child(3)", "css:finder"],
+        ["xpath=//select[@name='selizbor[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[0]']/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b4685857-2c42-4a9d-9c88-7f99af18c0a4",
+      "comment": "",
+      "command": "click",
+      "target": "id=sledeca",
+      "targets": [
+        ["id=sledeca", "id"],
+        ["css=#sledeca", "css:finder"],
+        ["xpath=//input[@id='sledeca']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input", "xpath:idRelative"],
+        ["xpath=//form/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f9623e73-13f3-418a-a654-67304f3f35e6",
+      "comment": "",
+      "command": "click",
+      "target": "name=broj[0]",
+      "targets": [
+        ["name=broj[0]", "name"],
+        ["css=#pitanje\\[3\\] > .izmenjiv:nth-child(4)", "css:finder"],
+        ["xpath=//input[@name='broj[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[3]']/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "14b94722-fcb0-4fd3-a785-695b2bbb2117",
+      "comment": "",
+      "command": "type",
+      "target": "name=broj[0]",
+      "targets": [
+        ["name=broj[0]", "name"],
+        ["css=#pitanje\\[3\\] > .izmenjiv:nth-child(4)", "css:finder"],
+        ["xpath=//input[@name='broj[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[3]']/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": "1"
+    }, {
+      "id": "ac1f7114-d267-4c27-a1e7-463fe673d43a",
+      "comment": "",
+      "command": "click",
+      "target": "name=broj[0]",
+      "targets": [
+        ["name=broj[0]", "name"],
+        ["css=#pitanje\\[3\\] > .izmenjiv:nth-child(4)", "css:finder"],
+        ["xpath=//input[@name='broj[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[3]']/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "823ad244-563e-4f5f-bfc6-5a74060015ef",
+      "comment": "",
+      "command": "click",
+      "target": "name=broj[1]",
+      "targets": [
+        ["name=broj[1]", "name"],
+        ["css=.izmenjiv:nth-child(7)", "css:finder"],
+        ["xpath=//input[@name='broj[1]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[3]']/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9db72c2c-727c-40e7-985d-96875ac33b8f",
+      "comment": "",
+      "command": "type",
+      "target": "name=broj[1]",
+      "targets": [
+        ["name=broj[1]", "name"],
+        ["css=.izmenjiv:nth-child(7)", "css:finder"],
+        ["xpath=//input[@name='broj[1]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[3]']/input[2]", "xpath:idRelative"],
+        ["xpath=//input[2]", "xpath:position"]
+      ],
+      "value": "123"
+    }, {
+      "id": "2b75949c-c12a-4dac-a970-bef4e67b4df7",
+      "comment": "",
+      "command": "click",
+      "target": "css=#pitanje\\[5\\] > .izmenjiv",
+      "targets": [
+        ["css=#pitanje\\[5\\] > .izmenjiv", "css:finder"],
+        ["xpath=(//input[@name='broj[0]'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[5]']/input", "xpath:idRelative"],
+        ["xpath=//div[6]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "14b5eab5-82f9-4320-ab8c-710d0f6231a5",
+      "comment": "",
+      "command": "type",
+      "target": "css=#pitanje\\[5\\] > .izmenjiv",
+      "targets": [
+        ["css=#pitanje\\[5\\] > .izmenjiv", "css:finder"],
+        ["xpath=(//input[@name='broj[0]'])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[5]']/input", "xpath:idRelative"],
+        ["xpath=//div[6]/input", "xpath:position"]
+      ],
+      "value": "123"
+    }, {
+      "id": "e7f2a140-1f6a-4349-9001-81f8b1f182ae",
+      "comment": "",
+      "command": "click",
+      "target": "id=sledeca",
+      "targets": [
+        ["id=sledeca", "id"],
+        ["css=#sledeca", "css:finder"],
+        ["xpath=//input[@id='sledeca']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input", "xpath:idRelative"],
+        ["xpath=//form/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ec1b2085-582b-46b2-8b80-ce8efb17e88b",
+      "comment": "",
+      "command": "click",
+      "target": "name=tekst[0]",
+      "targets": [
+        ["name=tekst[0]", "name"],
+        ["css=#pitanje\\[6\\] > .izmenjiv", "css:finder"],
+        ["xpath=//input[@name='tekst[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[6]']/input", "xpath:idRelative"],
+        ["xpath=//div[7]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0a044906-1f0e-4ee7-a464-29b65d0cf4b3",
+      "comment": "",
+      "command": "type",
+      "target": "name=tekst[0]",
+      "targets": [
+        ["name=tekst[0]", "name"],
+        ["css=#pitanje\\[6\\] > .izmenjiv", "css:finder"],
+        ["xpath=//input[@name='tekst[0]']", "xpath:attributes"],
+        ["xpath=//div[@id='pitanje[6]']/input", "xpath:idRelative"],
+        ["xpath=//div[7]/input", "xpath:position"]
+      ],
+      "value": "123"
+    }, {
+      "id": "a61ac204-f7ea-45d5-841a-495524af2834",
+      "comment": "",
+      "command": "click",
+      "target": "name=potvrdiAnketa",
+      "targets": [
+        ["name=potvrdiAnketa", "name"],
+        ["css=.submitdugme", "css:finder"],
+        ["xpath=//button[@name='potvrdiAnketa']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'POTVRDI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "faeaae5f-a2fb-4bbc-8555-69942e834dc0",
+      "comment": "",
+      "command": "click",
+      "target": "id=porukadiv",
+      "targets": [
+        ["id=porukadiv", "id"],
+        ["css=#porukadiv", "css:finder"],
+        ["xpath=//div[@id='porukadiv']", "xpath:attributes"],
+        ["xpath=//div[@id='greskadiv']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2a503a94-6190-42fb-bec8-d2a8aaec4347",
+      "comment": "",
+      "command": "click",
+      "target": "id=porukadiv",
+      "targets": [
+        ["id=porukadiv", "id"],
+        ["css=#porukadiv", "css:finder"],
+        ["xpath=//div[@id='porukadiv']", "xpath:attributes"],
+        ["xpath=//div[@id='greskadiv']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb4dfcd8-c01a-4d5c-a8f3-2e8e781be25f",
+      "comment": "",
+      "command": "click",
+      "target": "id=prethodna",
+      "targets": [
+        ["id=prethodna", "id"],
+        ["css=#prethodna", "css:finder"],
+        ["xpath=//input[@id='prethodna']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input[2]", "xpath:idRelative"],
+        ["xpath=//form/input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fa0e11c4-b792-412b-a3c7-46867d0c1574",
+      "comment": "",
+      "command": "click",
+      "target": "id=prethodna",
+      "targets": [
+        ["id=prethodna", "id"],
+        ["css=#prethodna", "css:finder"],
+        ["xpath=//input[@id='prethodna']", "xpath:attributes"],
+        ["xpath=//form[@id='anketa']/input[2]", "xpath:idRelative"],
+        ["xpath=//form/input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "7e52f812-f338-4c8c-89a4-0b9588320162",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["http://localhost/ankete2/index.php"],
+  "plugins": []
+}

@@ -1,0 +1,35 @@
+public class Primer {
+
+	private String ime = "";
+	private final String pol = 'm';
+	private int godine = 35;
+	private double popust;
+	
+	
+
+	public void mmm(){
+		if(ime=="Perica"){
+
+		}
+		int i = 0;
+		i++;
+		int b = --i;
+		int c = ++b - ++i;
+		c--;
+		c = 15;
+		int j = 0;
+		do {
+			b = --c + i++;
+		} while (j < 10);
+		System.out.println(c);
+	
+	
+
+	}
+
+	public void m() {
+	
+		this.ime = "Perica";
+		
+	}
+}

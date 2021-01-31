@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>T5.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">testovi (15 Jan 2021 13:10:18)</a> &gt; <a href="../../index.html" class="el_group">DU Simulator</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">testovi</a> &gt; <span class="el_source">T5.java</span></div><h1>T5.java</h1><pre class="source lang-java linenums">package testovi;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import simulator.*;
+import static org.junit.Assert.*;
+import java.util.ArrayList;
+
+
+<span class="fc" id="L15">public class T5 {</span>
+<span class="fc" id="L16">	private String myFile = &quot;&quot;;</span>
+<span class="fc" id="L17">	private ArrayList&lt;String&gt; vars = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L18">	private String scannedVars = &quot;&quot;;</span>
+<span class="fc" id="L19">	public ArrayList&lt;DUChain&gt; du = new ArrayList&lt;DUChain&gt;();</span>
+<span class="fc" id="L20">	public ArrayList&lt;Lcsaj&gt; lcsaj = new ArrayList&lt;Lcsaj&gt;();</span>
+	private Simulator sim;
+	
+	
+	@Before
+	public void ucitavanje_fajla() {
+<span class="fc" id="L26">		BufferedReader bufferdReader=null;</span>
+<span class="fc" id="L27">		myFile = &quot;&quot;;</span>
+		try {
+			//Ako promenim ovo, ne zaboravi da i expected value svih vrednosti se takodje menja
+<span class="fc" id="L30">			File rf = new File(&quot;C:\\Users\\lsimo\\OneDrive\\Desktop\\Java04_DUSim\\Test primeri\\DU\\Test2.txt&quot;);</span>
+<span class="fc" id="L31">			bufferdReader = new BufferedReader(new FileReader(rf));</span>
+<span class="fc" id="L32">			String line = bufferdReader.readLine();</span>
+			
+<span class="fc bfc" id="L34" title="All 2 branches covered.">			while(line!=null) {</span>
+<span class="fc" id="L35">				myFile+=line;</span>
+<span class="fc" id="L36">				myFile+=&quot;\n&quot;;</span>
+<span class="fc" id="L37">				line = bufferdReader.readLine();</span>
+			}
+			
+<span class="pc" id="L40">		}catch(Exception e) {</span>
+<span class="nc" id="L41">			System.out.println(&quot;Fajl ne moze da se ucita! Proveri putanju fajla&quot;);</span>
+		}finally{
+			try {
+<span class="fc" id="L44">				bufferdReader.close();</span>
+<span class="pc" id="L45">			} catch (IOException e) {</span>
+<span class="nc" id="L46">				System.out.println(&quot;Nisi uspeo da zatvoris buffered reader,znaci da je do greske u mom kodu.&quot;);</span>
+			}
+		}
+		
+		
+<span class="fc" id="L51">	}</span>
+	@Before
+	public void setVarsToInclude() {
+<span class="nc" id="L54">		scannedVars = &quot;ID&quot;;</span>
+<span class="nc" id="L55">		vars.add(&quot;ID&quot;);</span>
+<span class="nc" id="L56">		vars.add(&quot;IS&quot;);</span>
+<span class="nc" id="L57">	}</span>
+	
+	
+		@ParameterizedTest
+		@CsvFileSource(resources = &quot;vars.csv&quot;, numLinesToSkip = 1)
+		public void testingScanVars(String vars_from_csv_file) {
+			
+<span class="fc" id="L64">			VarsToInclude vti = new VarsToInclude();</span>
+<span class="fc" id="L65">			vti.scanVars(vars_from_csv_file);</span>
+<span class="fc" id="L66">			scannedVars = &quot;&quot;;</span>
+<span class="fc" id="L67">			int i = 0;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">			for (i = 0; i &lt; vars_from_csv_file.length(); i++) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">				if (vars_from_csv_file.charAt(i) == ' ') {</span>
+<span class="fc" id="L70">					scannedVars += &quot;\n&quot;;</span>
+<span class="fc" id="L71">				}else {</span>
+<span class="fc" id="L72">					scannedVars += vars_from_csv_file.charAt(i);</span>
+				}
+			}
+<span class="pc bpc" id="L75" title="2 of 4 branches missed.">			if (vars_from_csv_file.length() &gt; 0 &amp;&amp; (vars_from_csv_file.charAt(vars_from_csv_file.length() - 1) != ' '))</span>
+<span class="fc" id="L76">					scannedVars += &quot;\n&quot;;</span>
+			
+			
+<span class="fc" id="L79">			assertEquals(&quot;Provera promenljivih koje su skenirane&quot;, scannedVars, vti.printVars());</span>
+			
+			
+			
+<span class="fc" id="L83">		}</span>
+	
+		
+		@ParameterizedTest
+		@CsvFileSource(resources = &quot;vars2.csv&quot;, numLinesToSkip = 1)
+		public void testing_whole_example(String vars_from_csv_file) {		
+<span class="fc" id="L89">			ucitavanje_fajla();	</span>
+<span class="fc" id="L90">			VarsToInclude vti = new VarsToInclude();</span>
+<span class="fc" id="L91">			vti.scanVars(vars_from_csv_file);</span>
+<span class="fc" id="L92">			scannedVars = &quot;&quot;;</span>
+<span class="fc" id="L93">			int i = 0;</span>
+					
+<span class="fc" id="L95">			String expected_definicije = &quot;&quot;;</span>
+<span class="fc" id="L96">			String expected_upotrebe = &quot;&quot;;</span>
+		
+			ArrayList&lt;DUChain&gt; du;
+			ArrayList&lt;Lcsaj&gt; lcsaj;
+<span class="fc" id="L100">		    ArrayList&lt;String&gt; vars = new ArrayList&lt;String&gt;();</span>
+			
+<span class="fc" id="L102">		    sim = new Simulator();</span>
+			
+<span class="fc" id="L104">			StringBuilder s = new StringBuilder(&quot;&quot;);</span>
+<span class="fc" id="L105">			s.append(&quot;locks (red 1)\n&quot;).</span>
+<span class="fc" id="L106">			append(&quot;stocks (red 3)\n&quot;).</span>
+<span class="fc" id="L107">			append(&quot;locks (red 6)\n&quot;).</span>
+<span class="fc" id="L108">			append(&quot;\nBroj definicija: 3&quot;);</span>
+			
+			
+<span class="fc" id="L111">			expected_definicije = s.toString();</span>
+		
+<span class="fc" id="L113">			s = new StringBuilder(&quot;&quot;);</span>
+			
+<span class="fc" id="L115">			s.append(&quot;locks (red 2, p-upotreba)\n&quot;).</span>
+<span class="fc" id="L116">			append(&quot;locks (red 4, c-upotreba)\n&quot;).</span>
+<span class="fc" id="L117">			append(&quot;stocks (red 5, c-upotreba)\n\n&quot;).</span>
+<span class="fc" id="L118">			append(&quot;Broj c-upotreba: 2\n&quot;).</span>
+<span class="fc" id="L119">			append(&quot;Broj p-upotreba: 1&quot;);</span>
+			
+<span class="fc" id="L121">			expected_upotrebe = s.toString();</span>
+		   
+			
+<span class="fc" id="L124">			du = new ArrayList&lt;DUChain&gt;(); </span>
+	             
+<span class="fc" id="L126">	            	du.add(new DUChain(&quot;locks&quot;,1,2)); </span>
+<span class="fc" id="L127">	            	du.add(new DUChain(&quot;locks&quot;,1,4)); </span>
+<span class="fc" id="L128">	            	du.add(new DUChain(&quot;stocks&quot;,3,5));</span>
+<span class="fc" id="L129">	            	du.add(new DUChain(&quot;locks&quot;,6,2)); </span>
+<span class="fc" id="L130">	            	du.add(new DUChain(&quot;locks&quot;,6,4)); </span>
+	            
+	        
+<span class="fc" id="L133">	        lcsaj = new ArrayList&lt;Lcsaj&gt;(); </span>
+	            
+<span class="fc" id="L135">	        lcsaj.add(new Lcsaj(1,2,7)); </span>
+<span class="fc" id="L136">	        lcsaj.add(new Lcsaj(1,6,2)); </span>
+<span class="fc" id="L137">	        lcsaj.add(new Lcsaj(2,2,7));</span>
+<span class="fc" id="L138">	        lcsaj.add(new Lcsaj(2,6,2)); </span>
+<span class="fc" id="L139">	        lcsaj.add(new Lcsaj(7,8,11));</span>
+<span class="fc" id="L140">	        lcsaj.add(new Lcsaj(7,10,12));</span>
+	            	     
+		
+<span class="fc" id="L143">			vars.clear();</span>
+			//System.out.println(myFile+&quot;*************&quot;);
+<span class="fc" id="L145">			sim.analyseCode(myFile, vars_from_csv_file);</span>
+<span class="fc" id="L146">			sim.varsToInclude.printVars();</span>
+<span class="fc" id="L147">			sim.getUses();</span>
+<span class="fc" id="L148">			sim.getDuChains();</span>
+<span class="fc" id="L149">			sim.getLcsaj();</span>
+			
+		
+			//String s= sim.getDefinitions();
+			
+			//definicije and upotrebe check
+<span class="fc" id="L155">			assertEquals(&quot;Ocekivana definicija nije ista kao definicija u simultoru&quot;,expected_definicije,sim.getDefinitions());</span>
+<span class="fc" id="L156">			assertEquals(&quot;Ocekivana upotreba nije ista kao upotreba u simultoru&quot;,expected_upotrebe,sim.getUses());</span>
+			
+<span class="fc" id="L158">			i =0;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">			for (DUChain elem : du) {</span>
+<span class="fc" id="L160">				assertEquals(&quot;Neispravna variabla&quot;,elem.getVariable(),sim.duChains.get(i).getVariable());</span>
+<span class="fc" id="L161">				assertEquals(&quot;Neispravan RowNoDef&quot;,elem.getRowNoDef(),sim.duChains.get(i).getRowNoDef());</span>
+<span class="fc" id="L162">				assertEquals(&quot;Neispravan RowNoUse&quot;,elem.getRowNoUse(),sim.duChains.get(i).getRowNoUse());</span>
+<span class="fc" id="L163">				i++;</span>
+			}
+<span class="fc" id="L165">			i = 0;</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">			for (Lcsaj elem : lcsaj) {</span>
+<span class="fc" id="L167">				assertEquals(&quot;Nije ispravna vrednost startSeq&quot;,elem.getStartSeq(),sim.lcsaj.get(i).getStartSeq());</span>
+<span class="fc" id="L168">				assertEquals(&quot;Nije ispravna vrednost endSeq&quot;,elem.getEndSeq(),sim.lcsaj.get(i).getEndSeq());</span>
+<span class="fc" id="L169">				assertEquals(&quot;Nije ispravna vrednost Jump&quot;,elem.getJump(),sim.lcsaj.get(i).getJump());</span>
+<span class="fc" id="L170">				i++;</span>
+			}
+			
+			
+<span class="fc" id="L174">		}</span>
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>testovi (15 Jan 2021 13:10:18)</div></body></html>
