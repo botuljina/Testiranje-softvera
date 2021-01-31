@@ -1,4 +1,4 @@
-# Testiranje-softvera
+# Testiranje softvera 
 <h1>White box + black box testing </h1><br/>
 
 BLACK BOX: ,,Sistem za anketiranje korisnika"<br/>
